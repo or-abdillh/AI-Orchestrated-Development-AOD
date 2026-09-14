@@ -342,7 +342,7 @@ Framework ini terintegrasi langsung dengan skill industri terverifikasi dari eko
 
 Dikembangkan dan diarsiteki oleh:
 
-**or-abdillh**
+**Oka R. Abdillah**
 - **GitHub:** [@or-abdillh](https://github.com/or-abdillh)
 - **Email:** [hans.abdillh05@gmail.com](mailto:hans.abdillh05@gmail.com)
 - **Repository:** [AI-Orchestrated-Development-AOD](https://github.com/or-abdillh/AI-Orchestrated-Development-AOD)
