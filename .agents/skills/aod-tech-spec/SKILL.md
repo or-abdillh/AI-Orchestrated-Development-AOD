@@ -42,6 +42,8 @@ Tanyakan secara singkat preferensi arsitektur:
 
 *Catatan untuk SME:* Default ke arsitektur praktis (e.g. MVC + Service Layer atau Modular Layer) — hindari overengineering seperti microservices atau DDD berlebihan kecuali dibutuhkan.
 
+*Grounding Dokumentasi:* Gunakan **Context7 MCP** (`resolve-library-id` -> `query-docs`) untuk memvalidasi versi rilis terbaru, konfigurasi resmi, dan best practices dari library/framework yang dipilih sebelum dituangkan ke dalam Tech Spec.
+
 ---
 
 ## Struktur Dokumen Output / Output Structure

@@ -45,6 +45,7 @@ Setiap template prompt untuk fitur harus memuat:
    - 7. Unit / Feature Tests
 6. **AI Constraints:**
    - Wajib berada di feature branch sebelum coding.
+   - Gunakan Context7 MCP (`resolve-library-id` & `query-docs`) untuk mengambil dokumentasi resmi library/SDK terkait sebelum menulis kode.
    - Dilarang menaruh business logic di controller.
    - Gunakan nama field eksak dari Data Dictionary.
    - Terapkan eager loading untuk cegah N+1.

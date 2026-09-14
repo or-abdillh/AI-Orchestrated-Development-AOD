@@ -208,6 +208,10 @@ Sistem AOD dilindungi oleh file aturan otomatis yang selalu aktif di [`.agents/r
    - **Konvensi Branch:** `phase/<num>-<phase-slug>` untuk branch fase, dan `feat/<module>-<feature-slug>` untuk branch per-fitur.
    - **Alur Atomik:** `Checkout branch -> Koding tugas 1-8 -> Validasi DoD -> Atomic commit (smart-git-commit) -> Merge/PR`.
    - **Skill Terintegrasi:** Didukung oleh `git-flow-branch-creator`, `git-workflow-and-versioning`, dan `smart-git-commit`.
+5. **Context7 MCP Source-Driven Grounding (Official Docs Verification):**
+   - **No Hallucinated APIs:** AI dilarang mengarang sintaks atau konfigurasi library pihak ketiga.
+   - **Verifikasi Wajib:** AI wajib memanggil **Context7 MCP** (`resolve-library-id` dan `query-docs`) untuk memastikan dokumentasi resmi yang paling kredibel dan versi terkini dari library/tools yang digunakan (misal: Tailwind CSS, Prisma, Next.js, Laravel, dsb.).
+
 
 
 ```markdown

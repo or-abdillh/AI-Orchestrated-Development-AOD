@@ -86,4 +86,17 @@ Save all generated documents to `docs/` within the project directory:
 - AI must validate against `aod-dod` before completing the feature branch.
 - Atomic commits must be executed via `smart-git-commit`.
 
+## Source-Driven Grounding via Context7 MCP / Verifikasi Dokumentasi Kredibel
+
+- AI DILARANG berasumsi atau mengarang API syntax, konfigurasi, atau pola integrasi library berdasarkan pengetahuan hafalan yang berpotensi usang (*outdated*).
+- AI WAJIB menggunakan **Context7 MCP** (`resolve-library-id` dan `query-docs`) untuk mengambil dokumentasi resmi dan terkini setiap kali:
+  1. Menentukan versi package, konfigurasi, dan best practices pada **Phase 4: aod-tech-spec**.
+  2. Mengonfigurasi utility tokens, plugins, atau breaking changes pada **Phase 3: aod-tailwind-config** & **aod-page-slicer** (terutama Tailwind v4 / UI libraries).
+  3. Mengimplementasikan fitur kode yang berinteraksi dengan framework, SDK, ORM, Auth provider, atau tools pihak ketiga pada **Phase 4: aod-feature-prompts**.
+- Protokol Penggunaan Context7:
+  1. Resolve ID: Gunakan `resolve-library-id` dengan query spesifik (contoh: `tailwind`, `prisma`, `laravel`, `nextjs`).
+  2. Query Docs: Panggil `query-docs` dengan library ID terpilih (format `/org/project`) dan topik konsep spesifik.
+  3. Implementasi: Tulis kode atau konfigurasi yang terbukti valid dari dokumentasi resmi yang baru saja diambil.
+
+
 

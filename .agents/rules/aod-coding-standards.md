@@ -75,3 +75,12 @@ Setiap implementasi kode pada Phase Development **WAJIB** berada dalam git branc
    - Gunakan `git-workflow-and-versioning` untuk panduan branching dan release tagging.
    - Gunakan `smart-git-commit` untuk eksekusi commit atomik.
 
+---
+
+## Source-Driven Documentation via Context7 MCP
+
+- **No Hallucinated APIs:** Sebelum menulis syntax library atau package eksternal, gunakan Context7 MCP (`resolve-library-id` lalu `query-docs`).
+- **Verifikasi Versi & Sintaks:** Terutama untuk library yang sering berganti mayor API (misal: Tailwind v3 vs v4, Next.js App Router vs Pages, Prisma, dsb.).
+- **Prioritaskan Context7:** Utamakan Context7 MCP daripada web search biasa saat memerlukan dokumentasi resmi library/framework.
+
+
