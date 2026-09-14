@@ -13,6 +13,7 @@
 
 ## 📑 Daftar Isi
 
+- [Quick Install (One-Liner)](#-quick-install-one-liner)
 - [Overview](#-overview)
 - [Mengapa AOD Dibutuhkan?](#-mengapa-aod-dibutuhkan)
 - [Prinsip Fundamental](#-5-prinsip-fundamental)
@@ -25,9 +26,25 @@
 
 ---
 
+## ⚡ Quick Install (One-Liner)
+
+Pasang seluruh ekosistem AOD Framework (24+ Skills, 3 Rules, AGENTS.md, dan struktur scaffold `docs/`) ke dalam project apa pun (proyek baru maupun proyek yang sudah berjalan seperti Laravel, Next.js, Vue, Django, dsb.) dengan **satu baris perintah**:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/or-abdillh/AI-Orchestrated-Development-AOD/main/install.sh | bash
+```
+
+> **Atau tentukan direktori target secara spesifik:**
+> ```bash
+> curl -fsSL https://raw.githubusercontent.com/or-abdillh/AI-Orchestrated-Development-AOD/main/install.sh | bash -s -- /path/to/your/project
+> ```
+
+---
+
 ## 💡 Overview
 
 **AI-Orchestrated Development (AOD)** adalah framework yang dirancang khusus untuk pengembang mandiri (*solo developers*), konsultan teknis, dan tim freelance yang membangun sistem skala SME (*Small-Medium Enterprise*).
+
 
 Alih-alih membiarkan AI mengasumsikan arsitektur atau melompati fase rekayasa perangkat lunak, AOD menerapkan **rantai dependensi dokumen yang ketat**:
 
