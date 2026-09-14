@@ -23,8 +23,11 @@
 - [Panduan Penggunaan di Real Project](#-panduan-penggunaan-di-real-project)
 - [Struktur Output Dokumen](#-struktur-output-dokumen)
 - [Skill Ekosistem Pelengkap](#-skill-ekosistem-pelengkap)
+- [Author & Maintainer](#-author--maintainer)
+- [Lisensi](#-lisensi)
 
 ---
+
 
 ## ⚡ Quick Install (One-Liner)
 
@@ -335,6 +338,18 @@ Framework ini terintegrasi langsung dengan skill industri terverifikasi dari eko
 
 ---
 
+## 👤 Author & Maintainer
+
+Dikembangkan dan diarsiteki oleh:
+
+**or-abdillh**
+- **GitHub:** [@or-abdillh](https://github.com/or-abdillh)
+- **Email:** [hans.abdillh05@gmail.com](mailto:hans.abdillh05@gmail.com)
+- **Repository:** [AI-Orchestrated-Development-AOD](https://github.com/or-abdillh/AI-Orchestrated-Development-AOD)
+
+---
+
 ## 📄 Lisensi
 
 Didistribusikan di bawah lisensi MIT. Silakan gunakan, modifikasi, dan adaptasi untuk kebutuhan proyek perangkat lunak Anda.
+
