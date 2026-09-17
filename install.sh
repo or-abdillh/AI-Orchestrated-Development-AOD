@@ -53,27 +53,36 @@ cleanup() {
 trap cleanup EXIT
 
 # 1. Obtain AOD Source Files
-log_step "Mengunduh file arsitektur AOD Framework dari GitHub (${C_BOLD}${REPO}@${BRANCH}${C_RESET})..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || true)"
 
-ARCHIVE_URL="https://github.com/${REPO}/archive/refs/heads/${BRANCH}.tar.gz"
-
-if command -v curl >/dev/null 2>&1; then
-    curl -fsSL "$ARCHIVE_URL" -o "${TMP_DIR}/aod.tar.gz"
-elif command -v wget >/dev/null 2>&1; then
-    wget -qO "${TMP_DIR}/aod.tar.gz" "$ARCHIVE_URL"
+if [ -n "$SCRIPT_DIR" ] && [ -d "${SCRIPT_DIR}/.agents" ] && [ "$SCRIPT_DIR" != "$TARGET_DIR" ]; then
+    log_step "Menggunakan file AOD Framework dari sumber lokal (${C_BOLD}${SCRIPT_DIR}${C_RESET})..."
+    SOURCE_DIR="$SCRIPT_DIR"
+    log_ok "Sumber lokal AOD Framework terdeteksi."
 else
-    log_error "Dibutuhkan 'curl' atau 'wget' untuk mengunduh package AOD."
-    exit 1
+    log_step "Mengunduh file arsitektur AOD Framework dari GitHub (${C_BOLD}${REPO}@${BRANCH}${C_RESET})..."
+
+    ARCHIVE_URL="https://github.com/${REPO}/archive/refs/heads/${BRANCH}.tar.gz"
+
+    if command -v curl >/dev/null 2>&1; then
+        curl -fsSL "$ARCHIVE_URL" -o "${TMP_DIR}/aod.tar.gz"
+    elif command -v wget >/dev/null 2>&1; then
+        wget -qO "${TMP_DIR}/aod.tar.gz" "$ARCHIVE_URL"
+    else
+        log_error "Dibutuhkan 'curl' atau 'wget' untuk mengunduh package AOD."
+        exit 1
+    fi
+
+    tar -xzf "${TMP_DIR}/aod.tar.gz" -C "$TMP_DIR"
+    SOURCE_DIR="$(find "$TMP_DIR" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+
+    if [ ! -d "${SOURCE_DIR}/.agents" ]; then
+        log_error "Gagal menemukan direktori .agents di repository sumber."
+        exit 1
+    fi
+    log_ok "Sumber AOD Framework berhasil diunduh."
 fi
 
-tar -xzf "${TMP_DIR}/aod.tar.gz" -C "$TMP_DIR"
-SOURCE_DIR="$(find "$TMP_DIR" -mindepth 1 -maxdepth 1 -type d | head -n 1)"
-
-if [ ! -d "${SOURCE_DIR}/.agents" ]; then
-    log_error "Gagal menemukan direktori .agents di repository sumber."
-    exit 1
-fi
-log_ok "Sumber AOD Framework berhasil diunduh."
 
 # 2. Inject .agents (Rules & Skills)
 log_step "Menginjeksi aturan (.agents/rules/) dan skill (.agents/skills/)..."
@@ -100,6 +109,8 @@ DOCS_SUBDIRS=(
     "development"
     "testing"
     "proposal"
+    "feedback"
+    "revisions"
     "samples"
 )
 
@@ -107,9 +118,16 @@ for sub in "${DOCS_SUBDIRS[@]}"; do
     mkdir -p "${TARGET_DIR}/docs/${sub}"
 done
 
-# Copy sample study case if available and not existing
-if [ -f "${SOURCE_DIR}/docs/samples/STUDY_CASE_DOCUMENT.md" ] && [ ! -f "${TARGET_DIR}/docs/samples/STUDY_CASE_DOCUMENT.md" ]; then
-    cp "${SOURCE_DIR}/docs/samples/STUDY_CASE_DOCUMENT.md" "${TARGET_DIR}/docs/samples/STUDY_CASE_DOCUMENT.md"
+# Copy sample templates if available and not existing
+if [ -d "${SOURCE_DIR}/docs/samples" ]; then
+    for sample_file in "${SOURCE_DIR}/docs/samples/"*.md; do
+        if [ -f "$sample_file" ]; then
+            base_name="$(basename "$sample_file")"
+            if [ ! -f "${TARGET_DIR}/docs/samples/${base_name}" ]; then
+                cp "$sample_file" "${TARGET_DIR}/docs/samples/${base_name}"
+            fi
+        fi
+    done
 fi
 log_ok "Struktur direktori docs/ berhasil disiapkan."
 
@@ -159,6 +177,9 @@ Untuk memulai atau melanjutkan project dengan metodologi AOD, aktifkan skill yan
 **Phase 5 – Testing:**
 - `aod-uat` — UAT Sheet Generator
 
+**Maintenance & Revisions:**
+- `aod-feedback-loop` — audit dokumen feedback/revisi, klasifikasi 3-Tier Scope (A/B/C), penegakan upstream-first, dan pembuatan laporan akhir.
+
 **AOD Core Rules (Always Active):**
 - Disiplin fase ketat: ikuti urutan Business Layer → System Design → UI Architecture → Development → Testing.
 - Dependency chain mutlak: jangan membuat dokumen turunan tanpa dokumen prasyarat.
@@ -166,6 +187,7 @@ Untuk memulai atau melanjutkan project dengan metodologi AOD, aktifkan skill yan
 - Document versioning mutlak: seluruh dokumen di `docs/` wajib memiliki header semantic versioning (`vMAJOR.MINOR.PATCH`), tanggal `Last Updated`, dan tabel `Revision History`. AI wajib menaikkan versi (Major/Minor/Patch) setiap kali melakukan perubahan dokumen.
 - Git feature-branching mutlak: seluruh implementasi pada Phase 4 wajib berada di branch terpisah (`phase/<num>-<slug>` atau `feat/<module>-<slug>`). Dilarang commit langsung ke `main`/`master`. Gunakan `smart-git-commit` untuk commit atomik.
 - Grounding Context7 MCP mutlak: verifikasi dokumentasi resmi via Context7 (`resolve-library-id` & `query-docs`) sebelum menulis konfigurasi atau kode implementasi yang melibatkan library, framework, atau SDK pihak ketiga.
+- Feedback & Upstream-First mutlak: seluruh dokumen revisi di `docs/feedback/` wajib diaudit via `aod-feedback-loop` dalam mode PLAN dan meminta klarifikasi user terlebih dahulu. AI dilarang langsung mengedit kode sebelum dokumen spesifikasi hulu diperbarui (SemVer bump). Setiap sesi revisi wajib menghasilkan `FINAL_REPORT_<name>.md`.
 <!-- aod:end -->'
 
 

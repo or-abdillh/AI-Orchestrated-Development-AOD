@@ -184,6 +184,11 @@ Repository ini dilengkapi dengan **24 native agent skills** yang tersimpan di [`
 |---|---|---|---|
 | **`aod-uat`** | QA Lead & Product Delivery | PRD, Flow, State Machine | `docs/testing/UAT_SHEET.md` |
 
+### Maintenance & Revisions
+| Skill | Persona | Input Wajib | Output Artefak |
+|---|---|---|---|
+| **`aod-feedback-loop`** | Lead Architect & Delivery Mgr | Dokumen Feedback di `docs/feedback/` | `docs/feedback/FINAL_REPORT_<name>.md` |
+
 ---
 
 ## 🛡️ Guardrails & Rules Enforcement
@@ -211,6 +216,12 @@ Sistem AOD dilindungi oleh file aturan otomatis yang selalu aktif di [`.agents/r
 5. **Context7 MCP Source-Driven Grounding (Official Docs Verification):**
    - **No Hallucinated APIs:** AI dilarang mengarang sintaks atau konfigurasi library pihak ketiga.
    - **Verifikasi Wajib:** AI wajib memanggil **Context7 MCP** (`resolve-library-id` dan `query-docs`) untuk memastikan dokumentasi resmi yang paling kredibel dan versi terkini dari library/tools yang digunakan (misal: Tailwind CSS, Prisma, Next.js, Laravel, dsb.).
+6. **`aod-feedback-and-revisions.md` (Feedback Loop & Upstream-First Rule):**
+   - **Mandatory Planning Mode First:** AI dilarang langsung menyentuh dokumen atau kode dari feedback klien. AI wajib menyajikan rencana dampak dan meminta klarifikasi serta persetujuan eksplisit user.
+   - **3-Tier Scope Classification:** Memetakan butir revisi ke **Scope A (Doc Only)**, **Scope B (Feature Modification)**, atau **Scope C (New Feature / Scope Expansion)**.
+   - **Upstream Cascading:** Dokumen spesifikasi hulu (PRD, Data Dict, Spec) wajib disinkronkan dan dinaikkan versinya sebelum kode disentuh.
+   - **Laporan Akhir Wajib:** Setiap penanganan feedback wajib menghasilkan dokumen `docs/feedback/FINAL_REPORT_<name>.md`.
+
 
 
 
@@ -319,8 +330,15 @@ docs/
 │   └── DOD.md
 ├── testing/
 │   └── UAT_SHEET.md
-└── proposal/
-    └── PROPOSAL.md
+├── feedback/
+│   ├── CR-001-payment-update.md
+│   └── FINAL_REPORT_CR-001.md
+├── proposal/
+│   └── PROPOSAL.md
+└── samples/
+    ├── STUDY_CASE_DOCUMENT.md
+    ├── FEEDBACK_TEMPLATE.md
+    └── FINAL_REPORT_TEMPLATE.md
 ```
 
 ---

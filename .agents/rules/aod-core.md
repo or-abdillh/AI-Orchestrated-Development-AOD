@@ -98,5 +98,14 @@ Save all generated documents to `docs/` within the project directory:
   2. Query Docs: Panggil `query-docs` dengan library ID terpilih (format `/org/project`) dan topik konsep spesifik.
   3. Implementasi: Tulis kode atau konfigurasi yang terbukti valid dari dokumentasi resmi yang baru saja diambil.
 
+## Feedback & Revision Protocol / Tata Kelola Revisi (docs/feedback/)
+
+- Setiap dokumen revisi, catatan klien, atau Change Request (CR) di `docs/feedback/` WAJIB diaudit menggunakan skill `aod-feedback-loop`.
+- **Mode Perencanaan Wajib (Planning Mode First):** AI dilarang langsung memodifikasi dokumen atau kode tanpa menyajikan audit rencana dampak dan meminta konfirmasi/klarifikasi user.
+- **Upstream-First:** Dokumen spesifikasi hulu (PRD, Data Dict, Tech Spec) harus diperbarui dan dinaikkan versinya (SemVer) sebelum kode diubah.
+- **3-Tier Scope Classification:** Klasifikasikan dampak ke Scope A (Doc-Only), Scope B (Feature Modification), atau Scope C (New Feature/Expansion).
+- **Laporan Akhir Wajib:** Setiap penanganan revisi wajib menghasilkan laporan akhir di `docs/feedback/FINAL_REPORT_<name>.md`.
+
+
 
 

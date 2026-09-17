@@ -53,6 +53,9 @@ Untuk memulai atau melanjutkan project dengan metodologi AOD, aktifkan skill yan
 **Phase 5 – Testing:**
 - `aod-uat` — UAT Sheet Generator
 
+**Maintenance & Revisions:**
+- `aod-feedback-loop` — audit dokumen feedback/revisi, klasifikasi 3-Tier Scope (A/B/C), penegakan upstream-first, dan pembuatan laporan akhir.
+
 **AOD Core Rules (Always Active):**
 - Disiplin fase ketat: ikuti urutan Business Layer → System Design → UI Architecture → Development → Testing.
 - Dependency chain mutlak: jangan membuat dokumen turunan tanpa dokumen prasyarat.
@@ -60,6 +63,7 @@ Untuk memulai atau melanjutkan project dengan metodologi AOD, aktifkan skill yan
 - Document versioning mutlak: seluruh dokumen di `docs/` wajib memiliki header semantic versioning (`vMAJOR.MINOR.PATCH`), tanggal `Last Updated`, dan tabel `Revision History`. AI wajib menaikkan versi (Major/Minor/Patch) setiap kali melakukan perubahan dokumen.
 - Git feature-branching mutlak: seluruh implementasi pada Phase 4 wajib berada di branch terpisah (`phase/<num>-<slug>` atau `feat/<module>-<slug>`). Dilarang commit langsung ke `main`/`master`. Gunakan `smart-git-commit` untuk commit atomik.
 - Grounding Context7 MCP mutlak: verifikasi dokumentasi resmi via Context7 (`resolve-library-id` & `query-docs`) sebelum menulis konfigurasi atau kode implementasi yang melibatkan library, framework, atau SDK pihak ketiga.
+- Feedback & Upstream-First mutlak: seluruh dokumen revisi di `docs/feedback/` wajib diaudit via `aod-feedback-loop` dalam mode PLAN dan meminta klarifikasi user terlebih dahulu. AI dilarang langsung mengedit kode sebelum dokumen spesifikasi hulu diperbarui (SemVer bump). Setiap sesi revisi wajib menghasilkan `FINAL_REPORT_<name>.md`.
 <!-- aod:end -->
 
 
