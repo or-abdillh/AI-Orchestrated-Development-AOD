@@ -112,10 +112,11 @@ flowchart TD
         U2 --> U4["aod-page-slicer<br><i>Per-Page Slicing Loop</i>"]
     end
 
-    subgraph P4["Phase 4: Development"]
+    subgraph P4["Phase 4: Development & Tracking"]
         D1["aod-tech-spec<br><i>Technical Specification</i>"] --> D2["aod-phase-plan<br><i>Phased Sprint Plan</i>"]
         D2 --> D3["aod-feature-prompts<br><i>Atomic Implementation Library</i>"]
         D3 --> D4["aod-dod<br><i>Definition of Done Checklist</i>"]
+        D4 -.-> D5["aod-progress-tracker<br><i>Requirement Audit & Checklist</i>"]
     end
 
     subgraph P5["Phase 5: Testing & Delivery"]
@@ -134,7 +135,7 @@ flowchart TD
 
 ## 🛠️ Skills Inventory & Phase Mapping
 
-Repository ini dilengkapi dengan **24 native agent skills** yang tersimpan di [`.agents/skills/`](.agents/skills/):
+Repository ini dilengkapi dengan **25 native agent skills** yang tersimpan di [`.agents/skills/`](.agents/skills/):
 
 ### Entry Point & Pre-Project
 | Skill | Command Trigger | Input Dokumen | Output Artefak |
@@ -158,10 +159,10 @@ Repository ini dilengkapi dengan **24 native agent skills** yang tersimpan di [`
 |---|---|---|---|
 | **`aod-state-machine`** | DDD Specialist | Business Flow (TO-BE), PRD | `docs/system-design/STATE_MACHINE.md` |
 | **`aod-api-contract`** | Backend API Architect | PRD, Data Dictionary | `docs/system-design/API_CONTRACT.md` |
-| **`aod-ui-flow`** | UX System Designer | PRD, Business Flow | `docs/system-design/UI_FLOW.md` |
-| **`aod-website-concept`**| Product Strategist & UX Arch | Study Case, BRD, UI Flow | `docs/system-design/WEBSITE_CONCEPT.md` |
-| **`aod-design-system`** | Design System Architect | Website Concept | `docs/system-design/DESIGN_SYSTEM.md` |
-| **`aod-ui-style`** | Senior Product Designer | Website Concept, Design System | `docs/system-design/UI_STYLE.md` |
+| **`aod-ui-flow`** | Enterprise UX Designer | PRD, Business Flow | `docs/system-design/UI_FLOW.md` |
+| **`aod-website-concept`**| Senior UX Strategist | Study Case, BRD, Flow | `docs/system-design/WEBSITE_CONCEPT.md` |
+| **`aod-design-system`** | Design System Architect | Website Concept Doc | `docs/system-design/DESIGN_SYSTEM.md` |
+| **`aod-ui-style`** | Senior UI Designer | Website Concept, Design System | `docs/system-design/UI_STYLE.md` |
 
 ### Phase 3 — UI Architecture
 | Skill | Persona | Input Wajib | Output Artefak |
@@ -171,13 +172,14 @@ Repository ini dilengkapi dengan **24 native agent skills** yang tersimpan di [`
 | **`aod-tailwind-config`**| CSS Architecture Specialist | UI Style Document | `tailwind.config.ts` / tokens |
 | **`aod-page-slicer`** | Pixel-Perfect UI Engineer | UI Slicing, Component Map | Kode komponen per halaman |
 
-### Phase 4 — Development
+### Phase 4 — Development & Tracking
 | Skill | Persona | Input Wajib | Output Artefak |
 |---|---|---|---|
 | **`aod-tech-spec`** | Solution Architect | PRD, Data Dict, RBAC, Flow | `docs/development/TECH_SPEC.md` |
 | **`aod-phase-plan`** | Technical Project Manager | Technical Specification | `docs/development/PHASE_PLAN.md` |
 | **`aod-feature-prompts`**| AI Development Strategist | Tech Spec, Phase Plan | `docs/development/FEATURE_PROMPTS.md` |
 | **`aod-dod`** | Software Quality Auditor | Tech Spec, Feature Prompts | `docs/development/DOD.md` |
+| **`aod-progress-tracker`**| QA Lead & Release Auditor | PRD, Tech Spec, Git/Codebase | Interactive Checklist (Terminal default) / `docs/development/PROGRESS_REPORT.md` (Export) |
 
 ### Phase 5 — Testing
 | Skill | Persona | Input Wajib | Output Artefak |
@@ -221,6 +223,12 @@ Sistem AOD dilindungi oleh file aturan otomatis yang selalu aktif di [`.agents/r
    - **3-Tier Scope Classification:** Memetakan butir revisi ke **Scope A (Doc Only)**, **Scope B (Feature Modification)**, atau **Scope C (New Feature / Scope Expansion)**.
    - **Upstream Cascading:** Dokumen spesifikasi hulu (PRD, Data Dict, Spec) wajib disinkronkan dan dinaikkan versinya sebelum kode disentuh.
    - **Laporan Akhir Wajib:** Setiap penanganan feedback wajib menghasilkan dokumen `docs/feedback/FINAL_REPORT_<name>.md`.
+7. **Requirement Traceability & Progress Tracking (`aod-progress-tracker`):**
+   - **Audit Spesifikasi Objektif:** Membandingkan dokumen hulu (`PRD.md`, `TECH_SPEC.md`, `PHASE_PLAN.md`) dengan realisasi kode riil dan riwayat branch/commit Git.
+   - **Pemisahan Task yang Jelas:** Membedakan antara task yang direncanakan (*Planned Tasks*), sedang dikerjakan (*In Progress*), dan telah selesai (*Completed Tasks*).
+   - **Dual Output Modes:**
+     - **Default Mode (Terminal Print-Out):** Cepat dan instan menampilkan checklist progres langsung di chat/terminal tanpa mengotori repositori dengan file baru.
+     - **Export Mode (Document):** Mengekspor laporan lengkap ke `docs/development/PROGRESS_REPORT.md` (dilengkapi SemVer header) saat diminta oleh engineer.
 
 
 
