@@ -59,6 +59,7 @@ Save all generated documents to `docs/` within the project directory:
 - Phase Plan → `docs/development/PHASE_PLAN.md`
 - Feature Prompts → `docs/development/FEATURE_PROMPTS.md`
 - DoD → `docs/development/DOD.md`
+- Progress Report (when exported) → `docs/development/PROGRESS_REPORT.md`
 - UAT Sheet → `docs/testing/UAT_SHEET.md`
 - Proposal → `docs/proposal/PROPOSAL.md`
 

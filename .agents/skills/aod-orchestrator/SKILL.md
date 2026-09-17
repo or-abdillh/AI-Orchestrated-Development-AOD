@@ -66,7 +66,8 @@ Phase 4 – Development
   ├─ Step 18: aod-tech-spec        → Technical Specification
   ├─ Step 19: aod-phase-plan       → Development Phase Plan
   ├─ Step 20: aod-feature-prompts  → Feature Prompt Library
-  └─ Step 21: aod-dod              → Definition of Done Checklist
+  ├─ Step 21: aod-dod              → Definition of Done Checklist
+  └─ Tracking: aod-progress-tracker → Progress Tracker & Requirement Audit (Checklist)
 
 Phase 5 – Testing
   └─ Step 22: aod-uat              → UAT Sheet Generator
@@ -85,6 +86,7 @@ Phase 5 – Testing
 - **"next step"** / **"lanjut"** → Proceed to next AOD step
 - **"where am I"** / **"fase berapa"** → Show current position in AOD map
 - **"what do I need"** / **"apa yang dibutuhkan"** → List prerequisites for current step
+- **"cek progress"** / **"report progress"** → Run `aod-progress-tracker` for real-time progress checklist
 
 ## Parallel Steps Info
 
