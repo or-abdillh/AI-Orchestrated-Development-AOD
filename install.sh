@@ -173,6 +173,7 @@ Untuk memulai atau melanjutkan project dengan metodologi AOD, aktifkan skill yan
 - `aod-phase-plan` — Development Phase Plan
 - `aod-feature-prompts` — Feature Prompt Library
 - `aod-dod` — Definition of Done Checklist
+- `aod-progress-tracker` — Progress Tracker & Requirement Audit (output interactive checklist, terminal default / export dokumen)
 
 **Phase 5 – Testing:**
 - `aod-uat` — UAT Sheet Generator
