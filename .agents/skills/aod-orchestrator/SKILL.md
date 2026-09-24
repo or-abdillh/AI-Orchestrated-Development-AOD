@@ -53,20 +53,20 @@ Phase 2 – System Design
   ├─ Step 9:  aod-api-contract     → API Contract
   ├─ Step 10: aod-ui-flow          → UI Flow / Screen Map
   ├─ Step 11: aod-website-concept  → Website Concept Document
-  ├─ Step 12: aod-design-system    → Design System Document
+  ├─ Step 12: aod-design-system    → Design System Document (Mandatory Visual Contract)
   └─ Step 13: aod-ui-style         → UI Style Document
 
 Phase 3 – UI Architecture
   ├─ Step 14: aod-ui-component-map → UI Component Map
   ├─ Step 15: aod-ui-slicing       → Full UI Slicing Document
   ├─ Step 16: aod-tailwind-config  → CSS Framework Config
-  └─ Step 17: aod-page-slicer      → Per-Page Component (repeat per page)
+  └─ Step 17: aod-page-slicer      → Per-Page Component (repeat per page) + UI Reference (`docs/references/ui/`)
 
 Phase 4 – Development
-  ├─ Step 18: aod-tech-spec        → Technical Specification
+  ├─ Step 18: aod-tech-spec        → Technical Specification & Dynamic Rules (`.agents/rules/aod-architecture-engineering.md`)
   ├─ Step 19: aod-phase-plan       → Development Phase Plan
-  ├─ Step 20: aod-feature-prompts  → Feature Prompt Library
-  ├─ Step 21: aod-dod              → Definition of Done Checklist
+  ├─ Step 20: aod-feature-prompts  → Feature Prompt Library & Execution (with Feature Reference `docs/references/features/`)
+  ├─ Step 21: aod-dod              → Definition of Done Checklist (inc. Gate 7 Context Continuity)
   └─ Tracking: aod-progress-tracker → Progress Tracker & Requirement Audit (Checklist)
 
 Phase 5 – Testing
@@ -79,6 +79,9 @@ Phase 5 – Testing
 
 - Setiap fase harus lengkap sebelum lanjut ke fase berikutnya.
 - Jika user mencoba skip fase, ingatkan dengan tegas: "Dokumen [X] diperlukan sebelum melanjutkan ke [Y]."
+- **Design System Adherence Mutlak:** Seluruh pembuatan atau modifikasi UI pada Phase 3 dan Phase 4 wajib 100% mematuhi `docs/system-design/DESIGN_SYSTEM.md`.
+- **Dynamic Architecture Engineering Mutlak:** Step 18 (`aod-tech-spec`) wajib mengaktifkan `.agents/rules/aod-architecture-engineering.md` (`trigger: always_on`) yang menjadi panduan arsitektur operasional sepanjang Phase 4.
+- **Agent References Context (ARC) Mutlak:** Setiap kali mengeksekusi penulisan kode pada Step 17 (Phase 3) dan Step 20 (Phase 4), AI agent wajib menyusun dokumen referensi (`REF-UI-*` atau `REF-FEAT-*`) dan memperbarui Master Registry `docs/references/INDEX.md` sebelum task dinyatakan selesai.
 - Each phase must be complete before moving to the next.
 
 ## Navigation Commands / Perintah Navigasi

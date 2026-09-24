@@ -54,9 +54,11 @@ Prioritaskan: Consistency, Clarity, Scalability, Usability, Maintainability.
 
 - Avoid referencing specific CSS frameworks — focus on universal principles.
 - Be suitable for AI agents to follow when generating UI.
+- **Mandatory Visual Contract:** Dokumen ini merupakan kontrak visual mutlak yang mengikat seluruh proses penulisan kode pada Phase 3 (UI Slicing) dan Phase 4 (Development). Seluruh agent dilarang mengimprovisasi warna, spacing, atau komponen di luar spesifikasi ini (Anti AI-Slop).
 
 ---
 
 ## Output
 
 Simpan hasil ke: `docs/system-design/DESIGN_SYSTEM.md`
+Setelah selesai: **"Langkah berikutnya: UI Style Document (aod-ui-style) untuk konversi tokens konkret"**

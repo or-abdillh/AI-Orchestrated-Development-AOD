@@ -28,17 +28,18 @@ Tugasmu membuat checklist Definition of Done yang tegas, terukur, dan praktis un
 
 ## DoD Categories / Kategori Checklist
 
-Checklist harus mencakup 6 pilar:
+Checklist harus mencakup 7 pilar:
 
-### 1. Functional & Business Logic
+### 1. Functional, Business Logic & Visual Compliance
 - [ ] Alur kerja sesuai dengan use case PRD dan Business Flow.
 - [ ] Transisi status mematuhi State Machine (termasuk invalid transition prevention).
 - [ ] Edge cases dan failure scenarios tertangani dengan ramah user.
+- [ ] **Design System Adherence:** Tampilan antarmuka (views, templates, komponen) 100% mematuhi `docs/system-design/DESIGN_SYSTEM.md` dan `UI_STYLE.md` (zero arbitrary styling, bebas dari token warna liar).
 
 ### 2. Code Architecture & Cleanliness
-- [ ] Layering konsisten sesuai Tech Spec (e.g. Service Layer untuk business logic).
-- [ ] Tidak ada logic acak di controller/route handlers.
-- [ ] Penamaan variabel, fungsi, dan entity selaras dengan Data Dictionary.
+- [ ] Layering konsisten sesuai Tech Spec dan `.agents/rules/aod-architecture-engineering.md` (e.g. Service Layer untuk business logic).
+- [ ] Tidak ada logic acak atau database query di controller/route handlers (thin controllers).
+- [ ] Penamaan variabel, fungsi, class, dan entity selaras dengan Data Dictionary dan konvensi arsitektur proyek.
 
 ### 3. Data Integrity & Validation
 - [ ] Semua input divalidasi ketat di request layer (tipe, range, format, enum).
@@ -58,6 +59,12 @@ Checklist harus mencakup 6 pilar:
 ### 6. Automated Testing
 - [ ] Unit / Feature tests tersedia untuk happy path dan negative path.
 - [ ] Semua test suite berjalan hijau (passing) sebelum commit.
+
+### 7. Knowledge Documentation & Context Continuity (CRITICAL FOR AOD)
+- [ ] Agent References Context document dibuat atau diperbarui (`docs/references/ui/REF-UI-*.md` untuk Phase 3 UI Slicing, atau `docs/references/features/REF-FEAT-*.md` untuk Phase 4 Development).
+- [ ] Dokumen referensi didaftarkan ke Master Registry (`docs/references/INDEX.md`) dengan status dan link valid.
+- [ ] Manifest file fisik, props contract / request lifecycle, invariants bisnis, dan panduan kontinuitas bagi agent berikutnya terdokumentasi lengkap.
+- [ ] Dokumen referensi dan pembaruan `INDEX.md` disertakan dalam commit bersama kode fisik.
 
 ---
 

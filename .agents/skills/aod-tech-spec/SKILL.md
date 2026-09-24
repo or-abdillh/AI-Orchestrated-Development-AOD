@@ -81,9 +81,10 @@ Tanyakan secara singkat preferensi arsitektur:
 **7. Coding Rules for AI Agents**
 - Aturan ketat implementasi: No unapproved schema changes, no business logic in controllers, eager loading untuk hindari N+1, dsb.
 
----
+## Output & Dynamic Architecture Rules Generation
 
-## Output
+Skill ini WAJIB menghasilkan output terkoordinasi:
+1. **Technical Specification Document:** Simpan dokumen spesifikasi lengkap ke `docs/development/TECH_SPEC.md`.
+2. **Dynamic Project Architecture Rules (Always-On):** Ekstrak intisari aturan rekayasa arsitektur proyek ke `.agents/rules/aod-architecture-engineering.md` dengan frontmatter `trigger: always_on` menggunakan template `docs/samples/ARCHITECTURE_ENGINEERING_TEMPLATE.md` (serta simpan salinannya di `docs/development/ARCHITECTURE_ENGINEERING.md`).
 
-Simpan hasil ke: `docs/development/TECH_SPEC.md`
 Setelah selesai: **"Langkah berikutnya: Development Phase Plan (aod-phase-plan)"**

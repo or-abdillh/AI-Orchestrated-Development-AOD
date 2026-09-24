@@ -18,6 +18,8 @@ Pastikan dokumen berikut telah tersedia:
 - [ ] **UI Component Map** *(component hierarchy)*
 - [ ] **UI Style Document** *(design tokens & visual rules — CRITICAL)*
 - [ ] **Design System Document** *(guidelines & consistency)*
+- [ ] **Agent Reference Registry:** `docs/references/INDEX.md` *(jika belum ada, inisialisasi dari `docs/samples/MASTER_REFERENCE_INDEX_TEMPLATE.md`)*
+- [ ] **Existing UI Reference:** Periksa apakah `docs/references/ui/REF-UI-<slug>.md` sudah ada. Jika ada, baca terlebih dahulu sebelum mengedit.
 
 ---
 
@@ -40,19 +42,28 @@ Jika belum ditentukan oleh user atau dokumen proyek, tanyakan:
 ## Style Execution Rules (CRITICAL)
 
 Kamu HARUS:
-- Menggunakan design tokens (warna, font, spacing, shadow, radius) dari UI Style Document.
+- **Kepatuhan Mutlak Design System:** Mengikuti 100% tokens dan pedoman dari `docs/system-design/DESIGN_SYSTEM.md` dan `docs/system-design/UI_STYLE.md`.
+- Menggunakan design tokens (warna, font, spacing, shadow, radius) resmi tanpa deviasi.
 - Menerapkan hierarki visual yang jelas dan konsistensi tipografi.
 - Memasukkan visual micro-interactions (hover, active, focus, disabled states).
 - Menggunakan mock data lokal agar komponen langsung tampil interaktif.
+- **Menyusun Dokumen Referensi UI (ARC):** Setiap halaman yang selesai di-slice wajib didokumentasikan ke `docs/references/ui/REF-UI-<slug>.md`.
 
 Kamu TIDAK BOLEH:
-- Menggunakan arbitrary inline colors atau styling acak tanpa token.
+- Menggunakan arbitrary inline colors atau styling acak tanpa token (Zero AI-slop).
 - Mengimplementasikan panggilan API nyata (mock data only di tahap ini).
 - Menghasilkan UI generik bertipe "AI-slop".
+- Mengabaikan pembuatan dokumen referensi dan update `docs/references/INDEX.md`.
 
 ---
 
-## Output
+## Output & Reference Documentation
 
-Tulis atau hasilkan kode komponen langsung ke target file yang sesuai dalam proyek frontend user.
-Informasikan ke user komponen apa yang telah selesai dibuat dan halaman berikutnya yang siap di-slice.
+1. **Kode Komponen:** Tulis atau hasilkan kode komponen langsung ke target file yang sesuai dalam proyek frontend user.
+2. **UI Reference Document:** Tulis atau perbarui dokumen referensi di `docs/references/ui/REF-UI-<slug>.md` menggunakan template `docs/samples/UI_REFERENCE_TEMPLATE.md`.
+3. **Master Registry Update:** Daftarkan halaman/komponen ini pada tabel Phase 3 di `docs/references/INDEX.md`.
+4. **Laporan Selesai:** Informasikan ke user:
+   - Komponen fisik yang telah dibuat/diubah.
+   - Dokumen referensi yang dihasilkan (`docs/references/ui/REF-UI-<slug>.md`).
+   - Pembaruan pada `docs/references/INDEX.md`.
+   - Halaman berikutnya yang siap di-slice.

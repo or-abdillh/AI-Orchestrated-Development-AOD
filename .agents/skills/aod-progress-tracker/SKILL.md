@@ -23,6 +23,7 @@ Before running the progress audit, verify the availability of:
 - [ ] **Phase Plan:** `docs/development/PHASE_PLAN.md` *(recommended)*
 - [ ] **Feature Prompts:** `docs/development/FEATURE_PROMPTS.md` *(optional)*
 - [ ] **Definition of Done:** `docs/development/DOD.md` *(optional)*
+- [ ] **Agent Reference Registry:** `docs/references/INDEX.md` *(recommended — ARC audit)*
 
 Jika `PRD.md` atau `TECH_SPEC.md` belum tersedia:
 > "Untuk melakukan audit progres pengerjaan, diperlukan minimal `docs/business/PRD.md` dan `docs/development/TECH_SPEC.md`. Silakan selesaikan fase spesifikasi terlebih dahulu."
@@ -81,16 +82,19 @@ Lakukan pemindaian terhadap status riil repositori:
 4. **DoD & Revision Audit:**
    - Periksa checklist `docs/development/DOD.md` jika ada.
    - Periksa `docs/feedback/FINAL_REPORT_*.md` untuk melihat revisi yang telah di-resolve.
+5. **Agent References Context (ARC) Audit:**
+   - Periksa keberadaan Master Registry `docs/references/INDEX.md`.
+   - Periksa keberadaan file referensi di `docs/references/ui/REF-UI-*.md` dan `docs/references/features/REF-FEAT-*.md` untuk setiap komponen atau fitur yang telah dikerjakan.
 
 ### Step 3 — Classification & Status Tagging
 Klasifikasikan setiap kebutuhan ke dalam salah satu status berikut:
 
 | Status Badge | Definisi | Kriteria Pembuktian |
 |---|---|---|
-| `[✔] Completed` | Selesai & Terverifikasi | Kode modul lengkap (Model, Service, Controller), test ada/lolos, commit/merge tercatat. |
-| `[⏳] In Progress` | Sedang Dikerjakan | Branch fitur aktif ada, kode parsial ada, namun belum tuntas atau test belum lengkap. |
+| `[✔] Completed` | Selesai & Terverifikasi | Kode modul lengkap (Model, Service, Controller), test lolos, dokumen ARC (`REF-*`) tersedia & terdaftar di `INDEX.md`, commit/merge tercatat. |
+| `[⏳] In Progress` | Sedang Dikerjakan | Branch fitur aktif ada, kode parsial ada, namun belum tuntas, test belum lengkap, atau ARC belum final. |
 | `[ ] Planned` | Direncanakan (Belum Dimulai) | Tercantum di PRD/Tech Spec/Phase Plan, tetapi belum ada kode atau branch terkait. |
-| `[⚠] Drift / Blocked` | Ada Deviasi atau Terblokir | Implementasi menyimpang dari Tech Spec (misal: logic di controller) atau terblokir dependensi. |
+| `[⚠] Drift / Blocked` | Ada Deviasi atau Terblokir | Implementasi menyimpang dari Tech Spec (misal: logic di controller), dokumen ARC hilang, atau terblokir dependensi. |
 
 ### Step 4 — Formulate Interactive Checklist & KPI Dashboard
 Susun laporan terstruktur dengan format checklist:
@@ -190,6 +194,7 @@ Susun laporan terstruktur dengan format checklist:
 - [x] **Dedicated Validation:** Form Request / Schema Validator digunakan pada seluruh endpoint aktif.
 - [ ] **Authorization Policy:** Policy otorisasi RBAC belum sepenuhnya diaktifkan pada modul transaksi.
 - [ ] **Automated Test Suite:** Test coverage saat ini 45% (target DoD: min. 80% pada core flow).
+- [x] **Agent References Context (ARC Gate 7):** Dokumen referensi (`REF-*`) terisi lengkap dan terdaftar di `docs/references/INDEX.md`.
 
 ---
 
