@@ -51,6 +51,8 @@ OUTPUT REQUIREMENTS
 - Proper Tailwind usage
 - Consistent spacing and typography
 - Strong visual hierarchy
+- UI Reference Document: Generate or update `docs/references/ui/REF-UI-[slug].md` (following `docs/samples/UI_REFERENCE_TEMPLATE.md`)
+- Master Registry Update: Register/update this sliced page in `docs/references/INDEX.md`
 
 ---
 

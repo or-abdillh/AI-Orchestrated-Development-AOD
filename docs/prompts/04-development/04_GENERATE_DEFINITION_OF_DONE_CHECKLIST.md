@@ -52,6 +52,7 @@ Each feature must be validated across:
 5. UI rendering
 6. User interaction
 7. Error handling
+8. Knowledge documentation & context continuity (`docs/references/`)
 
 Do not mark a feature as done unless:
 
@@ -59,6 +60,7 @@ Do not mark a feature as done unless:
 - UI reflects the correct state
 - API and data are aligned
 - user actions behave correctly
+- Agent References Context document (`REF-*`) is completed and registered in `docs/references/INDEX.md`
 
 Generate a practical and strict Definition of Done checklist for:
 
@@ -68,6 +70,7 @@ C. Validation & Authorization
 D. Security
 E. Performance
 F. Testing
+G. Knowledge Documentation & Context Continuity (ARC)
 
 Rules:
 
@@ -81,6 +84,7 @@ Rules:
   - N+1 issue
   - Missing test
   - Undefined schema usage
+  - Missing Agent References Context doc (`REF-FEAT-*`) or unregistered in `docs/references/INDEX.md`
 
 Output format:
 

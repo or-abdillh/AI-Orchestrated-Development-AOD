@@ -104,6 +104,7 @@ Pengecekan keselarasan implementasi terhadap standar arsitektur AOD (`aod-coding
 - [ ] **RBAC Authorization:** Policy otorisasi telah diterapkan pada Master Data, belum tuntas pada Modul Transaksi.
 - [ ] **Eager Loading Enforcement:** Query pada Order Service masih membutuhkan penyesuaian eager loading relasi items.
 - [ ] **Test Coverage:** Automated test coverage saat ini mencapai ~52% (standar DoD: min. 80% pada transaksi inti).
+- [x] **Agent References Context (ARC Gate 7):** Dokumen referensi konteks (`docs/references/ui/` & `docs/references/features/`) dibuat lengkap dan tersinkronisasi di `docs/references/INDEX.md`.
 
 ---
 

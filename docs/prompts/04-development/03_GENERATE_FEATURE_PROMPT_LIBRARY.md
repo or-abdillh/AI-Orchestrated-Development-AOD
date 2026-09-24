@@ -86,6 +86,7 @@ For each module, create a reusable AI prompt template including:
   6. Policy
   7. API Resource (if API)
   8. Feature Test
+  9. Agent References Context (ARC): `docs/references/features/REF-FEAT-<module>-<slug>.md` & sync `docs/references/INDEX.md`
 
 Each template must include instruction:
 
@@ -94,6 +95,7 @@ Each template must include instruction:
 - Do not place business logic in Controller
 - Use Service layer
 - Ask clarification if unclear
+- Generate/update Feature Reference Document and register in `docs/references/INDEX.md` (DoD Gate 7)
 
 Do not invent features.
 Do not overcomplicate.
