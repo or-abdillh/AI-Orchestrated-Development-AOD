@@ -73,6 +73,7 @@ Include:
 7. API Specification (if needed)
 8. Validation & Authorization Approach
 9. Coding Rules for AI Development
+10. Dynamic Architecture Engineering Rules: Hasilkan file aturan operasional proyek ke `.agents/rules/aod-architecture-engineering.md` dengan frontmatter `trigger: always_on` (dan `docs/development/ARCHITECTURE_ENGINEERING.md`) mengikuti `docs/samples/ARCHITECTURE_ENGINEERING_TEMPLATE.md`.
 
 Language:
 

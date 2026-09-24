@@ -1,19 +1,28 @@
+---
+trigger: always_on
+---
+
 # AOD Coding Standards — Development Phase
 
 > Active during Development Phase (aod-tech-spec, aod-phase-plan, aod-feature-prompts, aod-dod).
 > These rules govern how AI generates implementation code.
-> Adapt to the tech stack confirmed in the Technical Specification.
+> Adapt to the tech stack confirmed in the Technical Specification and `.agents/rules/aod-architecture-engineering.md`.
 
 ---
 
 ## Core Architecture Rules / Aturan Arsitektur Inti
 
-- Follow the architecture pattern defined in Technical Specification. Do not deviate.
+- Follow the architecture pattern defined in Technical Specification and `.agents/rules/aod-architecture-engineering.md`. Do not deviate.
 - Business logic belongs in the Service/Use Case layer, NOT in Controllers/Routes.
 - Controllers are thin: receive request, delegate to service, return response.
 - Models/Entities contain relationships and domain rules only.
 - Validation must use dedicated Request/FormRequest/Schema classes.
 - Authorization must use dedicated Policy/Guard/Permission classes.
+
+## Design System Adherence / Kepatuhan Sistem Desain (Frontends & Views)
+
+- Seluruh kode visual (views, Blade templates, React/Vue/Svelte components, CSS classes) WAJIB 100% tunduk pada `docs/system-design/DESIGN_SYSTEM.md` dan `docs/system-design/UI_STYLE.md`.
+- Dilarang keras menggunakan warna hex arbitrer di luar token, arbitrary spacing (e.g. `p-[17px]`), atau komponen tanpa state matrix lengkap (hover, active, focus, disabled, loading, empty, error).
 
 ## Implementation Discipline / Disiplin Implementasi
 
@@ -30,6 +39,7 @@
 - Each data-modifying feature must include authorization checks.
 - Error responses must follow the format defined in the API Contract.
 - Do not place raw queries in controllers unless absolutely necessary.
+- Multi-table writes must be wrapped in Database Transactions (`DB::transaction`).
 
 ## Scope Control / Kendali Scope
 
@@ -38,10 +48,15 @@
 - Do not change database schema without user approval.
 - Feature is DONE only when it passes the Definition of Done checklist (aod-dod).
 
+## Dynamic Architecture Engineering Reference
+
+- Aturan arsitektur konkret dan konvensi spesifik proyek dikelola secara dinamis di `.agents/rules/aod-architecture-engineering.md`.
+- AI agent wajib memeriksa file tersebut sebelum memulai implementasi kode fitur baru.
+
 ## Framework Agnosticism
 
 - These rules apply regardless of tech stack.
-- Specific framework conventions are defined in the Technical Specification.
+- Specific framework conventions are defined in the Technical Specification and `.agents/rules/aod-architecture-engineering.md`.
 - When in doubt about framework-specific patterns, refer to the Tech Spec first.
 
 ---

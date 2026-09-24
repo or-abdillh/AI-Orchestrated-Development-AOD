@@ -107,6 +107,23 @@ Save all generated documents to `docs/` within the project directory:
 - **3-Tier Scope Classification:** Klasifikasikan dampak ke Scope A (Doc-Only), Scope B (Feature Modification), atau Scope C (New Feature/Expansion).
 - **Laporan Akhir Wajib:** Setiap penanganan revisi wajib menghasilkan laporan akhir di `docs/feedback/FINAL_REPORT_<name>.md`.
 
+## Design System Adherence / Kepatuhan Sistem Desain Mutlak
+
+- Seluruh pembuatan atau pengubahan UI, views, template Blade/JSX/Vue/Svelte, dan styling WAJIB 100% tunduk pada `docs/system-design/DESIGN_SYSTEM.md` dan `docs/system-design/UI_STYLE.md`.
+- **Zero Arbitrary Styling:** Dilarang keras menggunakan kode warna hex sembarangan, arbitrary spacing (misal `p-[17px]`), atau komponen di luar spesifikasi Design System.
+- **State Completeness:** Setiap komponen interaktif wajib mengimplementasikan state matrix lengkap: default, hover, active, focus-visible, disabled, loading skeleton, empty state, dan error banner.
+
+## Dynamic Architecture Engineering Rules (`always_on`)
+
+- Dokumen `docs/development/TECH_SPEC.md` yang dihasilkan oleh `aod-tech-spec` (Step 18) wajib diekstrak intisari operasionalnya ke `.agents/rules/aod-architecture-engineering.md` dengan frontmatter `trigger: always_on` (mengikuti template `docs/samples/ARCHITECTURE_ENGINEERING_TEMPLATE.md`).
+- Aturan ini bersifat mengikat secara permanen di seluruh sesi: dilarang menaruh business logic di Controller, dilarang raw query tanpa parameter binding, dan seluruh mutasi multi-tabel wajib dibungkus `DB::transaction()`.
+
+## Agent References Context (ARC) Mutlak (Phase 3 & Phase 4)
+
+- Setiap kali agent menulis kode pada Phase 3 (UI Slicing) atau Phase 4 (Development), agent WAJIB menyusun/memperbarui dokumen referensi (`docs/references/ui/REF-UI-<slug>.md` atau `docs/references/features/REF-FEAT-<module>-<slug>.md`) dan mendaftarkannya pada Master Registry `docs/references/INDEX.md`.
+- Sebelum memodifikasi modul/fitur yang sudah ada, agent WAJIB membaca dokumen referensi terkait di `docs/references/` terlebih dahulu.
+
+
 
 
 
