@@ -116,7 +116,8 @@ flowchart TD
         D1["aod-tech-spec<br><i>Technical Specification</i>"] --> D2["aod-phase-plan<br><i>Phased Sprint Plan</i>"]
         D2 --> D3["aod-feature-prompts<br><i>Atomic Implementation Library</i>"]
         D3 --> D4["aod-dod<br><i>Definition of Done Checklist</i>"]
-        D4 -.-> D5["aod-progress-tracker<br><i>Requirement Audit & Checklist</i>"]
+        D4 -.-> D5["aod-quick-checklist<br><i>Rapid Terminal Checklist</i>"]
+        D4 -.-> D6["aod-progress-tracker<br><i>Full Audit & Report</i>"]
     end
 
     subgraph P5["Phase 5: Testing & Delivery"]
@@ -135,7 +136,7 @@ flowchart TD
 
 ## 🛠️ Skills Inventory & Phase Mapping
 
-Repository ini dilengkapi dengan **25 native agent skills** yang tersimpan di [`.agents/skills/`](.agents/skills/):
+Repository ini dilengkapi dengan **26 native agent skills** yang tersimpan di [`.agents/skills/`](.agents/skills/):
 
 ### Entry Point & Pre-Project
 | Skill | Command Trigger | Input Dokumen | Output Artefak |
@@ -179,6 +180,7 @@ Repository ini dilengkapi dengan **25 native agent skills** yang tersimpan di [`
 | **`aod-phase-plan`** | Technical Project Manager | Technical Specification | `docs/development/PHASE_PLAN.md` |
 | **`aod-feature-prompts`**| AI Development Strategist | Tech Spec, Phase Plan | `docs/development/FEATURE_PROMPTS.md` |
 | **`aod-dod`** | Software Quality Auditor | Tech Spec, Feature Prompts | `docs/development/DOD.md` |
+| **`aod-quick-checklist`**| Fast Scrum Master & UI Lead | Phase Plan / UI Slicing | Instant Terminal Checklist (Phase Plan & UI Slicing) |
 | **`aod-progress-tracker`**| QA Lead & Release Auditor | PRD, Tech Spec, Git/Codebase | Interactive Checklist (Terminal default) / `docs/development/PROGRESS_REPORT.md` (Export) |
 
 ### Phase 5 — Testing
@@ -229,6 +231,10 @@ Sistem AOD dilindungi oleh file aturan otomatis yang selalu aktif di [`.agents/r
    - **Dual Output Modes:**
      - **Default Mode (Terminal Print-Out):** Cepat dan instan menampilkan checklist progres langsung di chat/terminal tanpa mengotori repositori dengan file baru.
      - **Export Mode (Document):** Mengekspor laporan lengkap ke `docs/development/PROGRESS_REPORT.md` (dilengkapi SemVer header) saat diminta oleh engineer.
+8. **Rapid Terminal Checklists (`aod-quick-checklist`):**
+   - **Zero File Footprint:** Memberikan tampilan status interaktif instan langsung di terminal/chat tanpa memicu git diff atau membuat file baru.
+   - **Targeted Granular Inspection:** Memungkinkan engineer memeriksa status granular per-fase pada **Phase Plan** (`checklist phase plan`), status pemotongan komponen per-halaman pada **UI Slicing** (`checklist ui slicing`), atau ringkasan dashboard gabungan (`quick checklist`).
+   - **Actionable Hints:** Menyertakan pointer aksi berikutnya secara presisi (halaman yang siap di-slice dengan `aod-page-slicer` atau branch Git yang harus dibuat).
 
 
 
