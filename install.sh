@@ -107,7 +107,7 @@ cp -R "${SOURCE_DIR}/.agents/skills/"* "${TARGET_DIR}/.agents/skills/"
 if [ -f "${SOURCE_DIR}/skills-lock.json" ]; then
     cp "${SOURCE_DIR}/skills-lock.json" "${TARGET_DIR}/skills-lock.json"
 fi
-log_ok "Seluruh aturan (rules) dan 24+ native skills berhasil dipasang."
+log_ok "Seluruh aturan (rules) dan 26 native skills berhasil dipasang."
 
 # 3. Scaffold docs directory structure
 log_step "Membuat scaffold struktur direktori docs/..."
@@ -185,6 +185,7 @@ Untuk memulai atau melanjutkan project dengan metodologi AOD, aktifkan skill yan
 - `aod-phase-plan` — Development Phase Plan
 - `aod-feature-prompts` — Feature Prompt Library
 - `aod-dod` — Definition of Done Checklist
+- `aod-quick-checklist` — Quick Terminal Checklist (tampilan checked list per-phase plan dan per-page UI slicing secara cepat via terminal)
 - `aod-progress-tracker` — Progress Tracker & Requirement Audit (output interactive checklist, terminal default / export dokumen)
 
 **Phase 5 – Testing:**
