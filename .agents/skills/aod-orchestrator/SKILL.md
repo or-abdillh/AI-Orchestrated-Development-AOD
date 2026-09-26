@@ -67,7 +67,8 @@ Phase 4 – Development
   ├─ Step 19: aod-phase-plan       → Development Phase Plan
   ├─ Step 20: aod-feature-prompts  → Feature Prompt Library & Execution (with Feature Reference `docs/references/features/`)
   ├─ Step 21: aod-dod              → Definition of Done Checklist (inc. Gate 7 Context Continuity)
-  └─ Tracking: aod-progress-tracker → Progress Tracker & Requirement Audit (Checklist)
+  ├─ Quick Check: aod-quick-checklist → Rapid Terminal Checklist (Phase Plan & UI Slicing)
+  └─ Audit Tracking: aod-progress-tracker → Progress Tracker & Requirement Audit (Checklist)
 
 Phase 5 – Testing
   └─ Step 22: aod-uat              → UAT Sheet Generator
@@ -89,6 +90,7 @@ Phase 5 – Testing
 - **"next step"** / **"lanjut"** → Proceed to next AOD step
 - **"where am I"** / **"fase berapa"** → Show current position in AOD map
 - **"what do I need"** / **"apa yang dibutuhkan"** → List prerequisites for current step
+- **"quick checklist"** / **"checklist phase"** / **"checklist slicing"** → Run `aod-quick-checklist` for rapid terminal status
 - **"cek progress"** / **"report progress"** → Run `aod-progress-tracker` for real-time progress checklist
 
 ## Parallel Steps Info
