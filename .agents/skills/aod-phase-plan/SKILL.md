@@ -33,6 +33,46 @@ Tugasmu menyusun rencana rilis bertahap (phased rollout) berbasis **MVP-first st
 3. **Pragmatic for Solo/Small Teams:** Hindari dependensi paralel yang rumit.
 4. **Scope Freeze:** Jangan memasukkan fitur baru di luar PRD / Technical Spec.
 
+### Existing Project Baseline Mode
+
+Jika user memilih Phase Plan setelah `aod-existing-project-initiation`, rencanakan
+pekerjaan dari baseline yang teramati, bukan dari Phase 0 setup. Gunakan laporan
+screening, Tech Spec *as-is* bila tersedia, dokumen yang ada, dan keputusan user.
+
+- Prasyarat Tech Spec/PRD/UI Flow/State Machine tetap menjadi sumber bila ada.
+  Jika artefak tersebut belum ada, gunakan bukti screening untuk memetakan
+  baseline *as-is* dan tandai input yang hilang; jangan mengarang scope bisnis.
+- Bedakan fitur existing yang teramati, implementasi parsial, kondisi belum
+  diketahui, dan pekerjaan baru. Jangan rencanakan ulang fitur selesai sebagai
+  deliverable baru.
+- Urutkan pekerjaan tersisa berdasarkan dependency, risiko yang didukung bukti,
+  dan prioritas bisnis yang diberikan user. Tandai prioritas sebagai keputusan
+  terbuka bila user belum menetapkannya.
+- Setiap item harus menunjuk ke temuan audit atau keputusan user. Bila tidak ada
+  dasar untuk menetapkan fitur baru, jangan masukkan fitur tersebut.
+- Target branch boleh dicantumkan sebagai saran workflow untuk pekerjaan ke
+  depan, tetapi jangan mengarang branch/commit historis sebagai bukti status.
+
+Struktur output mode existing project:
+
+```markdown
+# Existing System Baseline
+- Tech stack dan layanan (dengan bukti)
+- Domain/modul dan status existing
+- Risiko, gap, keputusan terbuka
+
+# Remaining Development Phases
+## Phase 1: [Objective dari temuan/keputusan]
+- Status awal / evidence
+- Deliverables
+- Dependencies
+- Validation Criteria
+- Exit Criteria
+```
+
+Nomor fase menunjukkan urutan pekerjaan setelah baseline audit, bukan nomor fase
+scaffolding yang wajib dimulai dari Phase 0.
+
 ---
 
 ## Format Rencana Fase / Phase Structure

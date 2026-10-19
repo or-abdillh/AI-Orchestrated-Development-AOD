@@ -107,7 +107,7 @@ cp -R "${SOURCE_DIR}/.agents/skills/"* "${TARGET_DIR}/.agents/skills/"
 if [ -f "${SOURCE_DIR}/skills-lock.json" ]; then
     cp "${SOURCE_DIR}/skills-lock.json" "${TARGET_DIR}/skills-lock.json"
 fi
-log_ok "Seluruh aturan (rules) dan 26 native skills berhasil dipasang."
+log_ok "Seluruh aturan (rules), 28 native AOD skills, dan skill pelengkap berhasil dipasang."
 
 # 3. Scaffold docs directory structure
 log_step "Membuat scaffold struktur direktori docs/..."
@@ -153,6 +153,7 @@ Untuk memulai atau melanjutkan project dengan metodologi AOD, aktifkan skill yan
 
 **Entry Point (Mulai di sini):**
 - `aod-orchestrator` — panduan interaktif lengkap fase demi fase, dari discovery hingga UAT.
+- `aod-existing-project-initiation` — screening codebase existing, deteksi tech stack, pemetaan domain berbasis bukti, dan pemilihan dokumen AOD yang relevan.
 
 **Pre-Project:**
 - `aod-proposal` — konversi PRD + Tech Spec menjadi Commercial Proposal & Quotation untuk klien.
@@ -197,6 +198,7 @@ Untuk memulai atau melanjutkan project dengan metodologi AOD, aktifkan skill yan
 **AOD Core Rules (Always Active):**
 - Disiplin fase ketat: ikuti urutan Business Layer → System Design → UI Architecture → Development → Testing.
 - Dependency chain mutlak: jangan membuat dokumen turunan tanpa dokumen prasyarat.
+- Existing Project Initiation Exception: saat `aod-existing-project-initiation` dipakai, screening read-only dan dokumen *as-is* boleh dibuat dari bukti repository tanpa memaksa rantai prasyarat scaffolding. Tandai fakta, inferensi, gap, dan konflik; dokumen *to-be* tetap memerlukan keputusan/user input.
 - AI berperan sebagai executor terkendali, bukan arsitek independen.
 - Document versioning mutlak: seluruh dokumen di `docs/` wajib memiliki header semantic versioning (`vMAJOR.MINOR.PATCH`), tanggal `Last Updated`, dan tabel `Revision History`. AI wajib menaikkan versi (Major/Minor/Patch) setiap kali melakukan perubahan dokumen.
 - Git feature-branching mutlak: seluruh implementasi pada Phase 4 wajib berada di branch terpisah (`phase/<num>-<slug>` atau `feat/<module>-<slug>`). Dilarang commit langsung ke `main`/`master`. Gunakan `smart-git-commit` untuk commit atomik.
@@ -276,6 +278,6 @@ echo ""
 echo -e "${C_GREEN}${C_BOLD}🎉 Instalasi AOD Framework Berhasil!${C_RESET}\n"
 echo -e "Untuk mulai menjalankan AOD pada AI coding agent Anda:"
 echo -e " 1. Buka AI Assistant / Antigravity di proyek ini."
-echo -e " 2. Ketik prompt: ${C_BOLD}\"Mulai AOD\"${C_RESET} atau ${C_BOLD}\"Jalankan aod-orchestrator\"${C_RESET}."
-echo -e " 3. AI akan otomatis membaca panduan fase dan memandu pengerjaan secara terstruktur."
+echo -e " 2. Untuk proyek baru, ketik ${C_BOLD}\"Mulai AOD\"${C_RESET}; untuk codebase existing, ketik ${C_BOLD}\"Audit codebase ini untuk adopsi AOD\"${C_RESET}."
+echo -e " 3. AI akan membaca panduan fase atau melakukan screening codebase sebelum menyarankan dokumen."
 echo ""
