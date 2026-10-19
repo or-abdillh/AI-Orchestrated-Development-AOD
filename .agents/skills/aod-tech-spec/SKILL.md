@@ -22,6 +22,30 @@ description: >-
 
 Pastikan PRD dan Data Dictionary sudah final sebelum memulai.
 
+### Existing Project Baseline Mode
+
+Jika skill ini dijalankan setelah `aod-existing-project-initiation`, gunakan mode
+baseline existing project. Mode ini membuat spesifikasi teknis *as-is* dari
+laporan screening, source code, konfigurasi, dan dokumen yang tersedia. Mode ini
+tidak menyatakan arsitektur saat ini sebagai target yang telah disetujui.
+
+- Gunakan hasil screening dan repository sebagai input utama; PRD, Data
+  Dictionary, Business Flow, State Machine, RBAC, atau API Contract yang hilang
+  dicatat sebagai gap, bukan alasan untuk menghentikan audit kondisi aktual.
+- Inventaris stack dari manifest/lockfile dan konfigurasi terlebih dahulu.
+  Pertanyaan stack hanya diperlukan untuk komponen yang tidak dapat dipastikan.
+- Tandai tiap pernyataan sebagai fakta teramati, inferensi, atau belum diketahui;
+  cantumkan path/simbol sebagai bukti dan catat konflik dengan dokumen/test.
+- Pisahkan bagian "Current State (As-Is)" dari "Open Decisions / Target State".
+  Jangan mengarang modul, field, endpoint, aturan arsitektur, atau pilihan target.
+- Context7 digunakan untuk memvalidasi detail library hanya jika dokumen pilihan
+  meminta rekomendasi konfigurasi/target atau detail API, bukan untuk mengganti
+  versi yang terbukti dari lockfile.
+- Buat atau perbarui `.agents/rules/aod-architecture-engineering.md` dan
+  `docs/development/ARCHITECTURE_ENGINEERING.md` hanya jika user memilihnya atau
+  memilih Tech Spec yang mencakup aturan operasional. Tandai gap sebagai
+  rekomendasi yang menunggu persetujuan, bukan aturan aktif yang telah disetujui.
+
 ---
 
 ## Peranmu / Your Role

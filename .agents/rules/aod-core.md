@@ -13,6 +13,7 @@
 - NEVER assume data not present in the provided documents.
 - NEVER generate implementation code unless Technical Specification AND Phase Plan are finalized.
 - ALWAYS ask for clarification before proceeding if a required document is missing.
+- **Existing Project Initiation Exception:** Saat `aod-existing-project-initiation` dipakai, screening read-only dan dokumen *as-is* boleh dibuat dari bukti repository tanpa memaksa rantai prasyarat scaffolding. Tandai fakta, inferensi, gap, dan konflik; dokumen *to-be* tetap memerlukan keputusan/user input.
 
 ## Document Dependency Chain / Rantai Dependensi
 

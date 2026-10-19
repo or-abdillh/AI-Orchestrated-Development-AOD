@@ -17,6 +17,7 @@ Untuk memulai atau melanjutkan project dengan metodologi AOD, aktifkan skill yan
 
 **Entry Point (Mulai di sini):**
 - `aod-orchestrator` — panduan interaktif lengkap fase demi fase, dari discovery hingga UAT.
+- `aod-existing-project-initiation` — screening codebase existing, deteksi tech stack, pemetaan domain berbasis bukti, dan pemilihan dokumen AOD yang relevan.
 
 **Pre-Project:**
 - `aod-proposal` — konversi PRD + Tech Spec menjadi Commercial Proposal & Quotation untuk klien.
@@ -61,6 +62,7 @@ Untuk memulai atau melanjutkan project dengan metodologi AOD, aktifkan skill yan
 **AOD Core Rules (Always Active):**
 - Disiplin fase ketat: ikuti urutan Business Layer → System Design → UI Architecture → Development → Testing.
 - Dependency chain mutlak: jangan membuat dokumen turunan tanpa dokumen prasyarat.
+- Existing Project Initiation Exception: saat `aod-existing-project-initiation` dipakai, screening read-only dan dokumen *as-is* boleh dibuat dari bukti repository tanpa memaksa rantai prasyarat scaffolding. Tandai fakta, inferensi, gap, dan konflik; dokumen *to-be* tetap memerlukan keputusan/user input.
 - AI berperan sebagai executor terkendali, bukan arsitek independen.
 - Document versioning mutlak: seluruh dokumen di `docs/` wajib memiliki header semantic versioning (`vMAJOR.MINOR.PATCH`), tanggal `Last Updated`, dan tabel `Revision History`. AI wajib menaikkan versi (Major/Minor/Patch) setiap kali melakukan perubahan dokumen.
 - Git feature-branching mutlak: seluruh implementasi pada Phase 4 wajib berada di branch terpisah (`phase/<num>-<slug>` atau `feat/<module>-<slug>`). Dilarang commit langsung ke `main`/`master`. Gunakan `smart-git-commit` untuk commit atomik.

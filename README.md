@@ -31,7 +31,7 @@
 
 ## ⚡ Quick Install (One-Liner)
 
-Pasang seluruh ekosistem AOD Framework (24+ Skills, 3 Rules, AGENTS.md, dan struktur scaffold `docs/`) ke dalam project apa pun (proyek baru maupun proyek yang sudah berjalan seperti Laravel, Next.js, Vue, Django, dsb.) dengan **satu baris perintah**:
+Pasang seluruh ekosistem AOD Framework (28 native AOD skills, 5 Rules, skill pelengkap, AGENTS.md, dan struktur scaffold `docs/`) ke dalam project apa pun (proyek baru maupun proyek yang sudah berjalan seperti Laravel, Next.js, Vue, Django, dsb.) dengan **satu baris perintah**:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/or-abdillh/AI-Orchestrated-Development-AOD/main/install.sh | bash
@@ -136,12 +136,13 @@ flowchart TD
 
 ## 🛠️ Skills Inventory & Phase Mapping
 
-Repository ini dilengkapi dengan **26 native agent skills** yang tersimpan di [`.agents/skills/`](.agents/skills/):
+Repository ini dilengkapi dengan **28 native AOD skills** serta skill pelengkap yang tersimpan di [`.agents/skills/`](.agents/skills/):
 
 ### Entry Point & Pre-Project
 | Skill | Command Trigger | Input Dokumen | Output Artefak |
 |---|---|---|---|
 | **`aod-orchestrator`** | `"start AOD"`, `"mulai AOD"`, `"panduan AOD"` | *None (Interactive)* | Panduan langkah per langkah |
+| **`aod-existing-project-initiation`** | `"initiate existing project"`, `"adopsi AOD pada proyek existing"`, `"audit codebase untuk phase plan"` | Repository yang sudah berjalan | Laporan screening di chat; dokumen AOD pilihan user berdasarkan bukti codebase |
 | **`aod-proposal`** | `"buat proposal"`, `"project quotation"` | PRD, Tech Spec | `docs/proposal/PROPOSAL.md` |
 
 ### Phase 1 — Business Layer
@@ -270,7 +271,15 @@ User: "Mulai proyek baru dengan AOD."
 Agent: Mengaktifkan aod-orchestrator, menanyakan ketersediaan Study Case / Business Discovery.
 ```
 
-### 2. Membangun Dokumen Bisnis (Phase 1)
+### 2. Inisialisasi Proyek Existing
+Untuk codebase yang sudah memiliki modul dan fitur berjalan, mulai dengan skill screening khusus. Skill akan mendeteksi stack dari manifest, memetakan domain dari bukti implementasi, lalu menampilkan pilihan dokumen yang relevan. Dokumen baru dibuat setelah Anda memilihnya:
+
+```text
+User: "Audit codebase ini untuk adopsi AOD dan susun opsi phase plan."
+Agent: Menjalankan aod-existing-project-initiation, memeriksa stack dan codebase secara read-only, lalu meminta pilihan dokumen berdasarkan hasil audit.
+```
+
+### 3. Membangun Dokumen Bisnis (Phase 1)
 Jalankan pembentukan BRD dan Business Flow:
 ```text
 User: "Generate BRD dari study case ini: [paste ringkasan bisnis]"
@@ -280,7 +289,7 @@ User: "Lanjut buat Business Flow dan PRD."
 Agent: Menjalankan aod-business-flow -> aod-prd.
 ```
 
-### 3. Merancang Sistem & Data (Phase 1 & 2)
+### 4. Merancang Sistem & Data (Phase 1 & 2)
 Generate kamus data dan kontrak antarmuka:
 ```text
 User: "Buat data dictionary dan skema DBML."
@@ -290,7 +299,7 @@ User: "Rancang API contract dan UI flow."
 Agent: Menjalankan aod-api-contract dan aod-ui-flow secara terpadu.
 ```
 
-### 4. Eksekusi Koding Terkendali (Phase 4)
+### 5. Eksekusi Koding Terkendali (Phase 4)
 Setelah `TECH_SPEC.md` dan `PHASE_PLAN.md` disetujui, gunakan prompt library atomik:
 ```text
 User: "Generate feature prompts untuk Module Orders."
@@ -300,7 +309,7 @@ User: "Implementasikan Feature 1: Create Order menggunakan prompt dari library."
 Agent: Mengeksekusi kode per-fitur (Migration -> Model -> Request -> Service -> Controller -> Policy -> Tests).
 ```
 
-### 5. Validasi & Commit
+### 6. Validasi & Commit
 Periksa checklist Definition of Done dan jalankan atomic commit:
 ```text
 User: "Periksa kepatuhan DoD untuk fitur Create Order."
