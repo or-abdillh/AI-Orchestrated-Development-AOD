@@ -63,3 +63,11 @@ versioning standard. Include scope and source references, entity definitions,
 relationships, enums, constraints, sensitivity notes, and open decisions. Then
 recommend `aod-dbml` when the dictionary is sufficiently approved; DBML must
 not add entities or fields absent here.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

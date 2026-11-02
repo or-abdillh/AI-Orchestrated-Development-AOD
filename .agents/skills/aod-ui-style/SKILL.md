@@ -61,3 +61,11 @@ Add a short implementation note: `aod-tailwind-config` maps these canonical
 tokens to the project's approved styling system; that mapping must not redefine
 the token source. After saving, identify `aod-ui-slicing` as the next step when
 its inputs are ready.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

@@ -94,3 +94,11 @@ questions. Flag potential breaking changes and security/privacy implications.
   when available, verification evidence, unresolved items, and next actions.
   Mark partial or blocked items honestly; never set the overall status to
   `Completed` while required work remains unresolved.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

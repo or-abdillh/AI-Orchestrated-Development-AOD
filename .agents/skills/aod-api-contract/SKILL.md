@@ -109,3 +109,11 @@ versioning standard. Begin with the confirmed interface mode and evidence.
 Organize operations by capability and include traceable request/response or
 page/redirect behavior, validation, access rules, errors, and unresolved
 decisions. Identify downstream UI and implementation dependencies.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

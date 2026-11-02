@@ -76,3 +76,11 @@ conditional criteria by work type, evidence fields, and unresolved thresholds
 or decisions. If a Phase Plan exists, map criteria to its work item or exit
 criteria. After saving, identify `aod-uat` as the next step when UAT is in
 scope; otherwise state the next dependency-ready action.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

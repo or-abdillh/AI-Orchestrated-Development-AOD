@@ -175,3 +175,11 @@ claim tests or documentation verification that was not performed.
 After saving the selected deliverables, report the files created or updated,
 important open decisions, and the next dependency-aware action. The usual next
 step is `aod-phase-plan` when a usable Tech Spec is ready.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

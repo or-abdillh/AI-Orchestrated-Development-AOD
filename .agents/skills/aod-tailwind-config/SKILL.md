@@ -4,7 +4,7 @@ description: >-
   Generates a complete CSS framework configuration file (Tailwind, or equivalent)
   based on the UI Style Document, enforcing all design tokens as framework config.
   Use when the user says "tailwind config", "CSS config", "design tokens config",
-  "generate tailwind", or at Phase 3 Step 16 of AOD. Requires: UI Style Document.
+  "generate tailwind", or at Phase 4 planned styling adapter of AOD. Requires: UI Style Document.
   Produces: tailwind.config.ts (or equivalent config file).
 ---
 
@@ -50,4 +50,12 @@ Jika proyek tidak memakai Tailwind, buat token `:root` CSS variables di `tokens.
 
 1. Hasilkan file konfigurasi (misal: `tailwind.config.ts` atau `src/styles/tokens.css`).
 2. Simpan dokumentasi mapping token ke: `docs/ui-architecture/DESIGN_TOKENS.md`
-Setelah selesai: **"Phase 3 UI Architecture siap diimplementasikan via aod-page-slicer atau lanjut ke Phase 4: aod-tech-spec"**
+Setelah selesai, kembalikan handoff ke orchestrator untuk unit Phase 4 berikutnya yang siap.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

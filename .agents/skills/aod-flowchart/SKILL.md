@@ -78,3 +78,11 @@ Generate DUA diagram dalam code block terpisah:
 ## Output
 
 Simpan hasil ke: `docs/business/FLOWCHART.md`
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

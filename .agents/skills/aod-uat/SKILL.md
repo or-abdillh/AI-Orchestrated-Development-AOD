@@ -82,3 +82,11 @@ Suggested execution statuses: `Not Run`, `Pass`, `Fail`, `Blocked`, and `N/A`
 with a reason. Do not mark scenarios passed, accepted, or deployment-ready
 while only generating the sheet. After saving, state the first stakeholder
 execution step and any coverage limitation.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

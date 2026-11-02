@@ -73,3 +73,11 @@ Use the project's document versioning standard. Include:
 Do not specify component trees here; `aod-ui-component-map` derives those from
 this screen contract. After saving, identify the next valid step, usually
 `aod-ui-component-map` when the relevant design inputs are available.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

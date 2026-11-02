@@ -86,3 +86,11 @@ For existing projects, number phases as remaining delivery stages if helpful;
 do not imply that project setup or completed work must restart. After saving,
 identify `aod-feature-prompts` as the next step for work items ready to receive
 implementation prompts, or name the missing approval that blocks it.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

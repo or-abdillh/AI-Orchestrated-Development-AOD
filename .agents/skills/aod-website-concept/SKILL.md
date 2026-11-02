@@ -69,3 +69,11 @@ Professional product design tone.
 Simpan hasil ke: `docs/system-design/WEBSITE_CONCEPT.md`
 
 Input untuk: Design System (aod-design-system) dan UI Style Document (aod-ui-style).
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

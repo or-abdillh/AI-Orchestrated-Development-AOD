@@ -53,3 +53,11 @@ standard. Include sources, actor/role definitions, permission matrix, conditiona
 rules, sensitive operations, conflicts, and open decisions. Describe
 implementation implications at a framework-neutral level; leave concrete
 middleware and policy mapping to the approved Tech Spec.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

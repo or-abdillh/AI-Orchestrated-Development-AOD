@@ -80,4 +80,12 @@ Panduan transisi saat backend API siap dihubungkan.
 ## Output
 
 Simpan dokumen ke: `docs/ui-architecture/UI_SLICING.md`
-Setelah selesai: **"Langkah berikutnya: CSS/Tailwind Config (aod-tailwind-config) dan Per-Page Slicing (aod-page-slicer)"**
+Setelah selesai, kembalikan kontrol ke orchestrator. Adapter styling dan implementasi halaman menunggu gate Phase 4.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

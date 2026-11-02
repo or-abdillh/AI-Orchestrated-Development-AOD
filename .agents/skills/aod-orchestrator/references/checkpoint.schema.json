@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AOD workflow checkpoint schema 1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "registry_version",
+    "workflow_id",
+    "scope",
+    "project_path",
+    "checkpoint_path",
+    "revision",
+    "updated_at",
+    "active_phase",
+    "active_step",
+    "mode",
+    "authorization",
+    "approvals",
+    "decisions",
+    "blockers",
+    "pending_decisions",
+    "next_action",
+    "paused",
+    "failures",
+    "steps"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "registry_version": {
+      "type": "string"
+    },
+    "workflow_id": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "project_path": {
+      "type": "string"
+    },
+    "checkpoint_path": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "active_phase": {
+      "type": "string"
+    },
+    "active_step": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "mode": {
+      "enum": [
+        "step",
+        "phase-parallel",
+        "phase-sequential"
+      ]
+    },
+    "authorization": {
+      "type": "object"
+    },
+    "approvals": {
+      "type": "array"
+    },
+    "decisions": {
+      "type": "object"
+    },
+    "blockers": {
+      "type": "array"
+    },
+    "pending_decisions": {
+      "type": "array"
+    },
+    "next_action": {
+      "type": "string"
+    },
+    "paused": {
+      "type": "boolean"
+    },
+    "failures": {
+      "type": "array"
+    },
+    "steps": {
+      "type": "object"
+    },
+    "dynamic_steps": {
+      "type": "array"
+    }
+  }
+}

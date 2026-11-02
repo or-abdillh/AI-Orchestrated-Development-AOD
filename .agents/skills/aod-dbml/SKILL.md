@@ -88,3 +88,11 @@ Return ONLY the DBML schema in a dbml code block.
 Simpan hasil ke: `docs/business/SCHEMA.dbml`
 
 **Business Layer selesai.** → Phase 2: System Design
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

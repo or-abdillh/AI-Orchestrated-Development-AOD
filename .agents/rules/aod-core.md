@@ -73,7 +73,7 @@ For client feedback or change requests, use `aod-feedback-loop` to assess scope 
 
 ## 7. Definition of Done and Continuity
 
-A task is complete when its acceptance criteria are met, relevant checks have been run or their absence is stated, and required project documentation is updated. For Phase 3/4 implementation, create or update the applicable ARC reference and `docs/references/INDEX.md` as required by the project's DoD. Do not claim tests passed unless they were run and their result is available.
+A task is complete when its acceptance criteria are met, relevant checks have been run or their absence is stated, and required project documentation is updated. For Phase 4 implementation, create or update the applicable ARC reference and `docs/references/INDEX.md` as required by the project's DoD. Do not claim tests passed unless they were run and their result is available.
 
 ## 8. Standard Output Locations
 
@@ -87,3 +87,18 @@ A task is complete when its acceptance criteria are met, relevant checks have be
 - UI and feature references plus registry: `docs/references/`
 
 Use an existing project convention when one is already established and compatible; report any material deviation from these defaults.
+
+
+## 9. Orchestrated workflow
+
+`aod-orchestrator` is the single entry for Mulai/Lanjut/Status/Jeda/Ubah mode
+AOD. Read its registry and operating protocol; execute specialist instructions
+and return control, rather than requiring manual skill invocation. The registry
+owns phase mapping and prerequisites; existing as-is exceptions remain valid.
+Obtain overview/start confirmation before product artifacts or checkpoint;
+obtain explicit phase mode and next-phase authorization. Required approvals
+never default on timeout or missing question widgets. Direct specialist requests
+remain scoped. Only the main orchestrator writes checkpoint; audits do not.
+Use scoped source fingerprints and invalidate only impacted dependents.
+Machine-readable workflow state uses schema/revision metadata rather than the
+Markdown version header. Implementation and styling adapters belong to Phase 4.

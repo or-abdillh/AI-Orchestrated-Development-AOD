@@ -90,3 +90,11 @@ standard. Add traceability tables from requirement IDs to deliverables and
 estimate rows. Separate approved facts, estimation assumptions, and open
 commercial decisions. End with the inputs needed to firm up any indicative
 scope, schedule, or price; do not claim client approval or contractual status.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

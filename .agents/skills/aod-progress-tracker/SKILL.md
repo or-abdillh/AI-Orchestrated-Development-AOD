@@ -70,7 +70,7 @@ Pindai dokumen spesifikasi untuk mengekstrak seluruh rencana kerja:
 2. **Dari `TECH_SPEC.md`:**
    - Ambil arsitektur modul, pemetaan entitas database (_Data Mapping_), dan endpoint API (_Endpoint Mapping_).
 3. **Dari `PHASE_PLAN.md`:**
-   - Ambil daftar fase (Phase 0 s/d Phase 4), sprint, milestone, serta target branch masing-masing fase.
+   - Ambil daftar fase (fase/release aktual pada Phase Plan), sprint, milestone, serta target branch masing-masing fase.
 4. **Dari `FEATURE_PROMPTS.md`:**
    - Identifikasi prompt-prompt implementasi fitur yang telah disiapkan.
 
@@ -116,7 +116,7 @@ Susun laporan terstruktur dengan format checklist:
 2. **Requirements Traceability Matrix (PRD vs Tech Spec vs Code):**
    - Tabel pemetaan kebutuhan dari PRD ke modul Tech Spec dan bukti fisik kodenya.
 3. **Phase-by-Phase Task Breakdown (Planned vs Completed):**
-   - Rincian per fase dari Phase 0 hingga Phase 4 dengan checkbox markdown:
+   - Rincian per fase dari fase/release aktual pada Phase Plan dengan checkbox markdown:
      - `[x]` untuk task yang sudah selesai (_Completed_).
      - `[⏳]` untuk task yang sedang berjalan (_In Progress_).
      - `[ ]` untuk task yang sudah direncanakan (_Planned_).
@@ -220,3 +220,15 @@ Susun laporan terstruktur dengan format checklist:
 - **Git Branch Target:** `feat/orders-checkout`
 - **Recommended Feature Prompt:** Jalankan prompt `[PROMPT-04: Order Checkout Service]` dari `docs/development/FEATURE_PROMPTS.md`.
 ```
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.
+
+Example phase numbers below are illustrative delivery phases, not AOD methodology
+phases. Derive actual labels from Phase Plan. Do not infer completion from branch
+existence or WIP filenames. State denominator for any percentage.

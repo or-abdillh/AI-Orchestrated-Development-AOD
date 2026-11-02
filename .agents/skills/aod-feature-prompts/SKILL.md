@@ -81,3 +81,11 @@ Before saving, check coverage: every ready implementation work item has one
 prompt or an explicit reason for omission; blocked items identify the missing
 decision; no prompt expands the approved scope. After saving, identify
 `aod-dod` as the next step when DoD has not yet been prepared.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

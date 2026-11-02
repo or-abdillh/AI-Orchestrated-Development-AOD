@@ -1,0 +1,621 @@
+{
+  "version": "1.0.0",
+  "phases": [
+    {
+      "id": "0",
+      "name": "Discovery / Baseline",
+      "exit_criteria": "All selected steps Completed or justified Skipped; required approvals current; no Blocked, Failed or Needs Revalidation; developer chooses next phase and mode"
+    },
+    {
+      "id": "1",
+      "name": "Business Layer",
+      "exit_criteria": "All selected steps Completed or justified Skipped; required approvals current; no Blocked, Failed or Needs Revalidation; developer chooses next phase and mode"
+    },
+    {
+      "id": "2",
+      "name": "System Design",
+      "exit_criteria": "All selected steps Completed or justified Skipped; required approvals current; no Blocked, Failed or Needs Revalidation; developer chooses next phase and mode"
+    },
+    {
+      "id": "3",
+      "name": "UI Architecture",
+      "exit_criteria": "All selected steps Completed or justified Skipped; required approvals current; no Blocked, Failed or Needs Revalidation; developer chooses next phase and mode"
+    },
+    {
+      "id": "4",
+      "name": "Development",
+      "exit_criteria": "All selected steps Completed or justified Skipped; required approvals current; no Blocked, Failed or Needs Revalidation; developer chooses next phase and mode"
+    },
+    {
+      "id": "5",
+      "name": "Testing",
+      "exit_criteria": "All selected steps Completed or justified Skipped; required approvals current; no Blocked, Failed or Needs Revalidation; developer chooses next phase and mode"
+    }
+  ],
+  "steps": [
+    {
+      "id": "discovery",
+      "phase": "0",
+      "skill": null,
+      "purpose": "discovery",
+      "outputs": [
+        "docs/business/STUDY_CASE.md"
+      ],
+      "depends_on": [],
+      "decision_dependencies": [],
+      "applicability": "required",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/business/STUDY_CASE.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "existing",
+      "phase": "0",
+      "skill": "aod-existing-project-initiation",
+      "purpose": "existing",
+      "outputs": [],
+      "depends_on": [],
+      "decision_dependencies": [],
+      "applicability": "conditional",
+      "applicability_rule": "existing repository screening; selected as-is artifacts bypass bootstrap dependencies",
+      "review_required": false,
+      "delegation": "read-only",
+      "write_conflicts": [],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "brd",
+      "phase": "1",
+      "skill": "aod-brd",
+      "purpose": "brd",
+      "outputs": [
+        "docs/business/BRD.md"
+      ],
+      "depends_on": [
+        "discovery"
+      ],
+      "decision_dependencies": [],
+      "applicability": "required",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/business/BRD.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "flow",
+      "phase": "1",
+      "skill": "aod-business-flow",
+      "purpose": "flow",
+      "outputs": [
+        "docs/business/BUSINESS_FLOW.md"
+      ],
+      "depends_on": [
+        "discovery"
+      ],
+      "decision_dependencies": [],
+      "applicability": "required",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/business/BUSINESS_FLOW.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "prd",
+      "phase": "1",
+      "skill": "aod-prd",
+      "purpose": "prd",
+      "outputs": [
+        "docs/business/PRD.md"
+      ],
+      "depends_on": [
+        "discovery",
+        "brd",
+        "flow"
+      ],
+      "decision_dependencies": [],
+      "applicability": "required",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/business/PRD.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "flowchart",
+      "phase": "1",
+      "skill": "aod-flowchart",
+      "purpose": "flowchart",
+      "outputs": [
+        "docs/business/FLOWCHART.md"
+      ],
+      "depends_on": [
+        "flow"
+      ],
+      "decision_dependencies": [],
+      "applicability": "optional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/business/FLOWCHART.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "rbac",
+      "phase": "1",
+      "skill": "aod-rbac",
+      "purpose": "rbac",
+      "outputs": [
+        "docs/business/RBAC.md"
+      ],
+      "depends_on": [
+        "prd"
+      ],
+      "decision_dependencies": [],
+      "applicability": "conditional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/business/RBAC.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "data",
+      "phase": "1",
+      "skill": "aod-data-dictionary",
+      "purpose": "data",
+      "outputs": [
+        "docs/business/DATA_DICTIONARY.md"
+      ],
+      "depends_on": [
+        "prd"
+      ],
+      "decision_dependencies": [],
+      "applicability": "conditional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/business/DATA_DICTIONARY.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "dbml",
+      "phase": "1",
+      "skill": "aod-dbml",
+      "purpose": "dbml",
+      "outputs": [
+        "docs/business/SCHEMA.dbml"
+      ],
+      "depends_on": [
+        "data"
+      ],
+      "decision_dependencies": [],
+      "applicability": "optional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/business/SCHEMA.dbml"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "state",
+      "phase": "2",
+      "skill": "aod-state-machine",
+      "purpose": "state",
+      "outputs": [
+        "docs/system-design/STATE_MACHINE.md"
+      ],
+      "depends_on": [
+        "prd",
+        "flow"
+      ],
+      "decision_dependencies": [],
+      "applicability": "conditional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/system-design/STATE_MACHINE.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "contract",
+      "phase": "2",
+      "skill": "aod-api-contract",
+      "purpose": "contract",
+      "outputs": [
+        "docs/system-design/API_CONTRACT.md"
+      ],
+      "depends_on": [
+        "prd",
+        "data"
+      ],
+      "decision_dependencies": [
+        "route-mode"
+      ],
+      "applicability": "conditional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/system-design/API_CONTRACT.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "ui-flow",
+      "phase": "2",
+      "skill": "aod-ui-flow",
+      "purpose": "ui flow",
+      "outputs": [
+        "docs/system-design/UI_FLOW.md"
+      ],
+      "depends_on": [
+        "prd",
+        "flow"
+      ],
+      "decision_dependencies": [],
+      "applicability": "conditional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/system-design/UI_FLOW.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "concept",
+      "phase": "2",
+      "skill": "aod-website-concept",
+      "purpose": "concept",
+      "outputs": [
+        "docs/system-design/WEBSITE_CONCEPT.md"
+      ],
+      "depends_on": [
+        "discovery",
+        "brd",
+        "flow"
+      ],
+      "decision_dependencies": [],
+      "applicability": "conditional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/system-design/WEBSITE_CONCEPT.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "design",
+      "phase": "2",
+      "skill": "aod-design-system",
+      "purpose": "design",
+      "outputs": [
+        "docs/system-design/DESIGN_SYSTEM.md"
+      ],
+      "depends_on": [
+        "concept"
+      ],
+      "decision_dependencies": [],
+      "applicability": "conditional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/system-design/DESIGN_SYSTEM.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "style",
+      "phase": "2",
+      "skill": "aod-ui-style",
+      "purpose": "style",
+      "outputs": [
+        "docs/system-design/UI_STYLE.md"
+      ],
+      "depends_on": [
+        "concept",
+        "design"
+      ],
+      "decision_dependencies": [],
+      "applicability": "conditional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/system-design/UI_STYLE.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "components",
+      "phase": "3",
+      "skill": "aod-ui-component-map",
+      "purpose": "components",
+      "outputs": [
+        "docs/ui-architecture/COMPONENT_MAP.md"
+      ],
+      "depends_on": [
+        "ui-flow",
+        "prd",
+        "concept",
+        "design",
+        "state",
+        "contract"
+      ],
+      "decision_dependencies": [],
+      "applicability": "conditional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/ui-architecture/COMPONENT_MAP.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "slicing",
+      "phase": "3",
+      "skill": "aod-ui-slicing",
+      "purpose": "slicing",
+      "outputs": [
+        "docs/ui-architecture/UI_SLICING.md"
+      ],
+      "depends_on": [
+        "components",
+        "design",
+        "style",
+        "contract",
+        "state"
+      ],
+      "decision_dependencies": [],
+      "applicability": "conditional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/ui-architecture/UI_SLICING.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "tech",
+      "phase": "4",
+      "skill": "aod-tech-spec",
+      "purpose": "tech",
+      "outputs": [
+        "docs/development/TECH_SPEC.md"
+      ],
+      "depends_on": [
+        "prd"
+      ],
+      "decision_dependencies": [],
+      "applicability": "required",
+      "applicability_rule": "approved relevant contracts; revalidate framework-neutral contract after approval",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/development/TECH_SPEC.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "plan",
+      "phase": "4",
+      "skill": "aod-phase-plan",
+      "purpose": "plan",
+      "outputs": [
+        "docs/development/PHASE_PLAN.md"
+      ],
+      "depends_on": [
+        "tech"
+      ],
+      "decision_dependencies": [],
+      "applicability": "required",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/development/PHASE_PLAN.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "prompts",
+      "phase": "4",
+      "skill": "aod-feature-prompts",
+      "purpose": "prompts",
+      "outputs": [
+        "docs/development/FEATURE_PROMPTS.md"
+      ],
+      "depends_on": [
+        "tech",
+        "plan"
+      ],
+      "decision_dependencies": [],
+      "applicability": "required",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/development/FEATURE_PROMPTS.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "dod",
+      "phase": "4",
+      "skill": "aod-dod",
+      "purpose": "dod",
+      "outputs": [
+        "docs/development/DOD.md"
+      ],
+      "depends_on": [
+        "tech",
+        "plan"
+      ],
+      "decision_dependencies": [],
+      "applicability": "required",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/development/DOD.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "adapter",
+      "phase": "4",
+      "skill": "aod-tailwind-config",
+      "purpose": "adapter",
+      "outputs": [],
+      "depends_on": [
+        "tech",
+        "plan",
+        "style",
+        "dod"
+      ],
+      "decision_dependencies": [],
+      "applicability": "optional",
+      "applicability_rule": "approved styling framework/version and planned work item",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "implementation",
+      "phase": "4",
+      "skill": null,
+      "purpose": "implementation",
+      "outputs": [],
+      "depends_on": [
+        "tech",
+        "plan",
+        "prompts",
+        "dod"
+      ],
+      "decision_dependencies": [],
+      "applicability": "dynamic",
+      "applicability_rule": "expand approved Phase Plan work items; backend uses feature prompt, UI uses aod-page-slicer",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/references/INDEX.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "uat",
+      "phase": "5",
+      "skill": "aod-uat",
+      "purpose": "uat",
+      "outputs": [
+        "docs/testing/UAT_SHEET.md"
+      ],
+      "depends_on": [
+        "prd"
+      ],
+      "decision_dependencies": [],
+      "applicability": "required",
+      "applicability_rule": "approved requirements or explicit acceptance criteria; execution and acceptance are separate",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/testing/UAT_SHEET.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "proposal",
+      "phase": "service",
+      "skill": "aod-proposal",
+      "purpose": "proposal",
+      "outputs": [
+        "docs/proposal/PROPOSAL.md"
+      ],
+      "depends_on": [
+        "prd",
+        "tech"
+      ],
+      "decision_dependencies": [],
+      "applicability": "optional",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [
+        "docs/proposal/PROPOSAL.md"
+      ],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "feedback",
+      "phase": "service",
+      "skill": "aod-feedback-loop",
+      "purpose": "feedback",
+      "outputs": [],
+      "depends_on": [],
+      "decision_dependencies": [],
+      "applicability": "on-request",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": true,
+      "delegation": "independent input snapshot and exclusive output owner",
+      "write_conflicts": [],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "checklist",
+      "phase": "service",
+      "skill": "aod-quick-checklist",
+      "purpose": "checklist",
+      "outputs": [],
+      "depends_on": [],
+      "decision_dependencies": [],
+      "applicability": "on-request",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": false,
+      "delegation": "read-only",
+      "write_conflicts": [],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    },
+    {
+      "id": "audit",
+      "phase": "service",
+      "skill": "aod-progress-tracker",
+      "purpose": "audit",
+      "outputs": [],
+      "depends_on": [],
+      "decision_dependencies": [],
+      "applicability": "on-request",
+      "applicability_rule": "relevant to confirmed scope; specialist prerequisites also apply",
+      "review_required": false,
+      "delegation": "read-only",
+      "write_conflicts": [],
+      "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
+    }
+  ]
+}

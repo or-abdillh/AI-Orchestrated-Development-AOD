@@ -56,3 +56,11 @@ and forbidden transitions, invariants, side effects, and open decisions. If no
 entity has an evidenced lifecycle, state that finding instead of manufacturing
 a state machine. Identify downstream API/UI contracts that depend on approved
 transitions.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

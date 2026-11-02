@@ -251,3 +251,11 @@ Screening awal selalu ditampilkan di chat. Setelah user memilih dokumen, simpan
 hasil yang dipilih pada lokasi standar `docs/` yang sesuai dan patuhi aturan
 versioning. Pada ringkasan akhir, sebutkan dokumen yang dibuat, pertanyaan/gap
 yang masih terbuka, dan bukti verifikasi yang tersedia.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.
