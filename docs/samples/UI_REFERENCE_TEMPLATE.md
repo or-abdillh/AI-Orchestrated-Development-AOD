@@ -1,19 +1,19 @@
 # Agent Reference Context: [Page / Component Name]
 
-> **Reference ID:** `REF-UI-[slug]`  
-> **Version:** `v1.0.0`  
-> **Last Updated:** `YYYY-MM-DD`  
-> **Status:** `Sliced (Mock Data)` *(Sliced / Integrated / Deprecated)*  
-> **Author / Agent:** `aod-page-slicer` / `[agent-id]`  
-> **Target Route:** `/path/to/page`  
-> **Primary Layout:** `[AppLayout / AuthLayout / DashboardLayout]`  
-> **Framework & Engine:** `[e.g. Next.js 15 / React 19 / Tailwind CSS v4]`  
-> **Git Branch:** `feat/ui-[slug]` *(or current branch)*  
-> **Upstream Specs:**  
-> - UI Flow: `docs/system-design/UI_FLOW.md#screen-[id]`  
-> - Component Map: `docs/ui-architecture/COMPONENT_MAP.md#[section]`  
-> - UI Style Doc: `docs/system-design/UI_STYLE.md`  
-> - API Contract: `docs/system-design/API_CONTRACT.md#[endpoint]`  
+> **Reference ID:** `REF-UI-[slug]`
+> **Version:** `v1.0.1`
+> **Last Updated:** `2026-11-02`
+> **Status:** `Sliced (Mock Data)` *(Sliced / Integrated / Deprecated)*
+> **Author / Agent:** `aod-page-slicer` / `[agent-id]`
+> **Target Route:** `/path/to/page`
+> **Primary Layout:** `[AppLayout / AuthLayout / DashboardLayout]`
+> **Framework & Engine:** `[e.g. Next.js 15 / React 19 / Tailwind CSS v4]`
+> **Git Branch:** `feat/ui-[slug]` *(or current branch)*
+> **Upstream Specs:**
+> - UI Flow: `docs/system-design/UI_FLOW.md#screen-[id]`
+> - Component Map: `docs/ui-architecture/COMPONENT_MAP.md#[section]`
+> - UI Style Doc: `docs/system-design/UI_STYLE.md`
+> - API Contract: `docs/system-design/API_CONTRACT.md#[endpoint]`
 
 ---
 
@@ -21,7 +21,7 @@
 
 | Version | Date | Author / Agent | Description |
 |---|---|---|---|
-| `v1.0.0` | YYYY-MM-DD | `aod-page-slicer` | Initial UI slicing and component documentation |
+| `v1.0.1` | 2026-11-02 | `aod-page-slicer` | Initial UI slicing and component documentation |
 
 ---
 
@@ -143,3 +143,7 @@ Instruksi bagi AI agent berikutnya yang akan memodifikasi atau memperluas halama
 > - Jika ingin menambahkan metode pembayaran baru, tambahkan tipe pada `PaymentMethodPicker.tsx` dan pastikan ikon SVG tersedia di `src/assets/icons/`.
 > - Komponen `CartSummaryTable` bersifat reusable; jika digunakan di halaman Order Detail, kirimkan prop `isReadOnly={true}` untuk menyembunyikan aksi penambahan kuantiti.
 > - Hindari mengubah padding luar kontainer halaman agar tidak bertabrakan dengan `DashboardLayout`.
+
+> Template revision v1.0.1 (2026-11-02): Phase 4 ownership and evidence clarification.
+> All sample routes, framework tokens, statuses and test results above are illustrative.
+> Replace with actual project evidence; examples never prove completion or approval.

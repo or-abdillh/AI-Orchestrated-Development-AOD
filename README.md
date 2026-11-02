@@ -30,7 +30,7 @@
 
 ## ⚡ Quick Install (One-Liner)
 
-Pasang seluruh ekosistem AOD Framework (28 native AOD skills, 5 Rules, skill pelengkap, AGENTS.md, dan struktur scaffold `docs/`) ke dalam project apa pun (proyek baru maupun proyek yang sudah berjalan seperti Laravel, Next.js, Vue, Django, dsb.) dengan **satu baris perintah**:
+Pasang seluruh ekosistem AOD Framework (28 native AOD skills, 5 Rules, skill pelengkap, AGENTS.md, registry, helper checkpoint, dan template `docs/samples/`) ke dalam project apa pun (proyek baru maupun proyek yang sudah berjalan seperti Laravel, Next.js, Vue, Django, dsb.) dengan **satu baris perintah**:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/or-abdillh/AI-Orchestrated-Development-AOD/main/install.sh | bash
@@ -72,7 +72,7 @@ Setiap fase memiliki persona spesialis, dokumen input wajib, batasan ketat (_con
 | **Logic Bocor ke Controller:** AI menaruh query dan business logic sembarangan.        | **Architectural Rules:** Batas implementasi diturunkan dari Tech Spec yang disetujui dan mengikuti stack proyek. |
 | **Lompat Langsung Coding:** Menghasilkan kode tanpa fondasi domain yang jelas.         | **Phase Discipline:** AI diblokir membuat kode sebelum PRD, Tech Spec, dan Phase Plan final.                     |
 | **UI Generik ("AI-Slop"):** Tampilan terasa murah, inkonsisten, dan membosankan.       | **Design Token Authority:** Mengunci styling lewat UI Style Document dan filter `antislop`.                      |
-| **Ketiadaan Pengujian:** Kode dianggap selesai saat tidak ada error sintaks.           | **Definition of Done & UAT:** 6 pilar verifikasi ketat sebelum kode dapat di-merge.                              |
+| **Ketiadaan Pengujian:** Kode dianggap selesai saat tidak ada error sintaks.           | **Definition of Done & UAT:** 7 pilar verifikasi ketat sebelum kode dapat di-merge.                              |
 
 ---
 
@@ -86,59 +86,46 @@ Setiap fase memiliki persona spesialis, dokumen input wajib, batasan ketat (_con
 
 ---
 
-## 🔄 Alur Kerja (End-to-End Workflow)
+## Workflow melalui satu skill
 
-```mermaid
-flowchart TD
-    subgraph COMM["Optional Commercial Proposal"]
-        PR["aod-proposal<br><i>Approved Scope-Based Offer</i>"]
-    end
+Panggil **Mulai AOD** untuk proyek baru, existing, atau AOD yang sedang berjalan.
+Orchestrator menginspeksi repository tanpa menulis, menampilkan overview, lalu
+meminta konfirmasi mulai dan mode fase. Spesialis tetap tersedia untuk tugas
+terbatas; pemanggilan langsung tidak menjalankan workflow penuh.
 
-    subgraph P1["Phase 1: Business Layer"]
-        B1["aod-brd<br><i>Business Requirement</i>"] --> B2["aod-business-flow<br><i>AS-IS & TO-BE</i>"]
-        B2 --> B3["aod-prd<br><i>Product Requirement Document</i>"]
-        B3 --> B4["aod-flowchart<br><i>Mermaid Diagrams</i>"]
-        B3 --> B5["aod-rbac<br><i>Access Control Matrix</i>"]
-        B3 --> B6["aod-data-dictionary<br><i>Entity Schema</i>"]
-        B6 --> B7["aod-dbml<br><i>DBML Schema</i>"]
-    end
+- **Bertahap:** satu langkah, ringkasan/checkpoint, lalu menunggu **lanjut**.
+- **Satu fase dengan sub-agent:** gelombang independen berdasarkan dependensi.
+- **Satu fase berurutan:** alternatif tanpa sub-agent.
 
-    subgraph P2["Phase 2: System Design"]
-        S1["aod-state-machine<br><i>Status Lifecycle</i>"]
-        S2["aod-api-contract<br><i>REST API Interface</i>"]
-        S3["aod-ui-flow<br><i>Screen Map & Journey</i>"]
-        S4["aod-website-concept<br><i>UX Direction</i>"] --> S5["aod-design-system<br><i>Component Standards</i>"]
-        S5 --> S6["aod-ui-style<br><i>Design Tokens</i>"]
-    end
+Contoh: **Mulai AOD → setujui overview → pilih bertahap → BRD draft selesai →
+review BRD → lanjut → fase selesai → konfirmasi fase berikutnya dan mode**.
+BRD dan Business Flow dapat paralel; PRD menunggu keduanya.
 
-    subgraph P3["Phase 3: UI Architecture"]
-        U1["aod-ui-component-map<br><i>Component Hierarchy</i>"] --> U2["aod-ui-slicing<br><i>Layout & Mock Data</i>"]
-    end
+Dalam sesi baru, **Lanjut AOD** membaca `docs/aod/WORKFLOW_STATE.json` dan
+memeriksa perubahan sumber. **Status AOD** hanya membaca; **Jeda AOD** menyimpan
+pekerjaan parsial; **Ubah mode AOD** mengganti mode dengan scope yang jelas.
+Jawaban mulai/mode tidak otomatis menyetujui dokumen. Jika question box tidak
+tersedia, agent meminta pilihan bernomor dan menunggu jawaban wajib. Jika
+sub-agent tidak tersedia, agent melaporkan kondisi dan meminta fallback bila
+belum diotorisasi.
 
-    subgraph P4["Phase 4: Development & Tracking"]
-        D1["aod-tech-spec<br><i>Technical Specification</i>"] --> D2["aod-phase-plan<br><i>Phased Sprint Plan</i>"]
-        D2 --> D3["aod-feature-prompts<br><i>Atomic Implementation Library</i>"]
-        D3 --> D4["aod-dod<br><i>Definition of Done Checklist</i>"]
-        D4 --> D5["aod-page-slicer<br><i>Approved Page Implementation</i>"]
-        D2 --> D8["aod-tailwind-config<br><i>Project Token Adapter (Optional)</i>"]
-        D8 -.-> D5
-        D4 -.-> D6["aod-quick-checklist<br><i>Rapid Terminal Checklist</i>"]
-        D4 -.-> D7["aod-progress-tracker<br><i>Full Audit & Report</i>"]
-    end
+Registry: `.agents/skills/aod-orchestrator/references/workflow.json`. Jalankan
+`python3 scripts/sync_workflow.py --check` untuk memeriksa peta ini.
 
-    subgraph P5["Phase 5: Testing & Delivery"]
-        T1["aod-uat<br><i>Stakeholder UAT Sheet</i>"]
-    end
+<!-- aod:map:start -->
+| Phase | Steps / executing skills |
+| --- | --- |
+| 0 — Discovery / Baseline | `discovery`, `aod-existing-project-initiation` |
+| 1 — Business Layer | `aod-brd`, `aod-business-flow`, `aod-prd`, `aod-flowchart`, `aod-rbac`, `aod-data-dictionary`, `aod-dbml` |
+| 2 — System Design | `aod-state-machine`, `aod-api-contract`, `aod-ui-flow`, `aod-website-concept`, `aod-design-system`, `aod-ui-style` |
+| 3 — UI Architecture | `aod-ui-component-map`, `aod-ui-slicing` |
+| 4 — Development | `aod-tech-spec`, `aod-phase-plan`, `aod-feature-prompts`, `aod-dod`, `aod-tailwind-config`, `implementation` |
+| 5 — Testing | `aod-uat` |
+<!-- aod:map:end -->
 
-    P1 --> P2
-    P2 --> P3
-    P2 --> P4
-    P3 --> P4
-    P4 --> P5
-    D1 -.-> PR
-```
-
----
+Workflow completion, implementasi requirement, hasil verifikasi, dan UAT
+execution/acceptance dilaporkan terpisah. Dokumen lengkap tidak berarti produk
+selesai. Fase/release pada Phase Plan bukan fase metodologi AOD.
 
 ## 🛠️ Skills Inventory & Phase Mapping
 
@@ -148,7 +135,7 @@ Repository ini dilengkapi dengan **28 native AOD skills** serta skill pelengkap 
 
 | Skill                                 | Command Trigger                                                                                         | Input Dokumen                                                           | Output Artefak                                                                 |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **`aod-orchestrator`**                | `"start AOD"`, `"mulai AOD"`, `"panduan AOD"`                                                           | _None (Interactive)_                                                    | Panduan langkah per langkah                                                    |
+| **`aod-orchestrator`**                | `"start AOD"`, `"mulai AOD"`, `"panduan AOD"`                                                           | _None (Interactive)_                                                    | Eksekusi workflow dan checkpoint persisten                                                    |
 | **`aod-existing-project-initiation`** | `"initiate existing project"`, `"adopsi AOD pada proyek existing"`, `"audit codebase untuk phase plan"` | Repository yang sudah berjalan                                          | Laporan screening di chat; dokumen AOD pilihan user berdasarkan bukti codebase |
 | **`aod-proposal`**                    | `"buat proposal"`, `"project quotation"`                                                                | Approved, stable PRD and Tech Spec; Phase Plan/rate card when available | Scope-based proposal and estimate in `docs/proposal/PROPOSAL.md`               |
 
@@ -422,3 +409,15 @@ Dikembangkan dan diarsiteki oleh:
 ## 📄 Lisensi
 
 Didistribusikan di bawah lisensi MIT. Silakan gunakan, modifikasi, dan adaptasi untuk kebutuhan proyek perangkat lunak Anda.
+
+## Pemeriksaan skill pack
+
+Runtime helper dan installer: Bash dan Python 3 standard library. Instalasi
+remote juga memerlukan tar serta curl atau wget. Installer memeriksa dependency,
+mengganti hanya file paket dalam manifest dan blok AOD; file proyek, checkpoint,
+dokumen produk, isi di luar marker dan aturan arsitektur proyek dipertahankan.
+Marker rusak menyebabkan error, bukan pembaruan diam-diam.
+
+Jalankan `python3 -m unittest discover -s tests -v`,
+`python3 scripts/sync_workflow.py --check`, dan `bash -n install.sh`.
+Pengujian fixture/state tidak membuktikan perilaku seluruh coding agent.

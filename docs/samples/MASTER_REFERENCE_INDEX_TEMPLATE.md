@@ -1,11 +1,11 @@
 # Master Agent Reference Registry
 
-> **Version:** `v1.0.0`  
-> **Last Updated:** `YYYY-MM-DD`  
-> **Status:** `Active`  
-> **Framework:** AOD (AI-Orchestrated Development)  
-> **Project Scope:** `[Nama Proyek / SME]`  
-> **Active Git Branch:** `[branch-aktif]`  
+> **Version:** `v1.0.1`
+> **Last Updated:** `2026-11-02`
+> **Status:** `Active`
+> **Framework:** AOD (AI-Orchestrated Development)
+> **Project Scope:** `[Nama Proyek / SME]`
+> **Active Git Branch:** `[branch-aktif]`
 
 ---
 
@@ -13,7 +13,7 @@
 
 | Version | Date | Author / Agent | Description |
 |---|---|---|---|
-| `v1.0.0` | YYYY-MM-DD | `aod-orchestrator` / `[agent-id]` | Inisialisasi Master Agent Reference Registry |
+| `v1.0.1` | 2026-11-02 | `aod-orchestrator` / `[agent-id]` | Inisialisasi Master Agent Reference Registry |
 
 ---
 
@@ -42,14 +42,14 @@ Project Root/
 
 ---
 
-## 2. Phase 3: UI Slicing Reference Registry
+## 2. Phase 4: UI Page Implementation Reference Registry
 
-Daftar seluruh halaman, view, dan komponen terpotong (*sliced UI components*) yang dihasilkan pada Phase 3:
+Daftar seluruh halaman, view, dan komponen terpotong (*sliced UI components*) yang dihasilkan pada Phase 4:
 
 | Ref ID | Halaman / Komponen | Target Route / Selector | File Komponen Utama | Dokumen Referensi | Git Branch | Status |
 |---|---|---|---|---|---|---|
-| `REF-UI-001` | Halaman Login | `/login` | `src/pages/auth/LoginPage.tsx` | [`REF-UI-auth-login.md`](docs/references/ui/REF-UI-auth-login.md) | `phase/03-ui-slicing` | `[✔] Sliced (Mock)` |
-| `REF-UI-002` | Halaman Register | `/register` | `src/pages/auth/RegisterPage.tsx` | [`REF-UI-auth-register.md`](docs/references/ui/REF-UI-auth-register.md) | `phase/03-ui-slicing` | `[✔] Sliced (Mock)` |
+| `REF-UI-001` | Halaman Login | `/login` | `src/pages/auth/LoginPage.tsx` | [`REF-UI-auth-login.md`](docs/references/ui/REF-UI-auth-login.md) | `feat/ui-slicing` | `[✔] Sliced (Mock)` |
+| `REF-UI-002` | Halaman Register | `/register` | `src/pages/auth/RegisterPage.tsx` | [`REF-UI-auth-register.md`](docs/references/ui/REF-UI-auth-register.md) | `feat/ui-slicing` | `[✔] Sliced (Mock)` |
 | `REF-UI-003` | Order Checkout Page | `/checkout` | `src/pages/checkout/CheckoutPage.tsx` | [`REF-UI-orders-checkout.md`](docs/references/ui/REF-UI-orders-checkout.md) | `feat/ui-checkout` | `[⏳] In Progress` |
 
 ---
@@ -85,3 +85,7 @@ Setiap kali agent AI menyelesaikan step penulisan kode pada Phase 3 atau Phase 4
 3. **Perbarui Hierarchy Tree:** Jika terdapat modul atau sub-modul baru, tambahkan cabang pada Seksi 1.
 4. **Naikkan Versi (SemVer):** Naikkan versi patch/minor pada header dokumen dan catat di tabel `Revision History`.
 5. **Commit Bersama Kode:** Pastikan perubahan file ini di-stage dan di-commit bersamaan dengan kode dan file referensi terkait.
+
+> Template revision v1.0.1 (2026-11-02): Phase 4 ownership and evidence clarification.
+> All sample routes, framework tokens, statuses and test results above are illustrative.
+> Replace with actual project evidence; examples never prove completion or approval.
