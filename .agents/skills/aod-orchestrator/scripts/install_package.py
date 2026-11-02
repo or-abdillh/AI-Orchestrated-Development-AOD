@@ -32,12 +32,15 @@ def install(source,target):
  source=Path(source).resolve();target=Path(target).resolve()
  manifest=json.loads((source/'.agents/aod-package.json').read_text())
  operations=[]
+ preserved=0
  for item in manifest['files']:
   rel=Path(item)
   if rel.is_absolute() or '..' in rel.parts: raise ValueError('Invalid package path')
   src=source/rel;dst=target/rel
   if dst.is_symlink() or not dst.resolve().is_relative_to(target): raise ValueError('Unsafe target path: '+item)
-  if item=='.agents/rules/aod-architecture-engineering.md' and dst.exists(): continue
+  if item=='.agents/rules/aod-architecture-engineering.md' and dst.exists():
+   preserved+=1
+   continue
   operations.append((dst,src.read_bytes()))
  block=(source/'.agents/skills/aod-orchestrator/references/agent-block.md').read_text()
  pointer='<!-- aod:start -->\nRead AGENTS.md and use aod-orchestrator for Mulai/Lanjut/Status/Jeda/Ubah mode AOD. Execute specialists and return control. Follow scoped approvals, registry dependencies, checkpoint protocol and project architecture rules.\n<!-- aod:end -->\n'
@@ -49,7 +52,19 @@ def install(source,target):
   if item.endswith('.mdc') and not dst.exists(): content='---\ndescription: AOD workflow\nalwaysApply: true\n---\n'
   operations.append((dst,inject(content,replacement).encode()))
  # Preflight all paths/markers/source files before the first target write.
- for dst,data in operations: atomic(dst,data)
- print('AOD package updated; project artifacts and architecture rules preserved.')
+ counts={'created':0,'updated':0,'unchanged':0}
+ total=len(operations)
+ print(f'  Memeriksa {total} file terkelola dan blok instruksi ...',flush=True)
+ for number,(dst,data) in enumerate(operations,1):
+  exists=dst.exists()
+  if exists and dst.read_bytes()==data:
+   counts['unchanged']+=1
+  else:
+   atomic(dst,data)
+   counts['updated' if exists else 'created']+=1
+  if number==total or number%50==0:
+   print(f'  Progres: {number}/{total} file diperiksa',flush=True)
+ print(f"  Hasil: {counts['created']} baru, {counts['updated']} diperbarui, {counts['unchanged']} sudah sesuai.")
+ print(f'  Aturan arsitektur proyek dipertahankan: {preserved}.')
 
 if __name__=='__main__': install(*sys.argv[1:])
