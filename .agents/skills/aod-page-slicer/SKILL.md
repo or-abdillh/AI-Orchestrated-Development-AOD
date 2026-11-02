@@ -4,7 +4,7 @@ description: >-
   Generates a framework component for a specific page or feature based on
   the UI Slicing Document, Component Map, UI Style Document, and Design System.
   Use when the user says "slice page [X]", "buat komponen [halaman]",
-  "implement page [X]", or when executing individual pages in Phase 3 Step 17
+  "implement page [X]", or when executing individual pages in Phase 4 implementation
   of AOD. Requires: UI Slicing Document, Component Map, UI Style Document.
   Produces: frontend component file(s) for the specified page.
 ---
@@ -61,9 +61,17 @@ Kamu TIDAK BOLEH:
 
 1. **Kode Komponen:** Tulis atau hasilkan kode komponen langsung ke target file yang sesuai dalam proyek frontend user.
 2. **UI Reference Document:** Tulis atau perbarui dokumen referensi di `docs/references/ui/REF-UI-<slug>.md` menggunakan template `docs/samples/UI_REFERENCE_TEMPLATE.md`.
-3. **Master Registry Update:** Daftarkan halaman/komponen ini pada tabel Phase 3 di `docs/references/INDEX.md`.
+3. **Master Registry Update:** Daftarkan halaman/komponen ini pada tabel Phase 4 di `docs/references/INDEX.md`.
 4. **Laporan Selesai:** Informasikan ke user:
    - Komponen fisik yang telah dibuat/diubah.
    - Dokumen referensi yang dihasilkan (`docs/references/ui/REF-UI-<slug>.md`).
    - Pembaruan pada `docs/references/INDEX.md`.
    - Halaman berikutnya yang siap di-slice.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

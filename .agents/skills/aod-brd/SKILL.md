@@ -75,3 +75,11 @@ Risiko utama dan mitigasinya.
 
 Simpan hasil ke: `docs/business/BRD.md`
 Setelah selesai: **"Langkah berikutnya: Business Flow (aod-business-flow)"**
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

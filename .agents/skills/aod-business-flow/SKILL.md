@@ -86,3 +86,11 @@ Redesign proses dengan sistem berbasis teknologi. Definisikan secara eksplisit:
 
 Simpan hasil ke: `docs/business/BUSINESS_FLOW.md`
 Setelah selesai: **"Langkah berikutnya: PRD Generator (aod-prd)"**
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

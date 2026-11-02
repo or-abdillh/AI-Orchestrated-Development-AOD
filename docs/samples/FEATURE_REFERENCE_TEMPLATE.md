@@ -1,21 +1,21 @@
 # Agent Reference Context: [Feature Name]
 
-> **Reference ID:** `REF-FEAT-[module]-[slug]`  
-> **Version:** `v1.0.0`  
-> **Last Updated:** `YYYY-MM-DD`  
-> **Status:** `Completed` *(Planned / In Progress / Completed / Deprecated)*  
-> **Module / Sub-module:** `[Module Name]` / `[Sub-module Name]`  
-> **Phase Target:** Phase [N] — [Phase Name]  
-> **Author / Agent:** `aod-feature-prompts` / `[agent-id]`  
-> **Git Branch:** `feat/[module]-[slug]`  
-> **Latest Commit:** `[commit-hash]`  
-> **Upstream Specs:**  
-> - PRD: `docs/business/PRD.md#section-[num]`  
-> - Tech Spec: `docs/development/TECH_SPEC.md#module-[name]`  
-> - Data Dictionary: `docs/business/DATA_DICTIONARY.md#table-[name]`  
-> - API Contract: `docs/system-design/API_CONTRACT.md#[endpoint]`  
-> - State Machine: `docs/system-design/STATE_MACHINE.md#[entity]`  
-> - UI Reference: `docs/references/ui/REF-UI-[slug].md` *(jika ada UI terkait)*  
+> **Reference ID:** `REF-FEAT-[module]-[slug]`
+> **Version:** `v1.0.1`
+> **Last Updated:** `2026-11-02`
+> **Status:** `Completed` *(Planned / In Progress / Completed / Deprecated)*
+> **Module / Sub-module:** `[Module Name]` / `[Sub-module Name]`
+> **Phase Target:** Phase [N] — [Phase Name]
+> **Author / Agent:** `aod-feature-prompts` / `[agent-id]`
+> **Git Branch:** `feat/[module]-[slug]`
+> **Latest Commit:** `[commit-hash]`
+> **Upstream Specs:**
+> - PRD: `docs/business/PRD.md#section-[num]`
+> - Tech Spec: `docs/development/TECH_SPEC.md#module-[name]`
+> - Data Dictionary: `docs/business/DATA_DICTIONARY.md#table-[name]`
+> - API Contract: `docs/system-design/API_CONTRACT.md#[endpoint]`
+> - State Machine: `docs/system-design/STATE_MACHINE.md#[entity]`
+> - UI Reference: `docs/references/ui/REF-UI-[slug].md` *(jika ada UI terkait)*
 
 ---
 
@@ -23,7 +23,7 @@
 
 | Version | Date | Author / Agent | Description |
 |---|---|---|---|
-| `v1.0.0` | YYYY-MM-DD | `aod-feature-prompts` | Initial feature implementation and architectural documentation |
+| `v1.0.1` | 2026-11-02 | `aod-feature-prompts` | Initial feature implementation and architectural documentation |
 
 ---
 
@@ -135,3 +135,7 @@ Panduan bagi AI agent berikutnya yang akan memodifikasi modul ini:
 > - Selalu pertahankan `DB::transaction()` dan locking row pada saat memanipulasi stok produk di `OrderCheckoutService`.
 > - Jika ada kebutuhan menambahkan voucher/diskon, masukkan logic pada `DiscountCalculatorService` terpisah dan inject ke `OrderCheckoutService` agar SRP (Single Responsibility Principle) tetap terjaga.
 > - Jika ada integrasi notifikasi baru, daftarkan listener baru pada event `OrderCreated` tanpa memodifikasi service utama checkout.
+
+> Template revision v1.0.1 (2026-11-02): Phase 4 ownership and evidence clarification.
+> All sample routes, framework tokens, statuses and test results above are illustrative.
+> Replace with actual project evidence; examples never prove completion or approval.

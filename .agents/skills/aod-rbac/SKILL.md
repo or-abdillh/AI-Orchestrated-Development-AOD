@@ -1,59 +1,63 @@
 ---
 name: aod-rbac
 description: >-
-  Designs a Role-Based Access Control (RBAC) model including role definitions,
-  permission matrix, and restriction rules. Use when the user says "role permission",
-  "RBAC", "access control", "permission matrix", "hak akses", or at Phase 1 Step 5
-  of AOD. Requires: PRD (primary). Produces: RBAC.md
+  Defines actors, roles, permissions, resource scope, and conditional access from
+  approved product and workflow requirements. Use for RBAC, role-permission
+  matrices, access control, or hak akses. Requires PRD; use Business Flow,
+  State Machine, and existing authorization design when available. Produces
+  docs/business/RBAC.md.
 ---
 
-# AOD: Role & Permission Matrix Generator
+# AOD Role and Permission Model
 
-## Prasyarat / Prerequisites
+Define who may perform which business actions on which resources, and under what
+conditions. Follow `.agents/rules/aod-core.md` and apply least privilege.
 
-**Input Priority:**
-1. **PRD** *(primary — source of truth untuk roles, features, permissions)*
-2. **Business Flow** *(optional strong boost — validasi user actions)*
-3. **Study Case** *(fallback context)*
+## Sources and boundaries
 
----
+- Use approved PRD for actors, features, and intended access; use Business Flow
+  to verify who performs each action.
+- Use State Machine for status-based guards and Data Dictionary for ownership,
+  tenant, or other scope fields when available.
+- For existing projects, separate observed roles/policies from approved target
+  permissions. Cite code or configuration as evidence; do not mistake an
+  implementation detail for a business approval.
+- Authentication establishes identity; this document defines authorization.
+  Do not assume an auth provider, role enum, middleware, policy class, or
+  framework mechanism unless Tech Spec or project evidence selects it.
+- Do not invent roles or grant broad access to fill gaps. Label unresolved
+  access decisions and their affected operations.
 
-## Peranmu / Your Role
+## Define the model
 
-You are a Security and Access Control Architect designing an RBAC model for a business system.
-
----
-
-## Yang Harus Dirancang / What to Design
-
-**1. Role Definitions**
-Setiap role: nama, deskripsi tanggung jawab, level akses.
-
-**2. Permission Matrix (Module-level & Action-level)**
-Tabel: Role × Module × Action (Create / Read / Update / Delete / Approve / Export, dll)
-
-**3. Restriction Rules (Conditional Access)**
-Aturan kondisional, contoh: "Hanya bisa edit jika status = draft"
-
-**4. Separation of Duty Considerations**
-Operasi yang tidak boleh dilakukan oleh role yang sama.
-
-**5. Principle of Least Privilege**
-Setiap role hanya mendapat akses minimum yang dibutuhkan.
-
----
-
-## Constraint Penting / Important Constraints
-
-- Hindari overlapping permissions kecuali ada justifikasi.
-- Definisikan kondisi secara eksplisit.
-- Identifikasi sensitive operations yang memerlukan elevated privilege.
-- Highlight potensi security risks.
-- Think in terms of backend policy and middleware design.
-- Output implementation-ready: bisa langsung dijadikan referensi untuk backend policy.
-
----
+1. List actors and roles with responsibilities and source references. Keep
+   human roles distinct from system/service actors.
+2. Build a role-by-resource/action matrix. Use explicit actions such as view,
+   create, update, delete, approve, export, or administer only when relevant.
+   Mark allowed, denied, or conditional; never leave a blank cell ambiguous.
+3. Define conditional access precisely: record/tenant ownership, organization
+   scope, lifecycle state, assigned vessel/project, or other source-backed
+   condition and its enforcement point.
+4. Identify public/unauthenticated operations separately from authenticated
+   role permissions.
+5. Record separation-of-duty constraints, sensitive actions, audit needs, and
+   deny-by-default expectations when supported by the requirements.
+6. Cross-check each protected Business Flow action and State Machine transition
+   against at least one permission rule. Flag actions with no authorized actor
+   and roles with no justified capability.
 
 ## Output
 
-Simpan hasil ke: `docs/business/RBAC.md`
+Save to `docs/business/RBAC.md` using the project's document versioning
+standard. Include sources, actor/role definitions, permission matrix, conditional
+rules, sensitive operations, conflicts, and open decisions. Describe
+implementation implications at a framework-neutral level; leave concrete
+middleware and policy mapping to the approved Tech Spec.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

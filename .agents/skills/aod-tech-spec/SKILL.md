@@ -1,114 +1,185 @@
 ---
 name: aod-tech-spec
 description: >-
-  Generates a Technical Specification document defining system architecture,
-  module breakdown, tech stack, database mapping, and coding rules for AI-assisted
-  development. Use when the user says "technical spec", "tech spec", "spesifikasi
-  teknis", "arsitektur sistem", or at Phase 4 Step 18 of AOD. Requires: PRD
-  (primary), Data Dictionary, Business Flow, State Machine, RBAC.
-  Produces: TECH_SPEC.md — the primary authority document for all development.
+  Creates or audits a project's Technical Specification: verified stack,
+  system boundaries, module responsibilities, data and interface mapping,
+  security, operations, and implementation constraints. Use when the user asks
+  for a technical specification, tech spec, system architecture, or AOD Phase 4
+  development baseline. For an existing codebase, use the as-is baseline mode
+  and keep observed architecture separate from proposed target decisions.
 ---
 
-# AOD: Technical Specification Generator
+# AOD Technical Specification
 
-## Prasyarat / Prerequisites
+Create a practical, evidence-backed specification that guides implementation
+without inventing requirements or overengineering the project. Follow
+`.agents/rules/aod-core.md`. The approved Tech Spec is authoritative for
+technical architecture; business and interface decisions remain owned by their
+respective approved documents.
 
-**Input Priority:**
-1. **PRD** *(primary — feature authority)*
-2. **Data Dictionary** *(data source of truth untuk tables & fields)*
-3. **Business Flow & State Machine** *(behavior and lifecycle logic)*
-4. **RBAC Matrix** *(authorization & access control)*
-5. **API Contract** *(interface definition)*
+## 1. Select the Mode and Establish Inputs
 
-Pastikan PRD dan Data Dictionary sudah final sebelum memulai.
+### New or planned system
 
-### Existing Project Baseline Mode
+Read the available approved documents and use only those relevant to the
+proposed system:
 
-Jika skill ini dijalankan setelah `aod-existing-project-initiation`, gunakan mode
-baseline existing project. Mode ini membuat spesifikasi teknis *as-is* dari
-laporan screening, source code, konfigurasi, dan dokumen yang tersedia. Mode ini
-tidak menyatakan arsitektur saat ini sebagai target yang telah disetujui.
+1. PRD for product scope and capabilities.
+2. Data Dictionary and DBML for entities and schema.
+3. Business Flow and State Machine for behavior and lifecycle.
+4. RBAC for identity and authorization requirements.
+5. API Contract and UI documents for interface and frontend boundaries.
+6. Explicit user decisions for deployment, scale, compliance, integrations, and
+   operational constraints.
 
-- Gunakan hasil screening dan repository sebagai input utama; PRD, Data
-  Dictionary, Business Flow, State Machine, RBAC, atau API Contract yang hilang
-  dicatat sebagai gap, bukan alasan untuk menghentikan audit kondisi aktual.
-- Inventaris stack dari manifest/lockfile dan konfigurasi terlebih dahulu.
-  Pertanyaan stack hanya diperlukan untuk komponen yang tidak dapat dipastikan.
-- Tandai tiap pernyataan sebagai fakta teramati, inferensi, atau belum diketahui;
-  cantumkan path/simbol sebagai bukti dan catat konflik dengan dokumen/test.
-- Pisahkan bagian "Current State (As-Is)" dari "Open Decisions / Target State".
-  Jangan mengarang modul, field, endpoint, aturan arsitektur, atau pilihan target.
-- Context7 digunakan untuk memvalidasi detail library hanya jika dokumen pilihan
-  meminta rekomendasi konfigurasi/target atau detail API, bukan untuk mengganti
-  versi yang terbukti dari lockfile.
-- Buat atau perbarui `.agents/rules/aod-architecture-engineering.md` dan
-  `docs/development/ARCHITECTURE_ENGINEERING.md` hanya jika user memilihnya atau
-  memilih Tech Spec yang mencakup aturan operasional. Tandai gap sebagai
-  rekomendasi yang menunggu persetujuan, bukan aturan aktif yang telah disetujui.
+Do not require an artifact that is irrelevant to the selected architecture. If
+an input is missing, identify the decision it affects and continue with
+independent sections. Record unresolved choices as open decisions; do not silently
+select a stack, database, hosting provider, or architecture pattern.
 
----
+### Existing project baseline
 
-## Peranmu / Your Role
+When preceded by `aod-existing-project-initiation`, describe the current system
+from repository evidence before recommending changes. Inspect the relevant
+manifest/lockfiles, configuration, routes, modules, data schema, tests, and
+deployment files. Treat documentation as evidence of intent, not proof of
+implementation.
 
-You are a Senior Solution Architect specializing in modern SME and freelance web/mobile systems.
-Keahlianmu adalah merancang arsitektur teknis yang modular, bersih, pragmatis, dan mudah dieksekusi secara atomik oleh AI assistant tanpa over-engineering.
+- Separate **Current State (As-Is)**, **Approved Target State (To-Be)**, and
+  **Open Decisions / Recommendations**.
+- Mark claims as **Observed**, **Inferred**, **User-Confirmed**, or **Unknown**;
+  add repository paths or document sections for material claims.
+- Preserve proven versions from manifests and lockfiles. Do not replace them
+  with latest versions or recommendations unless the user requested a target
+  stack review.
+- Record contradictions between code, tests, configuration, and documents
+  without deciding product intent on the user's behalf.
+- Do not turn a recommendation or gap into an active architecture constraint.
 
----
+## 2. Verify Technical Facts
 
-## Tech Stack Clarification (Framework Agnostic)
+- Derive current language, runtime, framework, ORM, database, and package
+  versions from repository manifests and lockfiles when available.
+- For proposed or uncertain third-party APIs, configuration, and version-specific
+  behavior, consult official documentation. Use Context7 when available; use
+  the vendor's official documentation otherwise. State the source/version and
+  verification date for consequential choices.
+- Do not browse or verify every dependency indiscriminately. Ground only choices
+  that affect the specification or implementation.
+- Never expose secrets. Record configuration keys or secret-management needs,
+  not secret values.
 
-Jika user belum mendefinisikan tech stack pada dokumen atau prompt:
-Tanyakan secara singkat preferensi arsitektur:
-- **Backend Framework:** (Laravel, NestJS, Express/Fastify, Django, Go/Gin, Spring Boot, etc.)
-- **Frontend Stack:** (Vue, React/Next.js, Svelte, Blade/Inertia, Mobile/Flutter, etc.)
-- **Database:** (PostgreSQL, MySQL, SQLite, MongoDB, etc.)
-- **Architecture Pattern:** (MVC + Service Layer, Clean Architecture, Modular Monolith, etc.)
+If the selected environment does not provide the requested documentation tool,
+continue with official vendor documentation when accessible. If neither can be
+verified, mark the detail unverified and avoid making it an implementation rule.
 
-*Catatan untuk SME:* Default ke arsitektur praktis (e.g. MVC + Service Layer atau Modular Layer) — hindari overengineering seperti microservices atau DDD berlebihan kecuali dibutuhkan.
+## 3. Make Decisions at the Right Level
 
-*Grounding Dokumentasi:* Gunakan **Context7 MCP** (`resolve-library-id` -> `query-docs`) untuk memvalidasi versi rilis terbaru, konfigurasi resmi, dan best practices dari library/framework yang dipilih sebelum dituangkan ke dalam Tech Spec.
+- Prefer the simplest architecture that meets approved functional and
+  non-functional requirements. Do not prescribe microservices, repositories,
+  event-driven processing, or a particular layer pattern without a project need.
+- Name boundaries and responsibilities using the project's actual framework
+  and structure. Adapt examples to the chosen stack; do not copy Laravel
+  conventions into Node, Python, Go, or other projects.
+- Distinguish **required constraints** from **recommendations**. A constraint
+  must have an approved requirement, a user decision, or a concrete technical
+  necessity behind it. Explain its source and impact.
+- Do not duplicate or redefine business rules, fields, endpoints, permissions,
+  or states owned by upstream documents. Map to their IDs/sections where
+  possible and report inconsistencies for resolution.
+- For an existing project, recommendations for target changes require user
+  approval before they become the approved To-Be architecture.
 
----
+Ask a focused question only when the unresolved choice materially changes
+architecture, data, security, operations, cost, or implementation sequencing.
+Proceed with unaffected sections and label any non-blocking uncertainty.
 
-## Struktur Dokumen Output / Output Structure
+## 4. Produce `docs/development/TECH_SPEC.md`
 
-**1. Project Overview & Scope**
-- System Name & Purpose
-- Architecture Type (Monolith / Decoupled / API-first)
-- Core Technical Constraints
+Use the project document versioning standard. Include the sections that apply;
+mark unavailable evidence and decisions explicitly rather than filling gaps with
+generic boilerplate.
 
-**2. Tech Stack Specification**
-- Language, runtime, framework versions
-- Database engine & ORM/query builder
-- Auth mechanism (JWT, Session, OAuth)
-- Key third-party packages & utilities
+1. **Document Control and Sources** — version/status, inputs, scope, evidence
+   date, and material source documents.
+2. **System Context and Scope** — purpose, in-scope components, external
+   dependencies, constraints, and explicit exclusions.
+3. **Current and Target Architecture** — architecture style, application
+   boundaries, runtime topology, and a diagram when it clarifies dependencies.
+   In existing-project mode, keep As-Is and To-Be distinct.
+4. **Verified Technology Stack** — language/runtime, frameworks, database,
+   persistence tools, auth, queues, storage, hosting, and versions, each marked
+   as observed or approved target.
+5. **Module and Integration Boundaries** — responsibilities, ownership, data
+   flow, synchronous/asynchronous edges, and failure handling.
+6. **Data and Interface Mapping** — map to approved entities and API contracts;
+   identify ownership, migrations, validation boundaries, and unresolved gaps.
+7. **Security and Privacy** — authentication, authorization, tenant boundaries
+   if applicable, sensitive data handling, secrets, audit needs, and relevant
+   threat assumptions.
+8. **Reliability and Operations** — deployment shape, configuration, logging,
+   monitoring, backup/recovery, queues/jobs, retries, timeouts, and availability
+   requirements where specified.
+9. **Performance and Scale** — known workload, query/index strategy, caching,
+   concurrency, and explicit thresholds where available. Do not invent traffic
+   targets.
+10. **Testing and Delivery** — test layers, required checks, migration/release
+    considerations, and environments, aligned with the project's delivery plan.
+11. **Architecture Decisions and Constraints** — each entry has decision,
+    rationale, source/owner, status (`Approved`, `Proposed`, or `Open`), and
+    affected modules.
+12. **Risks, Gaps, and Open Questions** — evidence, impact, owner/decision
+    needed, and whether the issue blocks implementation.
 
-**3. Module & Package Breakdown**
-- Pemetaan fitur PRD ke modul teknis independen.
-- Batasan tanggung jawab (boundaries) tiap modul.
+Map requirements to the modules and technical decisions that implement them.
+Avoid prescribing code-level details that belong in a feature prompt unless a
+shared constraint must guide multiple features.
 
-**4. High-Level Architectural Rules**
-- Layer responsibilities (Controller/Route → Service/Use Case → Repository/Model).
-- Naming conventions across layers.
-- Error handling & exception formatting.
+## 5. Generate Dynamic Architecture Rules Safely
 
-**5. Database & Entity Mapping**
-- Pemetaan entities dari Data Dictionary ke ORM Models.
-- Relationship mapping & foreign keys.
-- Indexing & performance strategy.
+Create or update `.agents/rules/aod-architecture-engineering.md` and its
+documentation mirror `docs/development/ARCHITECTURE_ENGINEERING.md` only when
+the user selected the rulebook or selected a Tech Spec that includes approved
+operational rules.
 
-**6. Validation & Security Approach**
-- Input validation layer (FormRequest / Zod / Joi / Pydantic).
-- Policy/Guard authorization logic per action.
-- Protection against common vulnerabilities (OWASP top 10).
+- Derive rules only from constraints marked `Approved` in the Tech Spec.
+- Keep recommendations and unresolved choices in the Tech Spec; do not place
+  them in an active `always_on` rule.
+- For a Draft or unapproved Tech Spec, do not activate project-specific rules.
+  Leave existing active rules untouched; report the approval needed before
+  replacing or enabling them.
+- Generate the workspace rule from
+  `docs/samples/ARCHITECTURE_ENGINEERING_TEMPLATE.md`, retaining only sections
+  relevant to this project's stack and risks.
+- Set `trigger: always_on` only when the generated rules are approved and
+  intended to govern all coding sessions. Include source sections, scope,
+  effective status, and version so agents can trace each active rule.
+- Keep the rule concise and operational: state what the agent must do, when the
+  rule applies, and the source of authority. Do not duplicate the full Tech Spec.
+- Keep the mirror synchronized with the active rule and mark it as a mirror;
+  do not maintain two conflicting authorities.
+- If an existing dynamic rule differs from the current approved Tech Spec,
+  report the delta and update both files together with version history. Preserve
+  unrelated local rules and user edits.
 
-**7. Coding Rules for AI Agents**
-- Aturan ketat implementasi: No unapproved schema changes, no business logic in controllers, eager loading untuk hindari N+1, dsb.
+If the user requested only a Tech Spec, do not create or change the dynamic
+rulebook unless the request or the selected output explicitly includes it.
 
-## Output & Dynamic Architecture Rules Generation
+## 6. Completion and Handoff
 
-Skill ini WAJIB menghasilkan output terkoordinasi:
-1. **Technical Specification Document:** Simpan dokumen spesifikasi lengkap ke `docs/development/TECH_SPEC.md`.
-2. **Dynamic Project Architecture Rules (Always-On):** Ekstrak intisari aturan rekayasa arsitektur proyek ke `.agents/rules/aod-architecture-engineering.md` dengan frontmatter `trigger: always_on` menggunakan template `docs/samples/ARCHITECTURE_ENGINEERING_TEMPLATE.md` (serta simpan salinannya di `docs/development/ARCHITECTURE_ENGINEERING.md`).
+Before finishing, check that every active constraint has a traceable source, all
+recommendations and open decisions are labeled, As-Is is not presented as an
+approved target, and the dynamic rule contains no unapproved policy. Do not
+claim tests or documentation verification that was not performed.
 
-Setelah selesai: **"Langkah berikutnya: Development Phase Plan (aod-phase-plan)"**
+After saving the selected deliverables, report the files created or updated,
+important open decisions, and the next dependency-aware action. The usual next
+step is `aod-phase-plan` when a usable Tech Spec is ready.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

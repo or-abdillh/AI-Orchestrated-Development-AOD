@@ -93,3 +93,11 @@ Petakan sumber data setiap komponen ke API endpoint (dari API Contract).
 
 Simpan dokumen ke: `docs/ui-architecture/COMPONENT_MAP.md`
 Setelah selesai: **"Langkah berikutnya: UI Slicing Document (aod-ui-slicing)"**
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

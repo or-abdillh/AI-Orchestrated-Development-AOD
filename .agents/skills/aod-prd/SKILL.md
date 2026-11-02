@@ -71,3 +71,11 @@ Simpan hasil ke: `docs/business/PRD.md`
 
 PRD ini menjadi **primary authority document** untuk seluruh sisa AOD workflow.
 Setelah selesai: **"Langkah berikutnya: Step 4-7 bisa berjalan paralel (Flowchart, RBAC, Data Dictionary)"**
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

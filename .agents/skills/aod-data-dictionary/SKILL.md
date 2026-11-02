@@ -1,73 +1,73 @@
 ---
 name: aod-data-dictionary
 description: >-
-  Generates a complete Data Dictionary defining all entities, fields, types,
-  constraints, relationships, and indexes for the system. Use when the user says
-  "data dictionary", "kamus data", "entity definition", "database schema planning",
-  or at Phase 1 Step 6 of AOD. Requires: PRD (primary). Produces: DATA_DICTIONARY.md
-  — becomes the single source of truth for all database fields.
+  Defines traceable domain entities, fields, relationships, constraints, and
+  persistence guidance from approved product requirements. Use for a Data
+  Dictionary, kamus data, entity definition, or database schema planning.
+  Requires PRD as the primary source; use Business Flow, Tech Spec, and existing
+  schema when available. Produces docs/business/DATA_DICTIONARY.md.
 ---
 
-# AOD: Data Dictionary Generator
+# AOD Data Dictionary
 
-## Prasyarat / Prerequisites
+Create the authoritative business-level definition of persisted data. Follow
+`.agents/rules/aod-core.md`. The dictionary describes approved domain data; it
+does not independently approve product scope or dictate a database engine.
 
-**Input Priority:**
-1. **PRD** *(primary — source of truth untuk entitas dan fitur)*
-2. **Business Flow** *(optional — pahami data movement dan lifecycle)*
-3. **Study Case** *(fallback context)*
+## Sources and boundaries
 
----
+- Use the approved PRD for entities, capabilities, and required data.
+- Use Business Flow and State Machine for lifecycle, ownership, and data
+  movement.
+- For an existing project, inspect the current schema and record observed
+  implementation separately from proposed changes.
+- Use Tech Spec for the selected database and supported storage conventions.
+- Do not add fields, enum values, relationships, retention rules, or sensitive
+  data collection without source evidence. Mark unresolved items as decisions.
+- Distinguish persisted fields from derived values, transient request fields,
+  external references, and audit metadata.
 
-## Peranmu / Your Role
+## Define each entity
 
-You are a Senior Data Architect responsible for designing a normalized, performance-aware database schema.
+Use one table per entity with these columns:
 
-Data Dictionary yang kamu hasilkan menjadi **single source of truth** untuk:
-- Semua field names dalam implementasi
-- Semua relationship antar entitas
-- Semua constraint dan validation rules
+| Field | Logical type | Required/nullability | Default | Constraints | Meaning/source | Sensitivity | Index rationale |
+| ----- | ------------ | -------------------- | ------- | ----------- | -------------- | ----------- | --------------- |
 
----
+For each entity, also state its purpose, identity/primary key, relationships and
+cardinality, uniqueness rules, lifecycle/status source, and relevant retention
+or deletion behavior when approved. Describe indexes only when query or
+integrity needs support them. Add database-specific types, lengths, generated
+columns, or engine syntax only when the Tech Spec or existing schema establishes
+the target.
 
-## Instruksi / Instructions
+## Workflow
 
-**Step 1: Identify All Entities**
-List semua entitas yang perlu ada berdasarkan PRD.
-
-**Step 2: Define Data Dictionary Per Entity**
-
-Untuk setiap entitas, definisikan:
-
-| Field Name | Data Type | Length | Nullable | Default | Description | Constraints | Index |
-|---|---|---|---|---|---|---|---|
-
-Sertakan: field name (snake_case), data type, length, nullable, default value, description, constraints, indexing strategy.
-
-**Step 3: Define Relationships**
-- One-to-Many, Many-to-Many, One-to-One
-
-**Step 4: Define Enum Values**
-List semua nilai enum secara eksplisit.
-
----
-
-## Aturan Penting / Important Rules
-
-- Think from a **migration perspective** — output harus bisa langsung dijadikan migration.
-- Consider query performance — definisikan index strategy.
-- Hindari ambiguous field naming.
-- Definisikan unique constraints secara jelas.
-- Definisikan foreign key relationships secara eksplisit.
-- Hindari redundancy — normalisasi dengan benar.
-- Ensure naming consistency di seluruh entitas.
-
-**Language:** Sesuai input user.
-
----
+1. Extract candidate entities and attributes from approved requirements.
+2. Trace each item to its source section or requirement ID; flag untraceable
+   items rather than silently including them.
+3. Reconcile names and meanings across PRD, Business Flow, State Machine, and
+   existing schema. Surface conflicts for resolution.
+4. Normalize relationships and constraints at the logical level. Avoid
+   duplicate facts and premature physical-schema choices.
+   List the approved values and meaning for every enum/status field; defer
+   lifecycle transitions to the State Machine.
+5. Identify sensitive fields and data-minimization concerns without inventing
+   classification or retention policy.
+6. Record gaps, assumptions, and decisions separately from approved fields.
 
 ## Output
 
-Struktur per entitas.
-Simpan hasil ke: `docs/business/DATA_DICTIONARY.md`
-Setelah selesai: **"Langkah berikutnya: DBML Generator (aod-dbml)"**
+Save to `docs/business/DATA_DICTIONARY.md` using the project's document
+versioning standard. Include scope and source references, entity definitions,
+relationships, enums, constraints, sensitivity notes, and open decisions. Then
+recommend `aod-dbml` when the dictionary is sufficiently approved; DBML must
+not add entities or fields absent here.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.

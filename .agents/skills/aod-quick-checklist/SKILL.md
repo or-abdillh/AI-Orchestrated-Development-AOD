@@ -38,7 +38,7 @@ Deteksi intensi pengguna berdasarkan trigger phrase:
 | Mode | Trigger Phrases | Fokus Output |
 |---|---|---|
 | **Mode 1: UI Slicing Only** | `"checklist ui slicing"`, `"cek slicing"`, `"status slicing"`, `"progress ui"` | Rincian status per-layout, per-halaman, komponen anak, varian state, mock data. |
-| **Mode 2: Phase Plan Only** | `"checklist phase plan"`, `"cek phase"`, `"status phase"`, `"progress phase"` | Rincian status per-fase (Phase 0 s/d Phase 4), sprint, task aktif, git branch. |
+| **Mode 2: Phase Plan Only** | `"checklist phase plan"`, `"cek phase"`, `"status phase"`, `"progress phase"` | Rincian status per-fase (fase/release aktual pada Phase Plan), sprint, task aktif, git branch. |
 | **Mode 3: Combined Quick Dashboard** | `"quick checklist"`, `"cek checklist"`, `"status cepat"`, `"tampilkan checklist"` | Ringkasan dashboard gabungan (UI Slicing + Phase Plan + Active Branch) dalam 1 layar. |
 
 ---
@@ -70,7 +70,7 @@ Deteksi intensi pengguna berdasarkan trigger phrase:
 3. **Format Output Terminal:**
 
 ```text
-🎨 UI Slicing Progress Checklist (Phase 3)
+🎨 UI Planning / Phase 4 Implementation Progress Checklist
 ──────────────────────────────────────────────────────────────────
 Progress: [████████████░░░░░░░░] 60% (3/5 Pages Sliced)
 Design System Authority: docs/system-design/DESIGN_SYSTEM.md
@@ -195,3 +195,15 @@ Immediate Next Steps:
 2. Backend  : Selesaikan inventory lock pada OrderService di branch feat/orders-checkout
 3. Check Detail: Ketik "checklist ui slicing" atau "checklist phase plan" untuk rincian lengkap.
 ```
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.
+
+Example phase numbers below are illustrative delivery phases, not AOD methodology
+phases. Derive actual labels from Phase Plan. Do not infer completion from branch
+existence or WIP filenames. State denominator for any percentage.

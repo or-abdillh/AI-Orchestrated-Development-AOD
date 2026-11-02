@@ -1,90 +1,66 @@
 ---
 name: aod-state-machine
 description: >-
-  Defines state machine behavior for all entities with lifecycle states in
-  the system. Use when the user says "state machine", "status transitions",
-  "entity lifecycle", "state diagram", "mesin status", or at Phase 2 Step 8
-  of AOD. Requires: Business Flow (primary) and PRD. Produces: STATE_MACHINE.md
+  Defines approved domain lifecycle states, transitions, guards, actors, and
+  invariants for entities that change status. Use for a state machine, status
+  transition map, or entity lifecycle. Requires Business Flow (TO-BE) and PRD;
+  use Data Dictionary and RBAC when available. Produces
+  docs/system-design/STATE_MACHINE.md.
 ---
 
-# AOD: State Machine Definition Generator
+# AOD State Machine
 
-## Prasyarat / Prerequisites
+Model domain lifecycle behavior from approved business sources. Follow
+`.agents/rules/aod-core.md`. Keep domain lifecycle separate from presentation
+states such as loading, empty, and error.
 
-**Input Priority:**
-1. **Business Flow (TO-BE)** *(primary — source of truth untuk states dan transitions)*
-2. **PRD** *(secondary — validasi alignment dengan fitur sistem)*
-3. **Study Case** *(fallback context)*
+## Sources and boundaries
 
----
+- Use Business Flow (TO-BE) for actual operational steps and triggers; PRD
+  confirms feature scope and intended outcomes.
+- Use Data Dictionary for entity identity and persisted status fields, and RBAC
+  for actor authorization when available.
+- For existing systems, distinguish observed states/transitions from proposed
+  behavior and cite implementation evidence separately.
+- Do not infer a state merely because it is common in similar systems. Record
+  ambiguity, missing trigger, or conflicting sources as an open decision.
 
-## Peranmu / Your Role
+## Model each lifecycle
 
-You are a Domain-Driven Design specialist defining state machine behavior for complex business entities.
+For every entity with meaningful lifecycle behavior, document:
 
----
+1. Entity and lifecycle scope, with source references.
+2. States, definitions, entry conditions, and whether terminal or re-enterable.
+3. Allowed transitions in a table:
 
-## State Modeling Rules / Aturan Pemodelan State
+   | From | To  | Trigger/event | Actor | Guards/preconditions | Result/side effects | Source |
+   | ---- | --- | ------------- | ----- | -------------------- | ------------------- | ------ |
 
-- Setiap state harus berasal dari actual step dalam TO-BE flow.
-- Setiap transition harus memiliki clear trigger.
-- Sertakan failure states dan edge cases.
-- Jangan menginvent states yang tidak didukung oleh flow.
-- Think in domain behavior logic, NOT in UI logic.
+4. Invalid or explicitly forbidden transitions, including why when known.
+5. Invariants that must hold before and after transitions.
+6. Failure, cancellation, retry, timeout, or reversal paths only when supported
+   by the business sources.
+7. Authorization dependencies and related data fields, linked to RBAC and the
+   Data Dictionary rather than redefining them.
 
----
-
-## Instruksi / Instructions
-
-**Step 1: Identify Entities Requiring State Management**
-Dari Business Flow, identifikasi entitas yang memiliki states/lifecycle.
-
-**Step 2: Define All Possible States**
-List semua possible states per entitas.
-
-**Step 3: Define Transition Table**
-
-| From State | To State | Trigger | Actor | Conditions |
-|---|---|---|---|---|
-
-**Step 4: Define Invalid Transitions**
-List transisi yang TIDAK diperbolehkan.
-
-**Step 5: Identify Terminal States**
-State yang tidak bisa ditransisi lagi (final states).
-
-**Step 6: Define Invariant Rules**
-Business rules yang harus selalu benar.
-
-**Step 7: Identify Side Effects**
-Event saat transition: notifikasi, logging, audit trail, dll.
-
----
-
-## Aturan Penting / Important Rules
-
-- Avoid ambiguous transitions.
-- Do not merge states without clear justification.
-- Explicitly define who is authorized to trigger each transition.
-- Define invalid transitions dengan jelas.
-
----
-
-## Output Format
-
-Per entitas:
-```
-## Entity: [Entity Name]
-### Possible States
-### Transition Table
-### Invalid Transitions
-### Terminal States
-### Invariant Rules
-### Side Effects
-```
-
----
+Use precise transition names and distinguish a business event from the actor
+action that causes it. State whether a transition is reversible only when the
+source defines that behavior. Do not treat HTTP response statuses or visual UI
+states as entity lifecycle states.
 
 ## Output
 
-Simpan hasil ke: `docs/system-design/STATE_MACHINE.md`
+Save to `docs/system-design/STATE_MACHINE.md` using the project's document
+versioning standard. Organize by entity and include source traceability, allowed
+and forbidden transitions, invariants, side effects, and open decisions. If no
+entity has an evidenced lifecycle, state that finding instead of manufacturing
+a state machine. Identify downstream API/UI contracts that depend on approved
+transitions.
+
+
+## Orchestrator handoff
+
+When invoked by `aod-orchestrator`, read
+`.agents/skills/aod-orchestrator/references/handoff.md`, return its structured
+handoff, and return control to the orchestrator. Do not write workflow checkpoint.
+Direct invocation authorizes only the requested scope, not the full workflow.
