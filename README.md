@@ -7,7 +7,7 @@
 
 > **"AI executes. Architect decides. Structure governs."**
 >
-> Metodologi pengembangan perangkat lunak dan ekosistem *agentic skills* untuk mentransformasi AI dari autopilot tanpa kendali menjadi **implementation accelerator yang disiplin, terstruktur, dan patuh arsitektur**.
+> Metodologi pengembangan perangkat lunak dan ekosistem _agentic skills_ untuk mentransformasi AI dari autopilot tanpa kendali menjadi **implementation accelerator yang disiplin, terstruktur, dan patuh arsitektur**.
 
 ---
 
@@ -28,7 +28,6 @@
 
 ---
 
-
 ## ⚡ Quick Install (One-Liner)
 
 Pasang seluruh ekosistem AOD Framework (28 native AOD skills, 5 Rules, skill pelengkap, AGENTS.md, dan struktur scaffold `docs/`) ke dalam project apa pun (proyek baru maupun proyek yang sudah berjalan seperti Laravel, Next.js, Vue, Django, dsb.) dengan **satu baris perintah**:
@@ -38,6 +37,7 @@ curl -fsSL https://raw.githubusercontent.com/or-abdillh/AI-Orchestrated-Developm
 ```
 
 > **Atau tentukan direktori target secara spesifik:**
+>
 > ```bash
 > curl -fsSL https://raw.githubusercontent.com/or-abdillh/AI-Orchestrated-Development-AOD/main/install.sh | bash -s -- /path/to/your/project
 > ```
@@ -46,35 +46,40 @@ curl -fsSL https://raw.githubusercontent.com/or-abdillh/AI-Orchestrated-Developm
 
 ## 💡 Overview
 
-**AI-Orchestrated Development (AOD)** adalah framework yang dirancang khusus untuk pengembang mandiri (*solo developers*), konsultan teknis, dan tim freelance yang membangun sistem skala SME (*Small-Medium Enterprise*).
-
+**AI-Orchestrated Development (AOD)** adalah framework yang dirancang khusus untuk pengembang mandiri (_solo developers_), konsultan teknis, dan tim freelance yang membangun sistem skala SME (_Small-Medium Enterprise_).
 
 Alih-alih membiarkan AI mengasumsikan arsitektur atau melompati fase rekayasa perangkat lunak, AOD menerapkan **rantai dependensi dokumen yang ketat**:
 
 ```
+
+Installer memperbarui file AOD yang dikelola dan menambahkan atau memperbarui blok bertanda `aod:start` di file instruksi agent. Isi proyek di luar blok tersebut tetap dipertahankan. File lain yang tidak dikelola AOD tidak dihapus; skill dan rule AOD dengan nama sama diperbarui dari paket, kecuali `.agents/rules/aod-architecture-engineering.md` yang sudah ada di proyek target.
+
+### Dukungan coding agent
+
+`AGENTS.md` menjadi panduan kanonis lintas agent. Installer juga menyiapkan instruksi khusus untuk Gemini (`GEMINI.md`), Claude (`CLAUDE.md`), GitHub Copilot (`.github/copilot-instructions.md`), Cursor (`.cursor/rules/aod.mdc`), dan Windsurf (`.windsurfrules`). Agent lain dapat diarahkan membaca `AGENTS.md` dari konfigurasi project mereka.
 Business Discovery ➔ System Design ➔ UI Architecture ➔ Phased Development ➔ Quality & Testing
 ```
 
-Setiap fase memiliki persona spesialis, dokumen input wajib, batasan ketat (*constraints*), dan artefak keluaran terstandarisasi.
+Setiap fase memiliki persona spesialis, dokumen input wajib, batasan ketat (_constraints_), dan artefak keluaran terstandarisasi.
 
 ---
 
 ## 🛑 Mengapa AOD Dibutuhkan?
 
-| Masalah AI Autopilot Biasa | Solusi Terorkestrasi AOD |
-|---|---|
-| **Halusinasi & Skema Acak:** AI mengarang kolom database yang tidak pernah disepakati. | **Single Source of Truth:** Seluruh kolom dan tipe data dikunci pada `DATA_DICTIONARY.md`. |
-| **Logic Bocor ke Controller:** AI menaruh query dan business logic sembarangan. | **Architectural Rules:** Dipaksa melalui Service Layer, FormRequest, dan Policy guards. |
-| **Lompat Langsung Coding:** Menghasilkan kode tanpa fondasi domain yang jelas. | **Phase Discipline:** AI diblokir membuat kode sebelum PRD, Tech Spec, dan Phase Plan final. |
-| **UI Generik ("AI-Slop"):** Tampilan terasa murah, inkonsisten, dan membosankan. | **Design Token Authority:** Mengunci styling lewat UI Style Document dan filter `antislop`. |
-| **Ketiadaan Pengujian:** Kode dianggap selesai saat tidak ada error sintaks. | **Definition of Done & UAT:** 6 pilar verifikasi ketat sebelum kode dapat di-merge. |
+| Masalah AI Autopilot Biasa                                                             | Solusi Terorkestrasi AOD                                                                                         |
+| -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Halusinasi & Skema Acak:** AI mengarang kolom database yang tidak pernah disepakati. | **Single Source of Truth:** Seluruh kolom dan tipe data dikunci pada `DATA_DICTIONARY.md`.                       |
+| **Logic Bocor ke Controller:** AI menaruh query dan business logic sembarangan.        | **Architectural Rules:** Batas implementasi diturunkan dari Tech Spec yang disetujui dan mengikuti stack proyek. |
+| **Lompat Langsung Coding:** Menghasilkan kode tanpa fondasi domain yang jelas.         | **Phase Discipline:** AI diblokir membuat kode sebelum PRD, Tech Spec, dan Phase Plan final.                     |
+| **UI Generik ("AI-Slop"):** Tampilan terasa murah, inkonsisten, dan membosankan.       | **Design Token Authority:** Mengunci styling lewat UI Style Document dan filter `antislop`.                      |
+| **Ketiadaan Pengujian:** Kode dianggap selesai saat tidak ada error sintaks.           | **Definition of Done & UAT:** 6 pilar verifikasi ketat sebelum kode dapat di-merge.                              |
 
 ---
 
 ## 🏛️ 5 Prinsip Fundamental
 
 1. **Architecture First:** Arsitektur dan pemodelan data diputuskan sebelum satu baris kode implementasi ditulis.
-2. **Phase-Driven Execution:** Eksekusi dilakukan berurutan berdasarkan dependensi logis dengan pendekatan *MVP-first*.
+2. **Phase-Driven Execution:** Eksekusi dilakukan berurutan berdasarkan dependensi logis dengan pendekatan _MVP-first_.
 3. **Feature-Level Atomic Workflow:** Siklus disiplin: `1 Fitur ➔ 1 Prompt ➔ 1 Review ➔ 1 Validasi ➔ 1 Commit`.
 4. **Definition of Done Enforcement:** Tidak ada fitur yang selesai tanpa lulus kepatuhan struktur, otorisasi, proteksi N+1, dan automated tests.
 5. **AI as Controlled Executor:** AI bertindak sebagai akselerator implementasi, bukan pengambil keputusan arsitektur.
@@ -85,8 +90,8 @@ Setiap fase memiliki persona spesialis, dokumen input wajib, batasan ketat (*con
 
 ```mermaid
 flowchart TD
-    subgraph Pre["Pre-Project"]
-        PR["aod-proposal<br><i>Commercial Proposal & SOW</i>"]
+    subgraph COMM["Optional Commercial Proposal"]
+        PR["aod-proposal<br><i>Approved Scope-Based Offer</i>"]
     end
 
     subgraph P1["Phase 1: Business Layer"]
@@ -108,28 +113,29 @@ flowchart TD
 
     subgraph P3["Phase 3: UI Architecture"]
         U1["aod-ui-component-map<br><i>Component Hierarchy</i>"] --> U2["aod-ui-slicing<br><i>Layout & Mock Data</i>"]
-        U2 --> U3["aod-tailwind-config<br><i>Framework Tokens</i>"]
-        U2 --> U4["aod-page-slicer<br><i>Per-Page Slicing Loop</i>"]
     end
 
     subgraph P4["Phase 4: Development & Tracking"]
         D1["aod-tech-spec<br><i>Technical Specification</i>"] --> D2["aod-phase-plan<br><i>Phased Sprint Plan</i>"]
         D2 --> D3["aod-feature-prompts<br><i>Atomic Implementation Library</i>"]
         D3 --> D4["aod-dod<br><i>Definition of Done Checklist</i>"]
-        D4 -.-> D5["aod-quick-checklist<br><i>Rapid Terminal Checklist</i>"]
-        D4 -.-> D6["aod-progress-tracker<br><i>Full Audit & Report</i>"]
+        D4 --> D5["aod-page-slicer<br><i>Approved Page Implementation</i>"]
+        D2 --> D8["aod-tailwind-config<br><i>Project Token Adapter (Optional)</i>"]
+        D8 -.-> D5
+        D4 -.-> D6["aod-quick-checklist<br><i>Rapid Terminal Checklist</i>"]
+        D4 -.-> D7["aod-progress-tracker<br><i>Full Audit & Report</i>"]
     end
 
     subgraph P5["Phase 5: Testing & Delivery"]
         T1["aod-uat<br><i>Stakeholder UAT Sheet</i>"]
     end
 
-    Pre -.-> P1
     P1 --> P2
     P2 --> P3
     P2 --> P4
     P3 --> P4
     P4 --> P5
+    D1 -.-> PR
 ```
 
 ---
@@ -138,60 +144,67 @@ flowchart TD
 
 Repository ini dilengkapi dengan **28 native AOD skills** serta skill pelengkap yang tersimpan di [`.agents/skills/`](.agents/skills/):
 
-### Entry Point & Pre-Project
-| Skill | Command Trigger | Input Dokumen | Output Artefak |
-|---|---|---|---|
-| **`aod-orchestrator`** | `"start AOD"`, `"mulai AOD"`, `"panduan AOD"` | *None (Interactive)* | Panduan langkah per langkah |
-| **`aod-existing-project-initiation`** | `"initiate existing project"`, `"adopsi AOD pada proyek existing"`, `"audit codebase untuk phase plan"` | Repository yang sudah berjalan | Laporan screening di chat; dokumen AOD pilihan user berdasarkan bukti codebase |
-| **`aod-proposal`** | `"buat proposal"`, `"project quotation"` | PRD, Tech Spec | `docs/proposal/PROPOSAL.md` |
+### Entry Point & Optional Commercial Proposal
+
+| Skill                                 | Command Trigger                                                                                         | Input Dokumen                                                           | Output Artefak                                                                 |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **`aod-orchestrator`**                | `"start AOD"`, `"mulai AOD"`, `"panduan AOD"`                                                           | _None (Interactive)_                                                    | Panduan langkah per langkah                                                    |
+| **`aod-existing-project-initiation`** | `"initiate existing project"`, `"adopsi AOD pada proyek existing"`, `"audit codebase untuk phase plan"` | Repository yang sudah berjalan                                          | Laporan screening di chat; dokumen AOD pilihan user berdasarkan bukti codebase |
+| **`aod-proposal`**                    | `"buat proposal"`, `"project quotation"`                                                                | Approved, stable PRD and Tech Spec; Phase Plan/rate card when available | Scope-based proposal and estimate in `docs/proposal/PROPOSAL.md`               |
 
 ### Phase 1 — Business Layer
-| Skill | Persona | Input Wajib | Output Artefak |
-|---|---|---|---|
-| **`aod-brd`** | Enterprise Business Analyst | Study Case | `docs/business/BRD.md` |
-| **`aod-business-flow`** | Business Process Architect | Study Case | `docs/business/BUSINESS_FLOW.md` |
-| **`aod-prd`** | Senior Product Manager | BRD, Business Flow | `docs/business/PRD.md` |
-| **`aod-flowchart`** | BPA & System Architect | Business Flow | `docs/business/FLOWCHART.md` |
-| **`aod-rbac`** | Access Control Architect | PRD | `docs/business/RBAC.md` |
-| **`aod-data-dictionary`**| Senior Data Architect | PRD | `docs/business/DATA_DICTIONARY.md` |
-| **`aod-dbml`** | Database Designer | Data Dictionary | `docs/business/SCHEMA.dbml` |
+
+| Skill                     | Persona                     | Input Wajib        | Output Artefak                     |
+| ------------------------- | --------------------------- | ------------------ | ---------------------------------- |
+| **`aod-brd`**             | Enterprise Business Analyst | Study Case         | `docs/business/BRD.md`             |
+| **`aod-business-flow`**   | Business Process Architect  | Study Case         | `docs/business/BUSINESS_FLOW.md`   |
+| **`aod-prd`**             | Senior Product Manager      | BRD, Business Flow | `docs/business/PRD.md`             |
+| **`aod-flowchart`**       | BPA & System Architect      | Business Flow      | `docs/business/FLOWCHART.md`       |
+| **`aod-rbac`**            | Access Control Architect    | PRD                | `docs/business/RBAC.md`            |
+| **`aod-data-dictionary`** | Senior Data Architect       | PRD                | `docs/business/DATA_DICTIONARY.md` |
+| **`aod-dbml`**            | Database Designer           | Data Dictionary    | `docs/business/SCHEMA.dbml`        |
 
 ### Phase 2 — System Design
-| Skill | Persona | Input Wajib | Output Artefak |
-|---|---|---|---|
-| **`aod-state-machine`** | DDD Specialist | Business Flow (TO-BE), PRD | `docs/system-design/STATE_MACHINE.md` |
-| **`aod-api-contract`** | Backend API Architect | PRD, Data Dictionary | `docs/system-design/API_CONTRACT.md` |
-| **`aod-ui-flow`** | Enterprise UX Designer | PRD, Business Flow | `docs/system-design/UI_FLOW.md` |
-| **`aod-website-concept`**| Senior UX Strategist | Study Case, BRD, Flow | `docs/system-design/WEBSITE_CONCEPT.md` |
-| **`aod-design-system`** | Design System Architect | Website Concept Doc | `docs/system-design/DESIGN_SYSTEM.md` |
-| **`aod-ui-style`** | Senior UI Designer | Website Concept, Design System | `docs/system-design/UI_STYLE.md` |
+
+| Skill                     | Persona                         | Input Wajib                                                                          | Output Artefak                                                   |
+| ------------------------- | ------------------------------- | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| **`aod-state-machine`**   | DDD Specialist                  | Business Flow (TO-BE), PRD                                                           | `docs/system-design/STATE_MACHINE.md`                            |
+| **`aod-api-contract`**    | Application Interface Architect | PRD, Data Dictionary, Tech Spec (when available) + developer route-mode confirmation | `docs/system-design/API_CONTRACT.md` (API, web routes, or mixed) |
+| **`aod-ui-flow`**         | Enterprise UX Designer          | PRD, Business Flow                                                                   | `docs/system-design/UI_FLOW.md`                                  |
+| **`aod-website-concept`** | Senior UX Strategist            | Study Case, BRD, Flow                                                                | `docs/system-design/WEBSITE_CONCEPT.md`                          |
+| **`aod-design-system`**   | Design System Architect         | Website Concept Doc                                                                  | `docs/system-design/DESIGN_SYSTEM.md`                            |
+| **`aod-ui-style`**        | Senior UI Designer              | Website Concept, Design System                                                       | `docs/system-design/UI_STYLE.md`                                 |
 
 ### Phase 3 — UI Architecture
-| Skill | Persona | Input Wajib | Output Artefak |
-|---|---|---|---|
-| **`aod-ui-component-map`**| Frontend Architect | UI Flow, Design System | `docs/ui-architecture/COMPONENT_MAP.md` |
-| **`aod-ui-slicing`** | UI Engineer | Component Map, Style Doc | `docs/ui-architecture/UI_SLICING.md` |
-| **`aod-tailwind-config`**| CSS Architecture Specialist | UI Style Document | `tailwind.config.ts` / tokens |
-| **`aod-page-slicer`** | Pixel-Perfect UI Engineer | UI Slicing, Component Map | Kode komponen per halaman |
+
+| Skill                      | Persona            | Input Wajib              | Output Artefak                          |
+| -------------------------- | ------------------ | ------------------------ | --------------------------------------- |
+| **`aod-ui-component-map`** | Frontend Architect | UI Flow, Design System   | `docs/ui-architecture/COMPONENT_MAP.md` |
+| **`aod-ui-slicing`**       | UI Engineer        | Component Map, Style Doc | `docs/ui-architecture/UI_SLICING.md`    |
 
 ### Phase 4 — Development & Tracking
-| Skill | Persona | Input Wajib | Output Artefak |
-|---|---|---|---|
-| **`aod-tech-spec`** | Solution Architect | PRD, Data Dict, RBAC, Flow | `docs/development/TECH_SPEC.md` |
-| **`aod-phase-plan`** | Technical Project Manager | Technical Specification | `docs/development/PHASE_PLAN.md` |
-| **`aod-feature-prompts`**| AI Development Strategist | Tech Spec, Phase Plan | `docs/development/FEATURE_PROMPTS.md` |
-| **`aod-dod`** | Software Quality Auditor | Tech Spec, Feature Prompts | `docs/development/DOD.md` |
-| **`aod-quick-checklist`**| Fast Scrum Master & UI Lead | Phase Plan / UI Slicing | Instant Terminal Checklist (Phase Plan & UI Slicing) |
-| **`aod-progress-tracker`**| QA Lead & Release Auditor | PRD, Tech Spec, Git/Codebase | Interactive Checklist (Terminal default) / `docs/development/PROGRESS_REPORT.md` (Export) |
+
+| Skill                      | Persona                   | Input Wajib                                                  | Output Artefak                                                            |
+| -------------------------- | ------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| **`aod-tech-spec`**        | Solution Architect        | Approved product/system inputs or existing-project evidence  | `docs/development/TECH_SPEC.md`; approved project rules when selected     |
+| **`aod-phase-plan`**       | Technical Project Manager | Technical Specification                                      | `docs/development/PHASE_PLAN.md`                                          |
+| **`aod-feature-prompts`**  | AI Development Strategist | Tech Spec, Phase Plan                                        | `docs/development/FEATURE_PROMPTS.md`                                     |
+| **`aod-dod`**              | Software Quality Auditor  | Tech Spec, Feature Prompts                                   | `docs/development/DOD.md`                                                 |
+| **`aod-tailwind-config`**  | Framework Token Adapter   | UI Style, approved Tech Spec and Phase Plan                  | Project styling config + `docs/ui-architecture/DESIGN_TOKENS.md`          |
+| **`aod-page-slicer`**      | Frontend Engineer         | Approved Tech Spec, Phase Plan, UI contracts                 | Page code, mock fixtures, UI reference                                    |
+| **`aod-quick-checklist`**  | Delivery Snapshot         | Phase Plan and/or UI Slicing                                 | Compact read-only status and next action in chat/terminal                 |
+| **`aod-progress-tracker`** | Requirement Audit Lead    | Available requirements, plan, code and verification evidence | Detailed traceability audit in chat; `PROGRESS_REPORT.md` only on request |
 
 ### Phase 5 — Testing
-| Skill | Persona | Input Wajib | Output Artefak |
-|---|---|---|---|
-| **`aod-uat`** | QA Lead & Product Delivery | PRD, Flow, State Machine | `docs/testing/UAT_SHEET.md` |
+
+| Skill         | Persona                    | Input Wajib                                                        | Output Artefak                                                            |
+| ------------- | -------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| **`aod-uat`** | QA Lead & Product Delivery | Approved requirements; relevant Flow, RBAC, State Machine, UI Flow | Requirement/role/state traceable scenarios in `docs/testing/UAT_SHEET.md` |
 
 ### Maintenance & Revisions
-| Skill | Persona | Input Wajib | Output Artefak |
-|---|---|---|---|
+
+| Skill                   | Persona                       | Input Wajib                          | Output Artefak                         |
+| ----------------------- | ----------------------------- | ------------------------------------ | -------------------------------------- |
 | **`aod-feedback-loop`** | Lead Architect & Delivery Mgr | Dokumen Feedback di `docs/feedback/` | `docs/feedback/FINAL_REPORT_<name>.md` |
 
 ---
@@ -201,7 +214,7 @@ Repository ini dilengkapi dengan **28 native AOD skills** serta skill pelengkap 
 Sistem AOD dilindungi oleh file aturan otomatis yang selalu aktif di [`.agents/rules/`](.agents/rules/):
 
 1. **`aod-core.md` (Always Active):**
-   - Mencegah AI melompati fase implementasi (*phase discipline*).
+   - Mencegah AI melompati fase implementasi (_phase discipline_).
    - Mengharuskan AI meminta klarifikasi jika dokumen prasyarat belum ada.
    - Menegakkan hierarki prioritas dokumen saat terjadi konflik (`Tech Spec > PRD > Flow > BRD`).
 2. **`aod-coding-standards.md` (Development Phase):**
@@ -222,26 +235,25 @@ Sistem AOD dilindungi oleh file aturan otomatis yang selalu aktif di [`.agents/r
    - **No Hallucinated APIs:** AI dilarang mengarang sintaks atau konfigurasi library pihak ketiga.
    - **Verifikasi Wajib:** AI wajib memanggil **Context7 MCP** (`resolve-library-id` dan `query-docs`) untuk memastikan dokumentasi resmi yang paling kredibel dan versi terkini dari library/tools yang digunakan (misal: Tailwind CSS, Prisma, Next.js, Laravel, dsb.).
 6. **`aod-feedback-and-revisions.md` (Feedback Loop & Upstream-First Rule):**
-   - **Mandatory Planning Mode First:** AI dilarang langsung menyentuh dokumen atau kode dari feedback klien. AI wajib menyajikan rencana dampak dan meminta klarifikasi serta persetujuan eksplisit user.
+   - **Planning and Authorization:** Audit-only requests menghasilkan rencana tanpa mengubah file. Jika user secara eksplisit meminta implementasi, kerjakan bagian yang jelas tanpa meminta persetujuan ulang; klarifikasi hanya keputusan material yang belum terselesaikan.
    - **3-Tier Scope Classification:** Memetakan butir revisi ke **Scope A (Doc Only)**, **Scope B (Feature Modification)**, atau **Scope C (New Feature / Scope Expansion)**.
    - **Upstream Cascading:** Dokumen spesifikasi hulu (PRD, Data Dict, Spec) wajib disinkronkan dan dinaikkan versinya sebelum kode disentuh.
-   - **Laporan Akhir Wajib:** Setiap penanganan feedback wajib menghasilkan dokumen `docs/feedback/FINAL_REPORT_<name>.md`.
+   - **Factual Reporting:** Buat laporan eksekusi setelah perubahan bila diwajibkan workflow proyek atau diminta user; jangan menyebut pekerjaan audit-only sebagai eksekusi selesai.
 7. **Requirement Traceability & Progress Tracking (`aod-progress-tracker`):**
-   - **Audit Spesifikasi Objektif:** Membandingkan dokumen hulu (`PRD.md`, `TECH_SPEC.md`, `PHASE_PLAN.md`) dengan realisasi kode riil dan riwayat branch/commit Git.
-   - **Pemisahan Task yang Jelas:** Membedakan antara task yang direncanakan (*Planned Tasks*), sedang dikerjakan (*In Progress*), dan telah selesai (*Completed Tasks*).
-   - **Dual Output Modes:**
-     - **Default Mode (Terminal Print-Out):** Cepat dan instan menampilkan checklist progres langsung di chat/terminal tanpa mengotori repositori dengan file baru.
-     - **Export Mode (Document):** Mengekspor laporan lengkap ke `docs/development/PROGRESS_REPORT.md` (dilengkapi SemVer header) saat diminta oleh engineer.
+   - **Full Requirement Traceability:** Memetakan requirement dan work item ke rencana, implementasi, DoD/ARC, serta bukti verifikasi yang tersedia.
+   - **Evidence-Based Status:** Membedakan completed/verified, implemented/unverified, in progress, planned, blocked, drift, dan unknown. Git menjadi bukti opsional, bukan prasyarat.
+   - **Dual Output Modes:** Ringkasan audit tampil di chat secara default; laporan `docs/development/PROGRESS_REPORT.md` dibuat hanya saat diminta.
 8. **Rapid Terminal Checklists (`aod-quick-checklist`):**
-   - **Zero File Footprint:** Memberikan tampilan status interaktif instan langsung di terminal/chat tanpa memicu git diff atau membuat file baru.
-   - **Targeted Granular Inspection:** Memungkinkan engineer memeriksa status granular per-fase pada **Phase Plan** (`checklist phase plan`), status pemotongan komponen per-halaman pada **UI Slicing** (`checklist ui slicing`), atau ringkasan dashboard gabungan (`quick checklist`).
-   - **Actionable Hints:** Menyertakan pointer aksi berikutnya secara presisi (halaman yang siap di-slice dengan `aod-page-slicer` atau branch Git yang harus dibuat).
-
-
-
+   - **Compact and Read-Only:** Menampilkan status singkat tanpa membuat file atau menjalankan tests.
+   - **Scope-Specific:** Merangkum Phase Plan, status rencana/implementasi halaman UI, atau keduanya; tidak menggantikan audit traceability lengkap.
+   - **One Next Action:** Menunjukkan satu langkah dependency-ready berdasarkan plan yang tersedia.
+9. **Stakeholder UAT (`aod-uat`):**
+   - Menautkan setiap skenario ke requirement/acceptance ID, actor role, state awal/akhir jika relevan, dan expected result yang bisa diamati.
+   - Menyediakan coverage matrix dan ruang pencatatan hasil/sign-off; tidak menyatakan UAT lulus sebelum stakeholder menjalankannya.
 
 ```markdown
 <!-- Contoh Header Metadata pada Setiap Dokumen docs/ -->
+
 # Product Requirement Document (PRD)
 
 > **Version:** `v1.2.0`  
@@ -252,26 +264,29 @@ Sistem AOD dilindungi oleh file aturan otomatis yang selalu aktif di [`.agents/r
 ---
 
 ### Revision History
-| Version | Date | Author | Description of Changes |
-|---|---|---|---|
-| `v1.0.0` | 2026-09-10 | aod-prd | Initial draft from BRD & Business Flow. |
-| `v1.1.0` | 2026-09-12 | aod-prd | Added Payment Gateway integration requirements. |
+
+| Version  | Date       | Author  | Description of Changes                                       |
+| -------- | ---------- | ------- | ------------------------------------------------------------ |
+| `v1.0.0` | 2026-09-10 | aod-prd | Initial draft from BRD & Business Flow.                      |
+| `v1.1.0` | 2026-09-12 | aod-prd | Added Payment Gateway integration requirements.              |
 | `v1.2.0` | 2026-09-14 | aod-prd | Added multi-currency support and localized tax calculations. |
 ```
 
 ---
 
-
 ## 🚀 Panduan Penggunaan di Real Project
 
 ### 1. Inisialisasi Proyek Baru
+
 Panggil orchestrator untuk memeriksa kelengkapan awal dokumen proyek Anda:
+
 ```text
 User: "Mulai proyek baru dengan AOD."
 Agent: Mengaktifkan aod-orchestrator, menanyakan ketersediaan Study Case / Business Discovery.
 ```
 
 ### 2. Inisialisasi Proyek Existing
+
 Untuk codebase yang sudah memiliki modul dan fitur berjalan, mulai dengan skill screening khusus. Skill akan mendeteksi stack dari manifest, memetakan domain dari bukti implementasi, lalu menampilkan pilihan dokumen yang relevan. Dokumen baru dibuat setelah Anda memilihnya:
 
 ```text
@@ -280,7 +295,9 @@ Agent: Menjalankan aod-existing-project-initiation, memeriksa stack dan codebase
 ```
 
 ### 3. Membangun Dokumen Bisnis (Phase 1)
+
 Jalankan pembentukan BRD dan Business Flow:
+
 ```text
 User: "Generate BRD dari study case ini: [paste ringkasan bisnis]"
 Agent: Menjalankan aod-brd -> menghasilkan docs/business/BRD.md
@@ -290,7 +307,9 @@ Agent: Menjalankan aod-business-flow -> aod-prd.
 ```
 
 ### 4. Merancang Sistem & Data (Phase 1 & 2)
+
 Generate kamus data dan kontrak antarmuka:
+
 ```text
 User: "Buat data dictionary dan skema DBML."
 Agent: Menjalankan aod-data-dictionary dan aod-dbml.
@@ -300,17 +319,21 @@ Agent: Menjalankan aod-api-contract dan aod-ui-flow secara terpadu.
 ```
 
 ### 5. Eksekusi Koding Terkendali (Phase 4)
+
 Setelah `TECH_SPEC.md` dan `PHASE_PLAN.md` disetujui, gunakan prompt library atomik:
+
 ```text
 User: "Generate feature prompts untuk Module Orders."
 Agent: Menghasilkan prompt per-fitur di docs/development/FEATURE_PROMPTS.md.
 
 User: "Implementasikan Feature 1: Create Order menggunakan prompt dari library."
-Agent: Mengeksekusi kode per-fitur (Migration -> Model -> Request -> Service -> Controller -> Policy -> Tests).
+Agent: Memeriksa project conventions, lalu mengimplementasikan work item sesuai urutan dan batasan pada Tech Spec, Phase Plan, kontrak, dan prompt fitur terkait.
 ```
 
 ### 6. Validasi & Commit
+
 Periksa checklist Definition of Done dan jalankan atomic commit:
+
 ```text
 User: "Periksa kepatuhan DoD untuk fitur Create Order."
 Agent: Menjalankan checklist aod-dod.
@@ -361,6 +384,8 @@ docs/
 └── samples/
     ├── STUDY_CASE_DOCUMENT.md
     ├── FEEDBACK_TEMPLATE.md
+    ├── UAT_SHEET_TEMPLATE.md
+    ├── PROGRESS_REPORT_TEMPLATE.md
     └── FINAL_REPORT_TEMPLATE.md
 ```
 
@@ -370,16 +395,15 @@ docs/
 
 Framework ini terintegrasi langsung dengan skill industri terverifikasi dari ekosistem agen:
 
-- **`domain-modeling`** *(Matt Pocock)*: Menajamkan model domain, bounded context, dan relasi data.
-- **`tailwind-design-system`** *(Wshobson)*: Pola implementasi sistem desain dan layout berbasis Tailwind v4/v3.
-- **`tdd`** *(Matt Pocock)*: Alur implementasi kode *Test-Driven Development* (Red-Green-Refactor).
-- **`code-review`** *(Matt Pocock)*: Audit kualitas kode multi-axis sebelum merge.
-- **`playwright-best-practices`** *(Currents.dev)*: Penulisan automated E2E tests berbasis skenario UAT.
-- **`git-flow-branch-creator`** *(GitHub Awesome Copilot)*: Manajemen pembuatan branch git flow standar (`feature/*`, `release/*`, `hotfix/*`).
-- **`git-workflow-and-versioning`** *(Addy Osmani)*: Best practices pengelolaan alur git, branching, dan semantic tagging.
+- **`domain-modeling`** _(Matt Pocock)_: Menajamkan model domain, bounded context, dan relasi data.
+- **`tailwind-design-system`** _(Wshobson)_: Pola implementasi sistem desain dan layout berbasis Tailwind v4/v3.
+- **`tdd`** _(Matt Pocock)_: Alur implementasi kode _Test-Driven Development_ (Red-Green-Refactor).
+- **`code-review`** _(Matt Pocock)_: Audit kualitas kode multi-axis sebelum merge.
+- **`playwright-best-practices`** _(Currents.dev)_: Penulisan automated E2E tests berbasis skenario UAT.
+- **`git-flow-branch-creator`** _(GitHub Awesome Copilot)_: Manajemen pembuatan branch git flow standar (`feature/*`, `release/*`, `hotfix/*`).
+- **`git-workflow-and-versioning`** _(Addy Osmani)_: Best practices pengelolaan alur git, branching, dan semantic tagging.
 - **`smart-git-commit`**: Pemilah commit git atomik berbasis Conventional Commits.
 - **`antislop`**: Filter pencegah copy dan komponen UI bergaya AI generik.
-
 
 ---
 
@@ -388,6 +412,7 @@ Framework ini terintegrasi langsung dengan skill industri terverifikasi dari eko
 Dikembangkan dan diarsiteki oleh:
 
 **Oka R. Abdillah**
+
 - **GitHub:** [@or-abdillh](https://github.com/or-abdillh)
 - **Email:** [hans.abdillh05@gmail.com](mailto:hans.abdillh05@gmail.com)
 - **Repository:** [AI-Orchestrated-Development-AOD](https://github.com/or-abdillh/AI-Orchestrated-Development-AOD)
@@ -397,4 +422,3 @@ Dikembangkan dan diarsiteki oleh:
 ## 📄 Lisensi
 
 Didistribusikan di bawah lisensi MIT. Silakan gunakan, modifikasi, dan adaptasi untuk kebutuhan proyek perangkat lunak Anda.
-
