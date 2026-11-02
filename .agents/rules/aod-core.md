@@ -1,130 +1,89 @@
-# AOD Core Rules — Always Active
-
-> These rules are always active in every AOD project session.
-> AI must follow these guardrails without exception.
-
+---
+trigger: always_on
 ---
 
-## Phase Discipline / Disiplin Fase
+# AOD Core Rules — Always Active
 
-- NEVER skip phases. The AOD sequence must be followed:
-  Business Layer → System Design → UI Architecture → Development → Testing
-- Tidak boleh melompat fase. Jika dokumen prerequisite belum ada, STOP dan minta user melengkapinya.
-- NEVER assume data not present in the provided documents.
-- NEVER generate implementation code unless Technical Specification AND Phase Plan are finalized.
-- ALWAYS ask for clarification before proceeding if a required document is missing.
-- **Existing Project Initiation Exception:** Saat `aod-existing-project-initiation` dipakai, screening read-only dan dokumen *as-is* boleh dibuat dari bukti repository tanpa memaksa rantai prasyarat scaffolding. Tandai fakta, inferensi, gap, dan konflik; dokumen *to-be* tetap memerlukan keputusan/user input.
+These rules govern AOD work in every project. Use the project's current state and the task's scope to select the applicable path; do not force a new-project workflow onto an existing codebase.
 
-## Document Dependency Chain / Rantai Dependensi
+## 1. Select the Project Path
 
-BRD → Business Flow → PRD → (RBAC, Data Dictionary, State Machine, API Contract, UI Flow) → Tech Spec → Phase Plan → Feature Prompts → DoD → UAT
+- **New project:** Start with business discovery and follow the dependency map below.
+- **Existing project:** Start with `aod-existing-project-initiation`. Its initial repository screening is read-only. Record observed facts, inferences, unknowns, conflicts, and evidence separately. Do not require missing bootstrap documents to describe the current system.
+- **Focused task in an initialized project:** Inspect the relevant project documents and code, identify the active phase and unmet prerequisites, then continue from the nearest valid step. Do not regenerate completed upstream work without a reason.
+- A user may choose a narrower deliverable. Produce only the requested artifact when its required inputs are available; explain material gaps and avoid fabricating decisions.
 
-Each document depends on the previous one. Do not produce downstream artifacts without upstream artifacts.
+## 2. Workflow and Dependency Rules
 
-## AI Role in AOD / Peran AI dalam AOD
+Follow this dependency-aware sequence. Items in the same group may be prepared in parallel once their shared inputs are ready.
 
-- AI is the EXECUTOR, not the ARCHITECT.
-- AI does not make architecture decisions.
-- AI does not change scope without user approval.
-- AI does not introduce patterns not defined in the Technical Specification.
-- Jangan improvisasi fitur atau skema database yang tidak didefinisikan.
+1. **Business discovery:** Study Case → BRD and Business Flow → PRD.
+2. **Business and system contracts:** After PRD, prepare the relevant Flowchart, RBAC, Data Dictionary, State Machine, API Contract, and UI Flow. DBML depends on the Data Dictionary. Website Concept depends on business context and informs Design System; UI Style depends on Website Concept and Design System.
+3. **UI architecture:** UI Component Map depends on UI Flow and the relevant product, design, state, and API documents. UI Slicing depends on the Component Map, Design System, UI Style, API Contract, and State Machine. Tailwind or equivalent token configuration depends on UI Style.
+4. **Development readiness:** Technical Specification depends on the approved product and system contracts relevant to implementation. Phase Plan depends on the Technical Specification and uses available UI and workflow specifications. Feature Prompts and DoD depend on the approved implementation plan and applicable contracts.
+5. **Implementation:** Implement one scoped feature or page at a time only after its required upstream contracts are approved and a valid Phase Plan exists. `aod-page-slicer` may implement a mock-backed UI page, but it is still implementation and follows this gate.
+6. **Verification and delivery:** Run applicable automated checks, validate DoD, and prepare UAT from the approved requirements and workflows.
 
-## Document Priority Rules (Universal)
+Do not interpret this sequence as requiring every possible document for every project. A skill's stated prerequisites and the current task determine the minimum inputs. If a prerequisite is missing, name it and its impact; proceed with independent, unblocked work where useful. Pause only the decision or implementation that depends on unresolved information.
 
-When multiple documents conflict:
-1. Technical Specification > PRD > Business Flow > BRD > Study Case
-2. Data Dictionary adalah single source of truth untuk semua field dan entitas.
-3. API Contract adalah single source of truth untuk semua endpoint.
-4. Never invent fields not defined in the Data Dictionary.
-5. Never create endpoints not defined in the API Contract.
+## 3. Approval, Assumptions, and Decision Boundaries
 
-## Output Naming Convention
+- The user owns product scope, business rules, and architecture decisions. The agent may analyze options and make recommendations, but must label them as recommendations until accepted.
+- Never present an inference, assumption, or recommendation as an observed fact or approved decision.
+- A document may contain clearly labeled, low-risk working assumptions to make a draft useful. Mark consequential, ambiguous, or conflicting items as open decisions. Do not implement or treat an open decision as an approved requirement.
+- Ask a focused clarification when an unresolved choice materially changes scope, data, permissions, lifecycle, security, integration, or architecture. Do not block unrelated work on that question.
+- Treat explicit user decisions in the current project documents or conversation as authorization; do not ask again unless new evidence creates a material conflict.
+- Do not expand scope or make irreversible external changes without explicit authorization.
 
-Save all generated documents to `docs/` within the project directory:
-- BRD → `docs/business/BRD.md`
-- Business Flow → `docs/business/BUSINESS_FLOW.md`
-- PRD → `docs/business/PRD.md`
-- Flowchart → `docs/business/FLOWCHART.md`
-- RBAC → `docs/business/RBAC.md`
-- Data Dictionary → `docs/business/DATA_DICTIONARY.md`
-- DBML → `docs/business/SCHEMA.dbml`
-- State Machine → `docs/system-design/STATE_MACHINE.md`
-- API Contract → `docs/system-design/API_CONTRACT.md`
-- UI Flow → `docs/system-design/UI_FLOW.md`
-- Website Concept → `docs/system-design/WEBSITE_CONCEPT.md`
-- Design System → `docs/system-design/DESIGN_SYSTEM.md`
-- UI Style → `docs/system-design/UI_STYLE.md`
-- UI Component Map → `docs/ui-architecture/COMPONENT_MAP.md`
-- UI Slicing → `docs/ui-architecture/UI_SLICING.md`
-- Tech Spec → `docs/development/TECH_SPEC.md`
-- Phase Plan → `docs/development/PHASE_PLAN.md`
-- Feature Prompts → `docs/development/FEATURE_PROMPTS.md`
-- DoD → `docs/development/DOD.md`
-- Progress Report (when exported) → `docs/development/PROGRESS_REPORT.md`
-- UAT Sheet → `docs/testing/UAT_SHEET.md`
-- Proposal → `docs/proposal/PROPOSAL.md`
+## 4. Document Authority and Conflict Resolution
 
-## Document Versioning & Tracking / Standar Versi Dokumen
+Use each document as authority for its domain:
 
-- EVERY document created in `docs/` MUST include version metadata at the top:
-  - Version: `vMAJOR.MINOR.PATCH` (e.g. `v1.0.0`)
-  - Last Updated: `YYYY-MM-DD`
-  - Status: `Draft` | `In Review` | `Approved` | `Superseded`
-  - Author / Generator: Skill name
-  - Revision History table
-- AI MUST bump the version upon ANY update:
-  - MAJOR (`vX.0.0`): Fundamental architectural change, breaking scope alteration, or complete rework.
-  - MINOR (`v1.X.0`): Additions of new modules, features, entities, or endpoints that are backward-compatible.
-  - PATCH (`v1.0.X`): Text clarifications, formatting improvements, typo fixes, or minor notes.
-- AI MUST update the `Last Updated` date and append an entry to the `Revision History` log on every revision.
-- Never edit an existing document without bumping version and updating history.
+| Decision area                                                              | Authority                                                           |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Business goals, stakeholders, and boundaries                               | BRD; Study Case is source context                                   |
+| Product scope, features, and acceptance intent                             | Approved PRD                                                        |
+| Operational behavior and actors                                            | Approved Business Flow                                              |
+| Roles and permissions                                                      | RBAC                                                                |
+| Entities, fields, types, and relationships                                 | Data Dictionary                                                     |
+| Entity lifecycle and valid transitions                                     | State Machine                                                       |
+| HTTP interfaces (API endpoints or web routes) and request/response schemas | API Contract                                                        |
+| Visual tokens and component standards                                      | Design System and UI Style                                          |
+| Technical architecture and implementation conventions                      | Approved Technical Specification and its project architecture rules |
+| Work order, deliverables, and phase exit criteria                          | Approved Phase Plan                                                 |
 
-## Git Feature-Branching Enforcement / Disiplin Branching Git
+When documents conflict, do not resolve the conflict by a universal document ranking. Preserve each source, identify the affected decision, and ask the project owner to resolve it. Until resolved, follow the last explicitly approved decision only where it remains unambiguous and do not implement the conflicting part. Downstream documents must reflect the relevant upstream authority; they do not silently redefine it.
 
-- In Phase 4 (Development), NEVER commit implementation code directly to `main` or `master`.
-- Every Phase must have a dedicated branch: `phase/<phase-num>-<phase-slug>` (e.g. `phase/01-core-foundation`).
-- Every Feature must have a dedicated branch: `feat/<module>-<feature-slug>` (e.g. `feat/orders-create-order`).
-- AI must ensure the workspace is on the correct feature branch before generating code.
-- AI must validate against `aod-dod` before completing the feature branch.
-- Atomic commits must be executed via `smart-git-commit`.
+Never invent database fields, endpoints, enum values, permissions, or state transitions. Propose additions in the owning document and wait for approval before implementing them.
 
-## Source-Driven Grounding via Context7 MCP / Verifikasi Dokumentasi Kredibel
+## 5. Implementation Guardrails
 
-- AI DILARANG berasumsi atau mengarang API syntax, konfigurasi, atau pola integrasi library berdasarkan pengetahuan hafalan yang berpotensi usang (*outdated*).
-- AI WAJIB menggunakan **Context7 MCP** (`resolve-library-id` dan `query-docs`) untuk mengambil dokumentasi resmi dan terkini setiap kali:
-  1. Menentukan versi package, konfigurasi, dan best practices pada **Phase 4: aod-tech-spec**.
-  2. Mengonfigurasi utility tokens, plugins, atau breaking changes pada **Phase 3: aod-tailwind-config** & **aod-page-slicer** (terutama Tailwind v4 / UI libraries).
-  3. Mengimplementasikan fitur kode yang berinteraksi dengan framework, SDK, ORM, Auth provider, atau tools pihak ketiga pada **Phase 4: aod-feature-prompts**.
-- Protokol Penggunaan Context7:
-  1. Resolve ID: Gunakan `resolve-library-id` dengan query spesifik (contoh: `tailwind`, `prisma`, `laravel`, `nextjs`).
-  2. Query Docs: Panggil `query-docs` dengan library ID terpilih (format `/org/project`) dan topik konsep spesifik.
-  3. Implementasi: Tulis kode atau konfigurasi yang terbukti valid dari dokumentasi resmi yang baru saja diambil.
+- Implement only the approved scope of the active feature prompt or user task. Follow the approved Technical Specification and project-specific architecture rules.
+- Before modifying an existing feature, inspect its relevant code and read any matching Agent Reference Context (ARC) documents.
+- Keep business logic, validation, persistence, and authorization in the layers defined by the project's architecture. Do not impose a framework-specific pattern when the Tech Spec does not select it.
+- Use official, version-matched documentation for third-party APIs and configuration. Use Context7 when available; otherwise use the library's official documentation. Record a limitation if neither source can be verified.
+- For UI work, follow the approved Design System and UI Style. If a required token or component is missing, propose the upstream design change instead of inventing a conflicting style.
+- In a Git-managed project, follow its established branch and commit workflow. If AOD branch conventions are adopted, use a dedicated phase/feature branch and do not commit implementation directly to `main` or `master`.
 
-## Feedback & Revision Protocol / Tata Kelola Revisi (docs/feedback/)
+## 6. Document Lifecycle
 
-- Setiap dokumen revisi, catatan klien, atau Change Request (CR) di `docs/feedback/` WAJIB diaudit menggunakan skill `aod-feedback-loop`.
-- **Mode Perencanaan Wajib (Planning Mode First):** AI dilarang langsung memodifikasi dokumen atau kode tanpa menyajikan audit rencana dampak dan meminta konfirmasi/klarifikasi user.
-- **Upstream-First:** Dokumen spesifikasi hulu (PRD, Data Dict, Tech Spec) harus diperbarui dan dinaikkan versinya (SemVer) sebelum kode diubah.
-- **3-Tier Scope Classification:** Klasifikasikan dampak ke Scope A (Doc-Only), Scope B (Feature Modification), atau Scope C (New Feature/Expansion).
-- **Laporan Akhir Wajib:** Setiap penanganan revisi wajib menghasilkan laporan akhir di `docs/feedback/FINAL_REPORT_<name>.md`.
+For documents generated or revised in `docs/`, use the project's document versioning standard: semantic version, last-updated date, status, generator/author, and revision history. On edits, update the version and revision history according to the size and compatibility of the change. Do not add AOD version metadata to unrelated files or modify documents outside the requested scope.
 
-## Design System Adherence / Kepatuhan Sistem Desain Mutlak
+For client feedback or change requests, use `aod-feedback-loop` to assess scope and downstream impact. Follow its planning and clarification gate before dependent edits or code changes. Update approved upstream contracts before implementing affected code, then record the outcome in the required final report.
 
-- Seluruh pembuatan atau pengubahan UI, views, template Blade/JSX/Vue/Svelte, dan styling WAJIB 100% tunduk pada `docs/system-design/DESIGN_SYSTEM.md` dan `docs/system-design/UI_STYLE.md`.
-- **Zero Arbitrary Styling:** Dilarang keras menggunakan kode warna hex sembarangan, arbitrary spacing (misal `p-[17px]`), atau komponen di luar spesifikasi Design System.
-- **State Completeness:** Setiap komponen interaktif wajib mengimplementasikan state matrix lengkap: default, hover, active, focus-visible, disabled, loading skeleton, empty state, dan error banner.
+## 7. Definition of Done and Continuity
 
-## Dynamic Architecture Engineering Rules (`always_on`)
+A task is complete when its acceptance criteria are met, relevant checks have been run or their absence is stated, and required project documentation is updated. For Phase 3/4 implementation, create or update the applicable ARC reference and `docs/references/INDEX.md` as required by the project's DoD. Do not claim tests passed unless they were run and their result is available.
 
-- Dokumen `docs/development/TECH_SPEC.md` yang dihasilkan oleh `aod-tech-spec` (Step 18) wajib diekstrak intisari operasionalnya ke `.agents/rules/aod-architecture-engineering.md` dengan frontmatter `trigger: always_on` (mengikuti template `docs/samples/ARCHITECTURE_ENGINEERING_TEMPLATE.md`).
-- Aturan ini bersifat mengikat secara permanen di seluruh sesi: dilarang menaruh business logic di Controller, dilarang raw query tanpa parameter binding, dan seluruh mutasi multi-tabel wajib dibungkus `DB::transaction()`.
+## 8. Standard Output Locations
 
-## Agent References Context (ARC) Mutlak (Phase 3 & Phase 4)
+- BRD, Business Flow, PRD, Flowchart, RBAC, Data Dictionary, DBML: `docs/business/`
+- State Machine, API Contract, UI Flow, Website Concept, Design System, UI Style: `docs/system-design/`
+- Component Map, UI Slicing, Design Tokens: `docs/ui-architecture/`
+- Technical Specification, Phase Plan, Feature Prompts, DoD, Progress Report: `docs/development/`
+- UAT: `docs/testing/`
+- Proposal: `docs/proposal/`
+- Feedback and final reports: `docs/feedback/`
+- UI and feature references plus registry: `docs/references/`
 
-- Setiap kali agent menulis kode pada Phase 3 (UI Slicing) atau Phase 4 (Development), agent WAJIB menyusun/memperbarui dokumen referensi (`docs/references/ui/REF-UI-<slug>.md` atau `docs/references/features/REF-FEAT-<module>-<slug>.md`) dan mendaftarkannya pada Master Registry `docs/references/INDEX.md`.
-- Sebelum memodifikasi modul/fitur yang sudah ada, agent WAJIB membaca dokumen referensi terkait di `docs/references/` terlebih dahulu.
-
-
-
-
-
+Use an existing project convention when one is already established and compatible; report any material deviation from these defaults.

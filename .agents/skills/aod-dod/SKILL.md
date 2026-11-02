@@ -1,74 +1,78 @@
 ---
 name: aod-dod
 description: >-
-  Generates a Definition of Done (DoD) checklist for validating every feature
-  across functional correctness, code quality, security, testing, and UI
-  compliance. Use when the user says "definition of done", "DoD", "checklist
-  selesai", "feature complete checklist", or at Phase 4 Step 21 of AOD.
-  Requires: Technical Specification and Phase Plan. Produces: DOD.md
+  Defines measurable, scope-specific completion criteria for AOD features,
+  integrations, UI pages, and releases. Use for a Definition of Done, DoD
+  checklist, or feature completion criteria. Requires the approved Tech Spec
+  and Phase Plan plus applicable requirements and contracts. Produces
+  docs/development/DOD.md.
 ---
 
-# AOD: Definition of Done (DoD) Checklist Generator
+# AOD Definition of Done
 
-## Prasyarat / Prerequisites
+Create a practical completion gate based on the project's approved architecture,
+work plan, and risk. Follow `.agents/rules/aod-core.md`. Do not impose a
+framework, layer pattern, test threshold, security certification, or release
+process that the project has not selected.
 
-- [ ] **Technical Specification** *(system correctness criteria)*
-- [ ] **Feature Prompt Library & Phase Plan** *(scope and sequence)*
-- [ ] **PRD & Business Flow** *(functional expectations)*
-- [ ] **State Machine & API Contract** *(data & state integrity)*
+## Inputs and applicability
 
----
+Read the approved Tech Spec and Phase Plan, then use the applicable PRD,
+Business Flow, Data Dictionary, RBAC, State Machine, API Contract, UI plans,
+Design System, existing code conventions, and user decisions.
 
-## Peranmu / Your Role
+- Keep universal completion criteria separate from checks that apply only to a
+  database change, API/web route, UI page, integration, or deployment.
+- Mark each criterion **Required**, **Conditional**, or **Not Applicable** and
+  state why. Do not omit a relevant gate just because the project uses a
+  different framework.
+- Derive quantitative thresholds and required commands only from approved
+  project documents. If none exist, define observable acceptance evidence or
+  leave the threshold as an open decision.
+- Distinguish expected checks from evidence that checks have actually run.
+  Never mark a check passed without a recorded result.
 
-You are a Senior Software Quality Auditor.
-Tugasmu membuat checklist Definition of Done yang tegas, terukur, dan praktis untuk memastikan tidak ada kode yang masuk ke fase rilis tanpa memenuhi standar mutu.
+## Criteria to define
 
----
+Build a feature/release checklist from these areas, including only relevant
+criteria:
 
-## DoD Categories / Kategori Checklist
+1. **Scope and behavior** — approved work item, user-visible outcomes,
+   acceptance criteria, exclusions, and failure/edge behavior.
+2. **Domain and data integrity** — source-backed fields, validation,
+   constraints, transactions/concurrency where required, and State Machine
+   invariants.
+3. **Authorization and security** — RBAC rules at the actual enforcement point,
+   data exposure, input handling, and applicable privacy/security requirements.
+4. **Architecture and integration** — Tech Spec boundaries, API or web-route
+   contract, error behavior, external dependencies, and compatibility.
+5. **UI quality** — only for UI scope: approved design tokens, relevant visual
+   states, responsive/accessibility behavior, and UI acceptance evidence.
+6. **Verification** — checks and test cases required by the project plan, with
+   exact expected evidence; include manual/UAT checks only when applicable.
+7. **Operations and documentation** — migration/release/monitoring needs when
+   applicable, and ARC/reference updates required by the project's DoD.
 
-Checklist harus mencakup 7 pilar:
+For ARC, distinguish an implemented UI page reference (`REF-UI-*`, Phase 4)
+from an implemented backend/integration feature reference (`REF-FEAT-*`, Phase
+4). Require `docs/references/INDEX.md` updates when the project's documentation
+policy requires them. Record actual files, contracts, invariants, integration
+handoff, and verification evidence; do not require an ARC reference for a
+documentation-only task unless the project explicitly requires one.
 
-### 1. Functional, Business Logic & Visual Compliance
-- [ ] Alur kerja sesuai dengan use case PRD dan Business Flow.
-- [ ] Transisi status mematuhi State Machine (termasuk invalid transition prevention).
-- [ ] Edge cases dan failure scenarios tertangani dengan ramah user.
-- [ ] **Design System Adherence:** Tampilan antarmuka (views, templates, komponen) 100% mematuhi `docs/system-design/DESIGN_SYSTEM.md` dan `UI_STYLE.md` (zero arbitrary styling, bebas dari token warna liar).
+## Checklist semantics
 
-### 2. Code Architecture & Cleanliness
-- [ ] Layering konsisten sesuai Tech Spec dan `.agents/rules/aod-architecture-engineering.md` (e.g. Service Layer untuk business logic).
-- [ ] Tidak ada logic acak atau database query di controller/route handlers (thin controllers).
-- [ ] Penamaan variabel, fungsi, class, dan entity selaras dengan Data Dictionary dan konvensi arsitektur proyek.
-
-### 3. Data Integrity & Validation
-- [ ] Semua input divalidasi ketat di request layer (tipe, range, format, enum).
-- [ ] Database transaction digunakan pada operasi multi-table write.
-- [ ] Soft deletes / cascade rules diuji jika ada.
-
-### 4. Security & Access Control
-- [ ] Authorization policy / role checks aktif di setiap endpoint/action.
-- [ ] Tidak ada data sensitif (password hash, internal token) bocor di response.
-- [ ] Bebas dari kerentanan umum (SQL injection, XSS, CSRF, IDOR).
-
-### 5. Performance & Resource Hygiene
-- [ ] Bebas dari issue N+1 query (eager loading digunakan).
-- [ ] Kolom pencarian/filter memiliki index yang memadai.
-- [ ] Response payload terukur dan terpaginasi untuk dataset besar.
-
-### 6. Automated Testing
-- [ ] Unit / Feature tests tersedia untuk happy path dan negative path.
-- [ ] Semua test suite berjalan hijau (passing) sebelum commit.
-
-### 7. Knowledge Documentation & Context Continuity (CRITICAL FOR AOD)
-- [ ] Agent References Context document dibuat atau diperbarui (`docs/references/ui/REF-UI-*.md` untuk Phase 3 UI Slicing, atau `docs/references/features/REF-FEAT-*.md` untuk Phase 4 Development).
-- [ ] Dokumen referensi didaftarkan ke Master Registry (`docs/references/INDEX.md`) dengan status dan link valid.
-- [ ] Manifest file fisik, props contract / request lifecycle, invariants bisnis, dan panduan kontinuitas bagi agent berikutnya terdokumentasi lengkap.
-- [ ] Dokumen referensi dan pembaruan `INDEX.md` disertakan dalam commit bersama kode fisik.
-
----
+Each criterion must have a stable ID, applicability, observable evidence, and
+one status: `Pass`, `Fail`, `Blocked`, `Not Run`, or `N/A` with rationale.
+Completion requires every Required criterion to pass and every Conditional
+criterion to be resolved. A failed, blocked, or unrun required check is not
+complete. Keep acceptance status distinct from release/deployment approval.
 
 ## Output
 
-Simpan dokumen ke: `docs/development/DOD.md`
-Setelah selesai: **"Langkah berikutnya: User Acceptance Testing (aod-uat)"**
+Save to `docs/development/DOD.md` using the project's document versioning
+standard. Include scope, source documents, checklist semantics, core criteria,
+conditional criteria by work type, evidence fields, and unresolved thresholds
+or decisions. If a Phase Plan exists, map criteria to its work item or exit
+criteria. After saving, identify `aod-uat` as the next step when UAT is in
+scope; otherwise state the next dependency-ready action.

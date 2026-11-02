@@ -1,63 +1,63 @@
 ---
 name: aod-ui-style
 description: >-
-  Generates a UI Style Document as the single source of truth for all visual
-  and styling decisions during frontend implementation. Defines concrete design
-  tokens ready for CSS framework implementation. Use when the user says
-  "UI style document", "design tokens", "style guide", "token UI", or at
-  Phase 2 Step 13 of AOD. Requires: Website Concept and Design System Document.
-  Produces: UI_STYLE.md
+  Converts approved product direction and Design System rules into a canonical,
+  framework-neutral visual token and styling specification. Use for UI Style,
+  style guide, or design token definition. Requires Website Concept and Design
+  System for new products; for existing products use verified UI evidence and
+  label missing design decisions. Produces docs/system-design/UI_STYLE.md.
 ---
 
-# AOD: UI Style Document Generator
+# AOD UI Style Specification
 
-## Prasyarat / Prerequisites
+Define concrete design decisions that designers and implementation agents can
+apply consistently, without coupling the canonical style source to a CSS
+framework. Follow `.agents/rules/aod-core.md` and treat the Design System as the
+authority for component and interaction rules.
 
-- [ ] **Website Concept Document** *(primary — product personality dan visual direction)*
-- [ ] **Design System Document** *(primary — UI components dan base rules)*
+## Sources and boundaries
 
----
+- Use Website Concept for product tone and visual direction, Design System for
+  roles, components, states, and accessibility, and UI Flow for actual screens
+  and content needs.
+- For an existing project, inspect its current styles and tokens. Separate
+  observed values from approved target values and avoid needless token churn.
+- Define semantic token names and values here; do not use Tailwind classes,
+  framework configuration syntax, or prescribe component implementation
+  patterns.
+- Do not invent a visual direction or resolve open product decisions by taste.
+  Label recommendations and unresolved tokens.
 
-## Peranmu / Your Role
+## Define canonical tokens
 
-You are a Senior Product Designer and Design System Architect.
+Use a stable semantic naming scheme. For each token record its name, value,
+purpose, usage, and relevant contrast/accessibility constraints. Include the
+systems required by the Design System:
 
-Tugasmu menghasilkan **UI Style Document** yang:
-- Menerjemahkan abstract concept menjadi concrete visual rules
-- Mendefinisikan strong dan unique visual identity (BUKAN generic)
-- Enforces consistency di semua UI
-- Bisa langsung digunakan dalam implementasi berbasis CSS framework
+- **Color:** semantic roles for text, surfaces, borders, actions, focus, and
+  statuses; provide exact values and contrast pairings where applicable.
+- **Typography:** font families/fallbacks, roles, sizes, weights, line heights,
+  and tracking, using explicit units.
+- **Spacing and layout:** a reusable scale, container/content widths, grid and
+  breakpoint intent; distinguish design intent from framework breakpoint
+  syntax.
+- **Shape and elevation:** radii, borders, shadows/elevation, and when each is
+  used.
+- **Motion:** duration/easing roles, transition intent, and reduced-motion
+  behavior when motion is used.
+- **Component styling:** map component variants and states to semantic tokens
+  from the Design System; include only components the product needs.
 
----
+Keep raw values and semantic aliases traceable. Ensure statuses remain
+distinguishable beyond color alone. Do not define duplicate tokens for the same
+meaning; provide a deprecation/migration note when replacing existing tokens.
 
-## Critical Requirement
+## Output: `docs/system-design/UI_STYLE.md`
 
-**Style TIDAK BOLEH:** Generic SaaS / "Safe" atau default UI / Visually bland
-
-**Style HARUS:**
-- Reflect clear identity (premium minimal, modern enterprise, bold data-driven)
-- Opinionated dan consistent
-- Define strong visual language
-
----
-
-## Struktur Output / Output Structure
-
-**1. Style Identity** — Style Name, Description, Keywords (3-5 kata)
-**2. Visual Philosophy** — Density, Contrast, Hierarchy, Motion
-**3. Color System (Design Tokens)** — Primary, Secondary, Accent, Background, Surface, Text, Semantic (hex + usage rules)
-**4. Typography System** — Font family, scale (h1-h6, body, caption), weight, line-height
-**5. Spacing & Layout System** — Scale, rhythm, container width, section spacing
-**6. Component Styling Rules** — Per Button/Input/Card/Table/Modal: padding, radius, colors, shadows, states
-**7. Elevation & Shadow System** — Levels, flat vs layered approach
-**8. Iconography & Visual Elements** — Icon style, size rules, consistency
-**9. Interaction & Micro UX** — Hover, loading states, transitions, feedback patterns
-**10. Anti-Patterns (CRITICAL)** — Inconsistent spacing, random colors, mixing styles, overuse of shadows
-**11. CSS Framework Token Mapping** — Sesuai framework yang digunakan (Tailwind tokens atau CSS custom properties)
-**12. Implementation Guidelines for AI** — Always start from tokens, no improvising
-
----
-
-## Output
-
-Simpan hasil ke: `docs/system-design/UI_STYLE.md`
+Use the project's document versioning standard. Include source documents,
+visual direction, canonical token tables, component/state mapping, contrast and
+accessibility notes, responsive/motion rules, anti-patterns, and open decisions.
+Add a short implementation note: `aod-tailwind-config` maps these canonical
+tokens to the project's approved styling system; that mapping must not redefine
+the token source. After saving, identify `aod-ui-slicing` as the next step when
+its inputs are ready.

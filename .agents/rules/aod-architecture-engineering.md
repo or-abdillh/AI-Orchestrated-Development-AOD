@@ -2,67 +2,46 @@
 trigger: always_on
 ---
 
-# AOD Architecture Engineering Guidelines — Project Rules
+# AOD Dynamic Architecture Rule — Project-Specific Policy Gate
 
-> **Status:** `Active (Dynamic Project Architecture Rules)`  
-> **Trigger:** `always_on`  
-> **Source Authority:** `docs/development/TECH_SPEC.md`  
-> **Documentation Mirror:** `docs/development/ARCHITECTURE_ENGINEERING.md`  
+> **Purpose:** Resolve and apply the approved project architecture rules. This
+> file is a policy gate, not a substitute for the project's Technical
+> Specification.
+> **Authority:** `docs/development/TECH_SPEC.md` and approved decisions referenced there.
+> **Generated project rules:** Replace this template with concise rules derived
+> from approved project constraints when `aod-tech-spec` is authorized to do so.
 
----
+## Governing Instructions
 
-## 1. Dynamic Project Architecture Overview
+- Before implementing or refactoring a feature, read the relevant sections of
+  `docs/development/TECH_SPEC.md`, this file, and any approved architecture
+  mirror at `docs/development/ARCHITECTURE_ENGINEERING.md`.
+- Apply only project-specific constraints that are explicitly marked
+  **Approved** in the current Technical Specification. A recommendation,
+  assumption, example, or open decision is not an active constraint.
+- Use the named frameworks, libraries, versions, directory boundaries, and
+  conventions verified or approved for this project. Do not infer project
+  architecture from this file's examples or from another framework's defaults.
+- If this file conflicts with the current approved Technical Specification,
+  stop only the affected implementation, report the conflicting statements and
+  sources, and request resolution. Do not silently choose one or expand scope.
+- If the Technical Specification is missing, Draft, or does not define a needed
+  decision, follow existing project conventions where they are evidenced and
+  safe; otherwise mark the choice open and ask only when it blocks the task.
+- Follow the authority of upstream project documents for business requirements,
+  data schema, API contracts, permissions, lifecycle states, and design tokens.
+  Do not redefine these in an architecture rule.
+- Keep this file short, actionable, and limited to constraints that must remain
+  available across implementation sessions. Store rationale and detailed
+  alternatives in the Technical Specification.
 
-Aturan rekayasa arsitektur ini digenerate secara dinamis saat **Step 18 (`aod-tech-spec`)** dijalankan untuk mencerminkan keadaan riil, tech stack, dan konvensi spesifik proyek.
+## Activation and Replacement
 
-> [!IMPORTANT]
-> **Dynamic Update Protocol:**
-> Jika `docs/development/TECH_SPEC.md` telah disetujui, AI agent wajib memperbarui isi file ini mengikuti template `docs/samples/ARCHITECTURE_ENGINEERING_TEMPLATE.md` agar mencerminkan dependensi, direktori, dan konvensi eksak proyek saat ini.
-
----
-
-## 2. Invariant Layering & Responsibility Boundaries (Universal)
-
-Seluruh implementasi kode pada Phase 4 (Development) WAJIB mematuhi pemisahan tanggung jawab lapisan (*layer separation*):
-
-1. **Controllers / Route Handlers (Thin Controllers):**
-   - Hanya bertanggung jawab menerima HTTP request, memvalidasi input via FormRequest/DTO, mendelegasikan eksekusi ke Service/Action, dan mengembalikan response JSON/View.
-   - ❌ **DILARANG:** Melakukan business logic, manipulasi perhitungan, atau pemanggilan query database langsung di dalam Controller.
-2. **Services / Use Cases (Business Logic Core):**
-   - Tempat seluruh business logic, aturan transaksi, dan kalkulasi berada.
-   - Wajib membungkus operasi mutasi multi-tabel dalam Database Transaction (`DB::transaction`).
-   - Menerima parameter primitif atau DTO/array tervalidasi, BUKAN HTTP Request object mentah.
-3. **Models / Entities (Domain & Data Layer):**
-   - Hanya mendefinisikan relasi, atribut casting, scopes, dan invariants entitas database.
-   - Field dan tabel wajib 100% selaras dengan `docs/business/DATA_DICTIONARY.md`.
-4. **Validation Layer (Dedicated Schemas):**
-   - Setiap endpoint penerima input wajib memiliki FormRequest / Validator Schema terpisah. Dilarang inline validation di controller.
-5. **Authorization Layer (Policies & Guards):**
-   - Setiap mutasi atau pembacaan data privat wajib melewati Policy berbasis RBAC (`docs/business/RBAC.md`).
-
----
-
-## 3. Visual & Design System Adherence (Frontends & Views)
-
-Setiap kali agent menulis atau memodifikasi tampilan antarmuka (frontend components, Blade templates, views, CSS classes):
-- **Otoritas Mutlak:** Wajib mematuhi `docs/system-design/DESIGN_SYSTEM.md` dan `docs/system-design/UI_STYLE.md`.
-- **Zero Arbitrary Styling:** Dilarang menggunakan warna hex di luar token, arbitrary spacing (e.g. `p-[19px]`), atau komponen kustom yang melanggar hierarki atomik Design System.
-- **State Handling:** Wajib menerapkan visual state matrix (hover, active, focus, disabled, loading skeleton, empty state, error banner) sesuai standar Design System.
-
----
-
-## 4. Performance & Database Concurrency
-
-- **Pemberantasan N+1 Query:** Eager loading (`with([...])`) wajib digunakan pada seluruh pemanggilan data relasi yang dirender atau diserialisasi.
-- **Concurrency & Race Conditions:** Operasi pengurangan stok, pemotongan saldo, atau kuota wajib menggunakan row-level locking (`lockForUpdate`).
-- **Database Schema Lockdown:** Dilarang menambahkan kolom atau tabel baru yang tidak tercatat di `docs/business/DATA_DICTIONARY.md`.
-
----
-
-## 5. Definition of Done (DoD) Integration
-
-Kode implementasi dianggap **DONE** hanya jika:
-- [ ] Mematuhi struktur folder dan layer boundary pada file ini.
-- [ ] Lolos seluruh kriteria pada `docs/development/DOD.md`.
-- [ ] Memiliki automated tests (unit/feature) yang passing 100%.
-- [ ] Dokumen referensi konteks (`docs/references/`) telah terbit dan terdaftar di `docs/references/INDEX.md`.
+- This gate may remain `always_on` because it defines how to resolve project
+  architecture policy; it does not itself approve a proposed project design.
+- `aod-tech-spec` may replace this gate with project-specific `always_on` rules
+  only after the relevant Tech Spec constraints are approved and the user has
+  selected or requested that rulebook output.
+- Preserve unrelated local rules. When updating project-specific rules, update
+  this file and its documentation mirror together, with version and revision
+  history in the mirror.

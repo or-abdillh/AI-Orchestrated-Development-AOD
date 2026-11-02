@@ -1,99 +1,168 @@
 ---
 name: aod-orchestrator
 description: >-
-  Master workflow guide for AI-Orchestrated Development (AOD). Use this skill
-  when the user says "start AOD", "mulai AOD", "setup project AOD", "panduan AOD",
-  "guide me through AOD", or when starting a new SME project from scratch.
-  This skill walks the user step-by-step through all AOD phases, activating
-  the right skill at each step, and preventing phase skipping.
+  Guides AI-Orchestrated Development (AOD) for new and existing software
+  projects. Use when the user says "start AOD", "mulai AOD", "setup project
+  AOD", "panduan AOD", "where am I in AOD", or asks which AOD step comes
+  next. Inspects existing project artifacts, identifies the correct workflow
+  path, checks prerequisites, and routes work to the relevant AOD skill without
+  repeating completed steps or inventing missing decisions.
 ---
 
 # AOD Master Orchestrator
 
-Kamu adalah AOD Workflow Guide. Peranmu:
-1. Mengorientasikan user dalam AOD workflow
-2. Mengecek dokumen apa yang sudah ada
-3. Mengaktifkan skill yang tepat untuk langkah berikutnya
-4. Mencegah phase skipping
+Guide the user through AOD and select the smallest valid next step for the
+project's actual state. Follow `.agents/rules/aod-core.md` as the governing
+workflow policy. This skill coordinates work; specialist skills create their
+own artifacts.
 
-You are the AOD Workflow Guide. Your role:
-1. Orient the user in the AOD workflow
-2. Check what documents already exist
-3. Activate the correct skill for the next step
-4. Prevent phase skipping
+## On Activation
 
----
+1. Inspect the project root for AOD documents, agent instructions, and relevant
+   repository context before asking questions.
+2. Classify the project path:
+   - **New project:** no meaningful application implementation exists yet.
+   - **Existing project:** application code or operational modules already
+     exist; start with `aod-existing-project-initiation`.
+   - **Active AOD project:** AOD artifacts exist; resume from the earliest
+     incomplete dependency relevant to the user's request.
+3. Present a short status: identified path, current phase or baseline, available
+   documents, missing prerequisites, and one recommended next action.
+4. Ask only for information that cannot be established from the repository or
+   prior approved decisions. Do not repeat questions already answered.
+5. Activate the relevant specialist skill when its prerequisites are met. If
+   the requested task is blocked, explain the specific missing input and offer
+   an unblocked next action.
 
-## On Activation / Saat Diaktifkan
+Do not begin by asking the user to choose a phase when repository evidence can
+answer that question. Do not create documents during an existing-project
+screening; that screening is read-only and follows
+`aod-existing-project-initiation`.
 
-1. Sapa user dan perkenalkan AOD framework secara singkat.
-2. Tanyakan: **"Di fase mana project Anda saat ini? Atau mulai dari awal (Phase 1: Business Layer)?"**
-3. Tanyakan: **"Apakah ada Study Case / Business Discovery Document yang sudah disiapkan?"**
-4. Aktifkan skill yang sesuai berdasarkan jawaban user.
+## AOD Workflow Map
 
----
+### Optional Pre-Project
 
-## AOD Phase Map
+- `aod-proposal` — create a commercial proposal from available business and
+  technical context. Label pricing or timeline estimates that lack approved
+  inputs as estimates.
 
-```
-Phase 0 – Pre-Project (Opsional)
-  └─ aod-proposal          → Technical to Commercial Proposal
+### Phase 1 — Business Layer
 
-Phase 1 – Business Layer
-  ├─ Step 1: aod-brd             → Business Requirement Document
-  ├─ Step 2: aod-business-flow   → Business Flow (AS-IS & TO-BE)
-  ├─ Step 3: aod-prd             → Product Requirement Document
-  ├─ Step 4: aod-flowchart       → Mermaid Flowchart Diagram
-  ├─ Step 5: aod-rbac            → Role & Permission Matrix
-  ├─ Step 6: aod-data-dictionary → Data Dictionary
-  └─ Step 7: aod-dbml            → DBML Schema
+1. `aod-brd` — business problem, objectives, scope, stakeholders, risks.
+2. `aod-business-flow` — current and target workflows.
+3. `aod-prd` — approved product scope and requirements.
+4. After the PRD, prepare the applicable artifacts; independent documents may
+   proceed in parallel:
+   - `aod-flowchart` from Business Flow.
+   - `aod-rbac` from PRD and workflow actions.
+   - `aod-data-dictionary` from PRD; then `aod-dbml` from the dictionary.
 
-Phase 2 – System Design
-  ├─ Step 8:  aod-state-machine    → State Machine Definition
-  ├─ Step 9:  aod-api-contract     → API Contract
-  ├─ Step 10: aod-ui-flow          → UI Flow / Screen Map
-  ├─ Step 11: aod-website-concept  → Website Concept Document
-  ├─ Step 12: aod-design-system    → Design System Document (Mandatory Visual Contract)
-  └─ Step 13: aod-ui-style         → UI Style Document
+### Phase 2 — System Design
 
-Phase 3 – UI Architecture
-  ├─ Step 14: aod-ui-component-map → UI Component Map
-  ├─ Step 15: aod-ui-slicing       → Full UI Slicing Document
-  ├─ Step 16: aod-tailwind-config  → CSS Framework Config
-  └─ Step 17: aod-page-slicer      → Per-Page Component (repeat per page) + UI Reference (`docs/references/ui/`)
+After the relevant business requirements are available:
 
-Phase 4 – Development
-  ├─ Step 18: aod-tech-spec        → Technical Specification & Dynamic Rules (`.agents/rules/aod-architecture-engineering.md`)
-  ├─ Step 19: aod-phase-plan       → Development Phase Plan
-  ├─ Step 20: aod-feature-prompts  → Feature Prompt Library & Execution (with Feature Reference `docs/references/features/`)
-  ├─ Step 21: aod-dod              → Definition of Done Checklist (inc. Gate 7 Context Continuity)
-  ├─ Quick Check: aod-quick-checklist → Rapid Terminal Checklist (Phase Plan & UI Slicing)
-  └─ Audit Tracking: aod-progress-tracker → Progress Tracker & Requirement Audit (Checklist)
+- `aod-state-machine` — lifecycle and allowed transitions.
+- `aod-api-contract` — HTTP interface contract for APIs, web routes, or a
+  developer-confirmed mix, grounded in PRD, data, and the Tech Spec.
+- `aod-ui-flow` — screens, journeys, visibility, and actions.
+- `aod-website-concept` — product and UX direction from business context.
+- `aod-design-system` — visual principles and component standards.
+- `aod-ui-style` — concrete tokens based on the concept and design system.
 
-Phase 5 – Testing
-  └─ Step 22: aod-uat              → UAT Sheet Generator
-```
+The API Contract and UI Flow can be drafted in parallel when both have the
+required inputs. Before defining route types or auth/response behavior,
+`aod-api-contract` must inspect the Tech Spec and confirm the API, web-route,
+or mixed mode with the developer. Do not make a downstream contract
+authoritative while its upstream requirements or this interface decision
+remain unresolved.
 
----
+### Phase 3 — UI Architecture
 
-## Phase Transition Rules / Aturan Transisi Fase
+Complete the design and implementation plans for the UI; this phase does not
+authorize page code by itself.
 
-- Setiap fase harus lengkap sebelum lanjut ke fase berikutnya.
-- Jika user mencoba skip fase, ingatkan dengan tegas: "Dokumen [X] diperlukan sebelum melanjutkan ke [Y]."
-- **Design System Adherence Mutlak:** Seluruh pembuatan atau modifikasi UI pada Phase 3 dan Phase 4 wajib 100% mematuhi `docs/system-design/DESIGN_SYSTEM.md`.
-- **Dynamic Architecture Engineering Mutlak:** Step 18 (`aod-tech-spec`) wajib mengaktifkan `.agents/rules/aod-architecture-engineering.md` (`trigger: always_on`) yang menjadi panduan arsitektur operasional sepanjang Phase 4.
-- **Agent References Context (ARC) Mutlak:** Setiap kali mengeksekusi penulisan kode pada Step 17 (Phase 3) dan Step 20 (Phase 4), AI agent wajib menyusun dokumen referensi (`REF-UI-*` atau `REF-FEAT-*`) dan memperbarui Master Registry `docs/references/INDEX.md` sebelum task dinyatakan selesai.
-- Each phase must be complete before moving to the next.
+1. `aod-ui-component-map` — page and component structure.
+2. `aod-ui-slicing` — layouts, mock schemas, page skeletons, and UI states.
+3. `aod-tailwind-config` — Tailwind or equivalent token configuration.
 
-## Navigation Commands / Perintah Navigasi
+These artifacts feed the Technical Specification and Phase Plan. The
+`aod-page-slicer` skill writes page code, so route it to Phase 4 implementation
+after the relevant design artifacts, Technical Specification, and Phase Plan
+are approved.
 
-- **"next step"** / **"lanjut"** → Proceed to next AOD step
-- **"where am I"** / **"fase berapa"** → Show current position in AOD map
-- **"what do I need"** / **"apa yang dibutuhkan"** → List prerequisites for current step
-- **"quick checklist"** / **"checklist phase"** / **"checklist slicing"** → Run `aod-quick-checklist` for rapid terminal status
-- **"cek progress"** / **"report progress"** → Run `aod-progress-tracker` for real-time progress checklist
+### Phase 4 — Development
 
-## Parallel Steps Info
+1. `aod-tech-spec` — implementation architecture and project-specific rules.
+2. `aod-phase-plan` — remaining work ordered by dependencies and priority.
+3. `aod-feature-prompts` — atomic prompts for approved features.
+4. `aod-dod` — feature completion criteria before implementation begins.
+5. Implement one approved unit at a time:
+   - `aod-page-slicer` for a scoped, mock-backed UI page.
+   - The relevant feature prompt and coding workflow for backend, integration,
+     or end-to-end functionality.
+6. After each implementation, run relevant checks, update ARC and its registry,
+   and validate the feature against DoD before calling it complete.
 
-Steps 5 (RBAC), 6 (Data Dictionary), 8 (State Machine) dapat berjalan paralel setelah PRD selesai.
-Steps 9 (API Contract) dan 10 (UI Flow) dapat berjalan paralel.
+Use `aod-quick-checklist` for a focused terminal checklist and
+`aod-progress-tracker` for a requirement-to-code audit. Keep their default
+terminal output ephemeral; export a report only when the user requests a file.
+
+### Phase 5 — Testing and Delivery
+
+- `aod-uat` — generate stakeholder test scenarios from approved requirements,
+  workflows, UI Flow, and State Machine.
+- Report verification evidence and unresolved gaps. Do not claim deployment,
+  stakeholder acceptance, or tests passed without evidence.
+
+### Maintenance and Revisions
+
+- `aod-feedback-loop` — classify feedback, assess upstream impact, plan the
+  revision, and guide approved changes through verification and final reporting.
+
+## Routing and Phase Gates
+
+- Check the selected skill's own prerequisites and the project state before
+  routing. The phase map is a dependency guide, not a demand to generate every
+  possible artifact in every project.
+- For a **new project**, follow the dependencies above and make unresolved
+  business or architecture choices visible before they affect downstream work.
+- For an **existing project**, use `aod-existing-project-initiation` first.
+  Establish an evidence-based as-is baseline, then let the user choose relevant
+  documents or implementation planning. Do not force missing bootstrap
+  documents or a full Phase 1–5 replay.
+- For an **active project**, preserve valid approved decisions and completed
+  work. Continue from the earliest unmet prerequisite relevant to the requested
+  task; do not regenerate artifacts merely to follow numbering.
+- A missing input blocks only work that depends on it. Identify the missing
+  artifact or decision, why it matters, and any independent work that can
+  continue.
+- Distinguish **observed fact**, **inference**, **working assumption**, and
+  **open decision**. Drafts may contain labeled low-risk assumptions; do not
+  implement consequential open decisions.
+- Ask for clarification only when an unresolved choice materially affects
+  business behavior, scope, data, access, lifecycle, security, integration, or
+  architecture. Respect explicit decisions already given by the user.
+- Before revising a feedback or change-request document, use the planning gate in
+  `aod-feedback-loop` and follow the user's approval before dependent edits.
+
+## Navigation Requests
+
+- **"next step" / "lanjut"** — show the next valid action and route to its
+  skill if inputs are ready.
+- **"where am I" / "fase berapa"** — report phase, completed artifacts, active
+  work, and the next unmet dependency from repository evidence.
+- **"what do I need" / "apa yang dibutuhkan"** — list only prerequisites for
+  the selected next task.
+- **"quick checklist" / "checklist phase" / "checklist slicing"** — route to
+  `aod-quick-checklist`.
+- **"cek progress" / "report progress"** — route to `aod-progress-tracker`.
+
+## Parallel Work Guidance
+
+Parallelize only artifacts that have all required inputs and do not depend on
+one another's unresolved decisions. Common examples after an approved PRD are
+RBAC, Data Dictionary, State Machine, and UI Flow. DBML follows the Data
+Dictionary; Design System follows Website Concept; UI Style follows both the
+Concept and Design System. When one artifact changes an upstream decision,
+recheck dependent artifacts before implementation.

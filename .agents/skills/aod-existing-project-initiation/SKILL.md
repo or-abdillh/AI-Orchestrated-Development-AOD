@@ -3,34 +3,38 @@ name: aod-existing-project-initiation
 description: >-
   Screens an existing software repository before AOD adoption. Detects its tech
   stack, maps implemented domains and features from code evidence, audits current
-  documentation and Agent Reference Context, then asks the user which evidence-
-  based AOD documents to create. Use when the user wants to initiate, onboard,
-  document, or build a development phase plan for an existing codebase.
+  documentation and Agent Reference Context, then creates only the evidence-
+  based AOD documents the user selected or explicitly requested. Use when the
+  user wants to initiate, onboard, document, or plan development for an existing
+  codebase.
 ---
 
 # AOD Existing Project Initiation
 
 Kamu membantu user mengadopsi AOD pada codebase yang sudah berjalan. Mulailah
 dengan membaca kondisi repository. Perlakukan implementasi saat ini sebagai
-baseline *as-is*; jangan memaksakan urutan scaffolding proyek baru.
+baseline _as-is_; jangan memaksakan urutan scaffolding proyek baru. Gunakan
+`.agents/rules/aod-core.md` untuk keputusan workflow umum.
 
-Skill ini melakukan audit dan dokumentasi saja. Jangan mengubah kode aplikasi,
-menjalankan migrasi, memasang dependency, atau membuat dokumen pilihan sebelum
-user memilihnya.
+Screening awal hanya membaca repository dan menyajikan laporan di chat. Jangan
+mengubah kode aplikasi, menjalankan migrasi, memasang dependency, menjalankan
+test suite, atau membuat dokumen AOD selama screening. Setelah screening, buat
+hanya dokumen yang dipilih atau diminta secara eksplisit oleh user.
 
 ## Hasil yang Dituju
 
 1. Tech stack dan struktur aplikasi teridentifikasi dari bukti repository.
 2. Domain, modul, fitur, integrasi, dan tingkat keyakinan pemetaan disajikan.
 3. Gap, duplikasi, ketergantungan, serta konflik dokumen dan implementasi dicatat.
-4. User menerima laporan screening di chat dan memilih dokumen AOD yang ingin
-   dibuat berdasarkan temuan tersebut.
+4. User menerima laporan screening di chat dan dapat memilih dokumen AOD
+   berdasarkan temuan tersebut; dokumen yang sudah diminta eksplisit tidak
+   perlu dipilih ulang.
 5. Dokumen terpilih menggambarkan sistem yang berjalan dan rencana pengembangan
    yang masih diperlukan. ARC mencatat konteks existing secara dapat ditelusuri.
 
 ## Aturan Screening
 
-- Gunakan repository sebagai sumber kondisi teknis *as-is*. Gunakan dokumen yang
+- Gunakan repository sebagai sumber kondisi teknis _as-is_. Gunakan dokumen yang
   ada sebagai bukti intent terdokumentasi, bukan bukti otomatis bahwa perilaku
   itu sudah diterapkan.
 - Bedakan **Teramati** (didukung file, route, schema, test, atau konfigurasi),
@@ -60,6 +64,8 @@ user memilihnya.
 
 - Periksa instruksi agent lokal, struktur tingkat atas, status Git, dan dokumen
   AOD atau spesifikasi yang sudah tersedia.
+- Periksa status Git secara read-only. Jangan berpindah branch atau membersihkan
+  perubahan lokal.
 - Kenali monorepo, beberapa aplikasi, package/workspace, service, dan area kode
   yang dikecualikan. Jangan menyamakan package dengan domain bisnis.
 - Jangan menanyakan lokasi, framework, atau dokumen sebelum memeriksa repository.
@@ -88,7 +94,9 @@ dipastikan sebagai belum diketahui; jangan mengisi kekosongan dengan tebakan.
 ### 3. Petakan Domain dan Fitur yang Berjalan
 
 Lakukan penelusuran lintas repository, bukan hanya membaca README atau beberapa
-folder pertama. Ikuti bukti yang tersedia dan relevan:
+folder pertama. Mulai dari peta struktur, lalu ikuti alur fitur yang relevan
+tanpa membaca dependency, artefak generated, atau file besar yang tidak memberi
+bukti tambahan. Periksa bukti yang tersedia:
 
 - struktur package/module, entry point, route/handler, halaman, dan navigasi;
 - model/entity, schema, migration, query, event, job, dan alur data;
@@ -102,6 +110,8 @@ terlihat, dependency, dan tingkat keyakinan. Sebut sebagai "terimplementasi"
 hanya jika alur implementasinya terlihat; keberadaan route atau tombol saja
 tidak membuktikan alur lengkap. Catat test yang ditemukan, tetapi jangan klaim
 test lulus kecuali memang dijalankan secara terpisah dan hasilnya tersedia.
+Jangan jalankan test selama screening awal; laporkan keberadaan test sebagai
+inventaris, bukan bukti bahwa perilaku saat ini lulus.
 
 ### 4. Audit Kesiapan dan Kesenjangan Dokumen
 
@@ -112,8 +122,8 @@ Nilai pula apakah tersedia cukup bukti untuk memperbarui atau membuat:
 - **Development:** Tech Spec, Architecture Engineering Rules, Phase Plan,
   Feature Prompts, DoD, dan Progress Report.
 - **Business yang dapat diturunkan:** domain glossary/CONTEXT, Business Flow
-  *as-is*, Data Dictionary *as-is*, RBAC yang teramati, dan state lifecycle.
-- **Interface dan UI bila relevan:** API Contract *as-is*, UI Flow, UI references,
+  _as-is_, Data Dictionary _as-is_, RBAC yang teramati, dan state lifecycle.
+- **Interface dan UI bila relevan:** API Contract _as-is_, UI Flow, UI references,
   atau design documentation berbasis tampilan yang ada.
 - **ARC:** feature reference untuk modul/use case yang dipetakan dan Master
   Reference Registry.
@@ -148,24 +158,37 @@ Tampilkan laporan tanpa membuat atau mengubah file. Sertakan:
 6. Menu dokumen yang dapat dibuat. Untuk tiap opsi sebut tujuan, dasar bukti,
    batas yang tidak dapat disimpulkan, dan lokasi output yang disarankan.
 
-Jangan menghasilkan dokumen pada langkah ini. Lalu minta user memilih satu atau
-beberapa dokumen, urutan bila ada dependency, dan menjawab pertanyaan bisnis yang
-memblokir dokumen pilihannya. Rekomendasikan urutan paling kecil yang masuk akal
-berdasarkan repository, tanpa memaksa seluruh rantai Phase 1 sampai 5.
+Jangan menghasilkan dokumen pada langkah ini. Setelah laporan, lanjutkan sesuai
+intent user:
+
+- Jika user secara eksplisit meminta satu atau beberapa dokumen tertentu,
+  permintaan tersebut sudah menjadi pilihan. Buat hanya dokumen itu setelah
+  screening selesai, kecuali keputusan penting masih belum jelas.
+- Jika user hanya meminta audit, screening, atau inisialisasi tanpa memilih
+  artefak, minta user memilih dokumen yang ingin dibuat.
+- Jika beberapa dokumen pilihan saling bergantung, sarankan urutan minimum dan
+  buat upstream pilihan terlebih dahulu.
+- Ajukan hanya pertanyaan yang benar-benar memblokir pilihan tersebut. Jangan
+  meminta persetujuan ulang atas ruang lingkup atau keputusan yang sudah
+  dinyatakan eksplisit oleh user.
+
+Rekomendasikan urutan paling kecil yang masuk akal berdasarkan repository,
+tanpa memaksa seluruh rantai Phase 1 sampai 5.
 
 ### 6. Buat Hanya Dokumen yang Dipilih
 
-Setelah user memilih:
+Setelah user memilih dokumen, atau setelah permintaan eksplisit user
+mengidentifikasi dokumen yang diminta:
 
-- Konfirmasi pilihan dan pertanyaan yang belum terjawab secara ringkas. Jangan
-  meminta konfirmasi ulang untuk detail yang sudah dipilih user.
+- Ringkas dokumen yang akan dibuat dan pertanyaan yang masih memblokir. Jangan
+  meminta konfirmasi ulang untuk pilihan yang sudah eksplisit.
 - Ikuti skill AOD khusus untuk dokumen terpilih jika prasyaratnya tersedia.
-  Untuk dokumen *as-is*, perlakukan bukti repository sebagai bahan audit dan
+  Untuk dokumen _as-is_, perlakukan bukti repository sebagai bahan audit dan
   jelaskan penyesuaian konteks existing. Jangan menolak pemetaan kondisi aktual
   hanya karena PRD atau dokumen scaffolding belum ada.
-- Jika prasyarat skill khusus belum tersedia dan belum ada mode existing-project,
-  gunakan format output dokumen tersebut untuk menghasilkan draft *as-is* dari
-  bukti screening. Tandai bagian yang belum diketahui sebagai gap; jangan
+- Jika prasyarat skill khusus belum tersedia, gunakan mode existing-project
+  untuk membuat draft _as-is_ dari bukti screening hanya jika dokumen itu
+  memang dipilih. Tandai bagian yang belum diketahui sebagai gap; jangan
   mengarang konten hanya untuk mengisi template.
 - Jika dokumen pilihan saling bergantung, hasilkan upstream yang dipilih lebih
   dulu, lalu gunakan hasilnya untuk dokumen turunan.
@@ -184,8 +207,8 @@ pengulangan urutan bootstrap standar:
 - Mulai dengan ringkasan baseline: stack, layanan, domain aktif, dan fitur
   existing yang menjadi fondasi.
 - Pisahkan pekerjaan baru dari pekerjaan yang sudah berjalan. Tandai status
-  existing sebagai *implemented/evidence observed*, *partial*, *unknown*, atau
-  *planned*; jangan masukkan fitur selesai sebagai pekerjaan baru.
+  existing sebagai _implemented/evidence observed_, _partial_, _unknown_, atau
+  _planned_; jangan masukkan fitur selesai sebagai pekerjaan baru.
 - Susun fase tersisa menurut dependensi teknis, prioritas bisnis yang diberikan
   user, risiko, dan kesiapan. Jika prioritas belum tersedia, tandai belum
   diputuskan dan tawarkan opsi pengurutan.

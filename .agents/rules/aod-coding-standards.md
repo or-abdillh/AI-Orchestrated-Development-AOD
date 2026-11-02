@@ -13,11 +13,10 @@ trigger: always_on
 ## Core Architecture Rules / Aturan Arsitektur Inti
 
 - Follow the architecture pattern defined in Technical Specification and `.agents/rules/aod-architecture-engineering.md`. Do not deviate.
-- Business logic belongs in the Service/Use Case layer, NOT in Controllers/Routes.
-- Controllers are thin: receive request, delegate to service, return response.
-- Models/Entities contain relationships and domain rules only.
-- Validation must use dedicated Request/FormRequest/Schema classes.
-- Authorization must use dedicated Policy/Guard/Permission classes.
+- Keep responsibilities separated according to the project's documented boundaries. Use a Service/Use Case layer, repository, controller, model, or equivalent only when selected by the project architecture.
+- Keep transport adapters (HTTP controllers/routes, server actions, message handlers, CLI commands) focused on translating input/output and delegating work where the architecture defines a separate application layer.
+- Place validation and authorization in the mechanisms selected for the project's framework. Every untrusted input and protected operation must be validated and authorized; a particular class or pattern is not mandatory across all stacks.
+- Keep persistence and domain behavior in the layer defined by the Tech Spec. Do not add a layer solely to satisfy a generic example.
 
 ## Design System Adherence / Kepatuhan Sistem Desain (Frontends & Views)
 
@@ -34,12 +33,11 @@ trigger: always_on
 
 ## Code Quality Rules / Aturan Kualitas Kode
 
-- N+1 queries are a defect. Use eager loading where relationships are accessed.
-- Each feature must include appropriate input validation.
-- Each data-modifying feature must include authorization checks.
-- Error responses must follow the format defined in the API Contract.
-- Do not place raw queries in controllers unless absolutely necessary.
-- Multi-table writes must be wrapped in Database Transactions (`DB::transaction`).
+- Prevent avoidable N+1 queries and use the loading strategy supported by the project's ORM or data access layer.
+- Validate untrusted inputs and authorize protected operations using the project's documented mechanisms.
+- Follow the API Contract for error responses when the feature exposes an API.
+- Use parameterized queries or the framework's safe query mechanism. Keep data access within the documented architecture boundaries.
+- Preserve consistency for multi-record or multi-service changes using a transaction, idempotency, locking, or other mechanism only when required by the approved data and concurrency design.
 
 ## Scope Control / Kendali Scope
 
@@ -56,7 +54,7 @@ trigger: always_on
 ## Framework Agnosticism
 
 - These rules apply regardless of tech stack.
-- Specific framework conventions are defined in the Technical Specification and `.agents/rules/aod-architecture-engineering.md`.
+- Framework conventions and project-specific engineering constraints are defined in the approved Technical Specification and `.agents/rules/aod-architecture-engineering.md`.
 - When in doubt about framework-specific patterns, refer to the Tech Spec first.
 
 ---
