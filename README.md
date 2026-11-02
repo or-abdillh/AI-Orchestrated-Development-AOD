@@ -421,3 +421,29 @@ Marker rusak menyebabkan error, bukan pembaruan diam-diam.
 Jalankan `python3 -m unittest discover -s tests -v`,
 `python3 scripts/sync_workflow.py --check`, dan `bash -n install.sh`.
 Pengujian fixture/state tidak membuktikan perilaku seluruh coding agent.
+
+## Wizard instalasi terminal
+
+Installer selalu menampilkan logo AOD. Saat terminal tersedia, wizard memberi
+pilihan **pasang/perbarui**, **ubah direktori target**, **lihat isi paket**, dan
+**batal**. Jawaban kosong pada menu tidak memulai instalasi. Progres menampilkan
+jumlah file yang diperiksa dan ringkasan file baru, diperbarui, atau sudah sesuai.
+
+```bash
+# Wizard otomatis jika dijalankan dari terminal
+bash install.sh /path/to/project
+
+# Wajibkan wizard, termasuk saat stdout dialihkan
+bash install.sh --interactive /path/to/project
+
+# Tanpa prompt untuk CI atau otomatisasi
+bash install.sh --yes /path/to/project
+
+# Tanpa warna (juga mendukung environment NO_COLOR)
+bash install.sh --no-color /path/to/project
+```
+
+Pemanggilan melalui pipe dapat memakai terminal pengendali untuk input wizard;
+input tidak diambil dari stream skrip. Tanpa terminal, installer memakai mode
+non-interaktif. `--interactive` gagal dengan pesan jelas bila terminal tidak
+tersedia. Gunakan `--help` untuk melihat opsi.
