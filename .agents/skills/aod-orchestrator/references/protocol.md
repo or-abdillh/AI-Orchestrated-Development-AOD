@@ -1,6 +1,17 @@
 # Operating protocol
 
-## Inspect and authorize
+## Route before phase scheduling
+
+First read [scoped change workflow](change-workflow.md). Its change profile is
+the default for fixes, feature changes and new modules in an initialized
+product. The per-phase gates below apply only to guided discovery, not scoped
+changes. One accepted change plan authorizes its described document deltas,
+implementation and checks end to end; do not ask again to traverse phases.
+An explicit apply instruction authorizes clear scope without a second start
+question. Preserve decision and external-action boundaries. Resume the active
+change checkpoint, never reopen the baseline for an incremental change.
+
+## Inspect and authorize (guided profile)
 
 Read agent instructions, Git status, available AOD documents, approvals and
 checkpoint. Do not run project scripts or write documents during screening.

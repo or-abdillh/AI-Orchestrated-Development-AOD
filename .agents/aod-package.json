@@ -28,6 +28,7 @@
     ".agents/skills/aod-flowchart/SKILL.md",
     ".agents/skills/aod-orchestrator/SKILL.md",
     ".agents/skills/aod-orchestrator/references/agent-block.md",
+    ".agents/skills/aod-orchestrator/references/change-workflow.md",
     ".agents/skills/aod-orchestrator/references/checkpoint.md",
     ".agents/skills/aod-orchestrator/references/checkpoint.schema.json",
     ".agents/skills/aod-orchestrator/references/handoff.md",

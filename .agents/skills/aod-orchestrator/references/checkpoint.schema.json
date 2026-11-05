@@ -63,7 +63,9 @@
       "enum": [
         "step",
         "phase-parallel",
-        "phase-sequential"
+        "phase-sequential",
+        "change-sequential",
+        "change-parallel"
       ]
     },
     "authorization": {
@@ -94,6 +96,18 @@
       "type": "object"
     },
     "dynamic_steps": {
+      "type": "array"
+    },
+    "profile": {
+      "enum": [
+        "guided",
+        "change"
+      ]
+    },
+    "change_plan": {
+      "type": "object"
+    },
+    "source_reviews": {
       "type": "array"
     }
   }

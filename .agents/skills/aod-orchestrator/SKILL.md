@@ -16,9 +16,20 @@ memorized skill sequence. Read the selected specialist's actual `SKILL.md`,
 execute its instructions when ready, inspect its output, and return control here.
 Never tell the developer to manually invoke the next specialist.
 
+## Select execution profile first
+
+Read [scoped change workflow](references/change-workflow.md) for bug fixes,
+feature changes and new modules in an initialized project. Route these requests
+to `aod-feedback-loop`; use one combined scope authorization and execute through
+code, checks and documentation. Do not enter the guided phase scheduler, reopen
+baseline approvals, or request phase/document permission for the same plan.
+Use guided discovery for new products and explicit phased-review requests.
+Inspect only the relevant project slice before choosing a profile. Reuse clear
+apply instructions and established parallelism preferences.
+
 ## Commands
 
-- **Mulai AOD:** inspect read-only, classify new/existing/active, present the
+- **Mulai AOD (guided profile only):** inspect read-only, classify new/existing/active, present the
   overview, then obtain explicit start confirmation. Reuse explicit approval
   for the same plan in the active conversation. No product artifacts or new
   checkpoint before this gate.

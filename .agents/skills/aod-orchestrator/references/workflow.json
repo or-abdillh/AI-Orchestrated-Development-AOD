@@ -617,5 +617,23 @@
       "write_conflicts": [],
       "exit_criteria": "Evidence satisfies specialist acceptance criteria; required scoped approvals recorded; no unresolved blockers"
     }
-  ]
+  ],
+  "profiles": {
+    "guided": {
+      "purpose": "new-project discovery or explicit phased review",
+      "scheduler": "phase",
+      "human_review": "selected material artifacts"
+    },
+    "change": {
+      "purpose": "initialized-product fix, feature or module",
+      "scheduler": "authorized-change",
+      "stages": [
+        "contracts",
+        "implementation",
+        "verification",
+        "documentation"
+      ],
+      "human_review": "combined plan and new material decisions only"
+    }
+  }
 }

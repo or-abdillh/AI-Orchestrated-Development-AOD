@@ -55,3 +55,14 @@ its required review. Never override target implementation, adapter, plan,
 prompts or DoD gates. Pass `effective_registry(state, registry)` to validation,
 readiness, invalidation and phase closure. Dynamic and override graph errors
 reject state; unknown target decisions remain blocked.
+
+## Additive change profile
+
+Absent profile means guided; schema 1 guided checkpoints remain compatible and
+are never converted in place. Use change_baseline/init-change and a separate
+change file as described in change-workflow.md. Change review_required=false
+units require evidence under a fingerprint-bound execution plan, not invented
+manual approval. Change source reconciliation preserves review history and
+marks only changed consumers until a documented impact assessment determines
+the affected descendants. The old broad invalidation remains for guided
+checkpoints; do not use that scheduler for incremental work.

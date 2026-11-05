@@ -43,7 +43,7 @@ def install(source,target):
    continue
   operations.append((dst,src.read_bytes()))
  block=(source/'.agents/skills/aod-orchestrator/references/agent-block.md').read_text()
- pointer='<!-- aod:start -->\nRead AGENTS.md and use aod-orchestrator for Mulai/Lanjut/Status/Jeda/Ubah mode AOD. Execute specialists and return control. Follow scoped approvals, registry dependencies, checkpoint protocol and project architecture rules.\n<!-- aod:end -->\n'
+ pointer='<!-- aod:start -->\nRead AGENTS.md and use aod-orchestrator for Mulai/Lanjut/Status/Jeda/Ubah mode AOD. Route initialized-project fixes/features/modules through the scoped change profile, not guided Phase 0–5. One accepted plan authorizes affected contract patches, implementation, checks and factual documentation. Do not request repeated phase/document approvals for the same scope. Pause only for new material decisions or actions outside authorization. Follow project architecture rules and preserve baseline state.\n<!-- aod:end -->\n'
  for item in ['AGENTS.md','GEMINI.md','CLAUDE.md','.github/copilot-instructions.md','.cursor/rules/aod.mdc','.windsurfrules']:
   dst=target/item
   if dst.is_symlink() or not dst.resolve().is_relative_to(target): raise ValueError('Unsafe instruction path')
