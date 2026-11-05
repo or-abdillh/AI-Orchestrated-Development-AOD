@@ -137,7 +137,6 @@
     "docs/samples/PROGRESS_REPORT_TEMPLATE.md",
     "docs/samples/STUDY_CASE_DOCUMENT.md",
     "docs/samples/UAT_SHEET_TEMPLATE.md",
-    "docs/samples/UI_REFERENCE_TEMPLATE.md",
-    "scripts/sync_workflow.py"
+    "docs/samples/UI_REFERENCE_TEMPLATE.md"
   ]
 }

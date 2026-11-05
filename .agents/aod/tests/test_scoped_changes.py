@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 import unittest
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[3]
 BASE=ROOT/'.agents/skills/aod-orchestrator'
 spec=importlib.util.spec_from_file_location('scoped_workflow',BASE/'scripts/workflow.py')
 w=importlib.util.module_from_spec(spec);spec.loader.exec_module(w)

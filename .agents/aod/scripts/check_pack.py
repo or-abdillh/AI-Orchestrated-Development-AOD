@@ -3,10 +3,12 @@ import json
 from pathlib import Path
 import re
 
-root=Path(__file__).resolve().parents[1]
+root=Path(__file__).resolve().parents[3]
 manifest=json.loads((root/'.agents/aod-package.json').read_text())
 if len(manifest['files'])!=len(set(manifest['files'])): raise SystemExit('Duplicate manifest path')
 for name in manifest['files']:
+ if name.startswith(('scripts/', 'tests/', 'test/', '.agents/aod/')):
+  raise SystemExit('Maintainer/root tooling must not be installed: '+name)
  p=root/name
  if not p.is_file(): raise SystemExit('Missing package file: '+name)
  if p.suffix=='.json': json.loads(p.read_text())

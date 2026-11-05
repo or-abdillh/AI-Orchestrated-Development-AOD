@@ -415,8 +415,22 @@ mengganti hanya file paket dalam manifest dan blok AOD; file proyek, checkpoint,
 dokumen produk, isi di luar marker dan aturan arsitektur proyek dipertahankan.
 Marker rusak menyebabkan error, bukan pembaruan diam-diam.
 
-Jalankan `python3 -m unittest discover -s tests -v`,
-`python3 scripts/sync_workflow.py --check`, dan `bash -n install.sh`.
+Tooling internal dipisahkan dari tooling aplikasi penerima:
+
+| Path | Kegunaan | Ikut instalasi |
+| --- | --- | --- |
+| `.agents/skills/<skill>/scripts/` | Helper runtime khusus skill | Sesuai manifest |
+| `.agents/aod/scripts/` | Sinkronisasi/pemeriksaan distribusi oleh maintainer | Tidak |
+| `.agents/aod/tests/` | Pengujian workflow dan installer AOD | Tidak |
+
+Installer tidak membuat folder root `scripts/`, `tests/` atau `test/`. File
+legacy dari instalasi lama tidak dihapus: termasuk `scripts/sync_workflow.py`
+yang pernah didistribusikan. Periksa kepemilikan dan modifikasi lokal sebelum
+membersihkannya secara manual. Dokumentasi contoh yang menunjuk test aplikasi
+seperti `tests/Feature/` tetap menggunakan konvensi aplikasi tersebut.
+
+Jalankan `python3 -m unittest discover -s .agents/aod/tests -v`,
+`python3 .agents/aod/scripts/sync_workflow.py --check`, `python3 .agents/aod/scripts/check_pack.py`, dan `bash -n install.sh`.
 Pengujian fixture/state tidak membuktikan perilaku seluruh coding agent.
 
 ## Wizard instalasi terminal

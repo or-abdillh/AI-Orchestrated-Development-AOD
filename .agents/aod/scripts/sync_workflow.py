@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 import sys
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[3]
 r=json.loads((ROOT/'.agents/skills/aod-orchestrator/references/workflow.json').read_text())
 lines=['| Phase | Steps / executing skills |','| --- | --- |']
 for p in r['phases']:

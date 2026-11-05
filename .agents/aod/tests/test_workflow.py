@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[3]
 BASE=ROOT/'.agents/skills/aod-orchestrator'
 def module(name,path):
  spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
@@ -95,6 +95,33 @@ class WorkflowTests(unittest.TestCase):
   self.s['paused']=False;self.s['pending_decisions']=['route-mode'];self.assertEqual(w.candidates(self.s,self.r),[])
 
 class InstallerTests(unittest.TestCase):
+ def test_clean_install_excludes_root_and_maintainer_tooling(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   t=Path(tmp)
+   subprocess.run(['bash',str(ROOT/'install.sh'),'--yes',tmp],check=True,capture_output=True)
+   for rel in ['scripts','tests','test','.agents/aod']:
+    self.assertFalse((t/rel).exists(),rel+' must not be injected')
+   runtime=t/'.agents/skills/aod-orchestrator/scripts/workflow.py'
+   self.assertTrue(runtime.is_file())
+   result=subprocess.run(['python3',str(runtime),'validate-registry'],check=True,capture_output=True,text=True)
+   self.assertIn('Registry valid',result.stdout)
+ def test_reinstall_preserves_app_tooling_and_legacy_file(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   t=Path(tmp)
+   originals={'scripts/build.sh':b'app build\n','tests/app_test.py':b'app tests\n',
+    'test/app.test.js':b'project tests\n','scripts/sync_workflow.py':b'locally modified legacy AOD helper\n',
+    '.agents/aod/scripts/custom.py':b'project-owned helper\n'}
+   for name,data in originals.items():
+    p=t/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data)
+   for _ in range(2):subprocess.run(['bash',str(ROOT/'install.sh'),'--yes',tmp],check=True,capture_output=True)
+   for name,data in originals.items():self.assertEqual((t/name).read_bytes(),data,name)
+   for folder in ['scripts','tests','test','.agents/aod']:
+    actual={str(p.relative_to(t)) for p in (t/folder).rglob('*') if p.is_file()}
+    expected={name for name in originals if name.startswith(folder+'/')}
+    self.assertEqual(actual,expected)
+ def test_manifest_excludes_maintainer_tooling(self):
+  files=json.loads((ROOT/'.agents/aod-package.json').read_text())['files']
+  self.assertFalse(any(p.startswith(('scripts/','tests/','test/','.agents/aod/')) for p in files))
  def test_markers_preserve_and_reject(self):
   block='<!-- aod:start -->new<!-- aod:end -->'
   self.assertEqual(i.inject('before<!-- aod:start -->old<!-- aod:end -->after',block),'before'+block+'after')
@@ -128,6 +155,6 @@ class InstallerTests(unittest.TestCase):
    self.assertFalse((t/'.agents').exists())
    self.assertEqual((t/'AGENTS.md').read_text(),'custom<!-- aod:start -->')
  def test_generated_maps(self):
-  subprocess.run(['python3',str(ROOT/'scripts/sync_workflow.py'),'--check'],check=True)
+  subprocess.run(['python3',str(ROOT/'.agents/aod/scripts/sync_workflow.py'),'--check'],check=True)
 
 if __name__=='__main__':unittest.main()
