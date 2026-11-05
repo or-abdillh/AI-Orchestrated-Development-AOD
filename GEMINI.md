@@ -21,24 +21,27 @@ Use `aod-orchestrator` for **Mulai AOD**, **Lanjut AOD / lanjut**, **Status AOD*
 execute the selected specialist and return control. Do not require developers
 to remember specialist names. Direct specialist calls remain limited in scope.
 
-Before changes, read `.agents/rules/aod-core.md`, relevant ARC references,
-approved contracts and project architecture rules. Initial inspection is
-read-only. Show workflow overview and obtain explicit start confirmation;
-choose step, phase-parallel or phase-sequential mode before each phase.
-Use available question box or numbered chat fallback; silence is not approval.
-Only the main orchestrator writes `docs/aod/WORKFLOW_STATE.json`. Reconcile
-sources and approvals on resume; never infer approval from file existence.
-Preserve existing-project screening and valid as-is work. Phase 3 creates UI
-plans; Phase 4 implements them. Follow approved Tech Spec/Phase Plan, DoD and
-ARC. API/web/mixed is developer-confirmed; never assume Sanctum or Tailwind.
-Design System/UI Style remain framework-neutral; styling adapter is optional
-planned Phase 4 work. Proposal requires stable approved PRD and Tech Spec.
-Use Context7 for third-party implementation documentation. Keep architecture
-rules derived only from approved constraints. Feedback updates affected upstream
-sources first. Quick Checklist is read-only; Progress Tracker audits evidence
-and exports only on request. Workflow completion is not product/UAT acceptance.
-Documents under docs use SemVer, Last Updated and Revision History; JSON state
-uses schema/revision metadata. Use feature branches and smart-git-commit.
+Before changes, read core rules, relevant project contracts and ARC.
+First classify the task: guided new-project discovery, existing adoption, or
+scoped fix/feature/module change. For changes use the scoped change protocol;
+no replay of phases 0–5. One accepted plan authorizes its document deltas,
+implementation, checks and final documentation. Clear apply instructions
+already authorize in-scope work. Ask only for unresolved material decisions or
+separately authorized actions; never fabricate developer document sign-off.
+Per-phase start/mode/review gates apply only to guided discovery or when the
+developer explicitly requests them. Reuse session parallelism preferences.
+Read the change-workflow reference before invoking specialist generators.
+Patch only affected contract sections before dependent code, then synchronize
+implementation facts, ARC and required docs after verification. No compulsory
+full Phase Plan/Feature Prompt regeneration for a focused change.
+Preserve baseline checkpoints; scoped changes may use docs/aod/changes/<id>.json.
+Source hash differences require impact assessment, not automatic re-approval.
+Only the main agent writes state. Question box has a numbered-chat fallback;
+no response never approves a material decision. Preserve existing API/web/mixed,
+framework-neutral tokens and approved architecture; never assume Sanctum or
+Tailwind. DoD, actual verification, documentation and ARC remain completion
+criteria. Quick Checklist is read-only; Progress Tracker independently audits
+and exports only on request. UAT preparation is not stakeholder acceptance.
 
 ### Workflow map (generated from registry)
 <!-- aod:map:start -->

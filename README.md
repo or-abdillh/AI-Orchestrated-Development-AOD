@@ -1,7 +1,7 @@
 # AI-Orchestrated Development (AOD) Framework
 
 [![Framework](https://img.shields.io/badge/Methodology-AOD%20Framework-blue.svg)](#overview)
-[![Agentic Skills](https://img.shields.io/badge/Native%20Skills-24%20Skills-emerald.svg)](#-skills-inventory--phase-mapping)
+[![Agentic Skills](https://img.shields.io/badge/Native%20Skills-28%20Skills-emerald.svg)](#-skills-inventory--phase-mapping)
 [![Compatibility](https://img.shields.io/badge/Agent-Antigravity%20%7C%20Gemini%20%7C%20Claude%20%7C%20Copilot-purple.svg)](#-how-to-use-in-real-projects)
 [![License](https://img.shields.io/badge/License-MIT-gray.svg)](LICENSE)
 
@@ -48,69 +48,66 @@ curl -fsSL https://raw.githubusercontent.com/or-abdillh/AI-Orchestrated-Developm
 
 **AI-Orchestrated Development (AOD)** adalah framework yang dirancang khusus untuk pengembang mandiri (_solo developers_), konsultan teknis, dan tim freelance yang membangun sistem skala SME (_Small-Medium Enterprise_).
 
-Alih-alih membiarkan AI mengasumsikan arsitektur atau melompati fase rekayasa perangkat lunak, AOD menerapkan **rantai dependensi dokumen yang ketat**:
+AOD menjaga keputusan produk, kontrak dan implementasi tetap konsisten dengan
+workflow yang mengikuti jenis pekerjaan.
 
-```
+### Pilih jalur pekerjaan
 
-Installer memperbarui file AOD yang dikelola dan menambahkan atau memperbarui blok bertanda `aod:start` di file instruksi agent. Isi proyek di luar blok tersebut tetap dipertahankan. File lain yang tidak dikelola AOD tidak dihapus; skill dan rule AOD dengan nama sama diperbarui dari paket, kecuali `.agents/rules/aod-architecture-engineering.md` yang sudah ada di proyek target.
+| Kebutuhan | Jalur | Interaksi developer |
+| --- | --- | --- |
+| Proyek baru / discovery | Guided Phase 0–5 | Review keputusan dan mode fase sesuai kebutuhan |
+| Adopsi proyek existing | Screening baseline terarah | Pilih scope, pertahankan pekerjaan yang valid |
+| Bug, perubahan fitur, modul baru | Scoped change | Satu rencana mencakup dokumen, kode, checks dan dokumentasi hasil |
 
-### Dukungan coding agent
+Penambahan modul pada produk existing tidak memulai ulang Phase 1–5.
+Untuk permintaan plan-then-wait, agent mengajukan satu rencana gabungan lalu
+menunggu. Setelah rencana disetujui, agent menjalankan seluruh scope tanpa
+approval per dokumen atau fase. Permintaan apply yang sudah jelas langsung
+mengotorisasi scope tersebut. Pertanyaan tambahan hanya untuk keputusan
+material baru, konflik atau tindakan di luar otorisasi.
 
-`AGENTS.md` menjadi panduan kanonis lintas agent. Installer juga menyiapkan instruksi khusus untuk Gemini (`GEMINI.md`), Claude (`CLAUDE.md`), GitHub Copilot (`.github/copilot-instructions.md`), Cursor (`.cursor/rules/aod.mdc`), dan Windsurf (`.windsurfrules`). Agent lain dapat diarahkan membaca `AGENTS.md` dari konfigurasi project mereka.
-Business Discovery ➔ System Design ➔ UI Architecture ➔ Phased Development ➔ Quality & Testing
-```
+### Contoh workflow perubahan
 
-Setiap fase memiliki persona spesialis, dokumen input wajib, batasan ketat (_constraints_), dan artefak keluaran terstandarisasi.
+> Developer: “Rencanakan penambahan field equipment serial number, tunggu approval.”
+> Agent: menjelaskan delta Data Dictionary/interface yang relevan, migration,
+> validasi, UI dan pengujian; tidak merevisi BRD atau Design System.
+> Developer: “Setuju, implementasikan.”
+> Agent: memperbarui kontrak esensial → implementasi → checks → ARC/dokumentasi
+> aktual → laporan hasil. Tidak meminta ulang persetujuan versi dokumen.
 
----
+Bug yang mengembalikan perilaku sesuai spesifikasi tidak wajib mengubah PRD.
+Kontrak data/permission/interface/state yang benar-benar berubah dicatat sebelum
+kode terkait. Detail implementasi dan hasil checks dicatat sesudah verifikasi.
+Dokumentasi yang diwajibkan tetap menjadi syarat pekerjaan selesai.
 
-## 🛑 Mengapa AOD Dibutuhkan?
+### Resume, mode dan checkpoint
 
-| Masalah AI Autopilot Biasa                                                             | Solusi Terorkestrasi AOD                                                                                         |
-| -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| **Halusinasi & Skema Acak:** AI mengarang kolom database yang tidak pernah disepakati. | **Single Source of Truth:** Seluruh kolom dan tipe data dikunci pada `DATA_DICTIONARY.md`.                       |
-| **Logic Bocor ke Controller:** AI menaruh query dan business logic sembarangan.        | **Architectural Rules:** Batas implementasi diturunkan dari Tech Spec yang disetujui dan mengikuti stack proyek. |
-| **Lompat Langsung Coding:** Menghasilkan kode tanpa fondasi domain yang jelas.         | **Phase Discipline:** AI diblokir membuat kode sebelum PRD, Tech Spec, dan Phase Plan final.                     |
-| **UI Generik ("AI-Slop"):** Tampilan terasa murah, inkonsisten, dan membosankan.       | **Design Token Authority:** Mengunci styling lewat UI Style Document dan filter `antislop`.                      |
-| **Ketiadaan Pengujian:** Kode dianggap selesai saat tidak ada error sintaks.           | **Definition of Done & UAT:** 7 pilar verifikasi ketat sebelum kode dapat di-merge.                              |
+Gunakan **Mulai AOD**, **Lanjut AOD / lanjut**, **Status AOD**, **Jeda AOD**,
+dan **Ubah mode AOD**. Agent memilih profile sebelum menjalankan scheduler.
+Pada perubahan fitur, default adalah eksekusi sampai selesai dalam scope;
+mode bertahap tersedia ketika dipilih developer. Preferensi paralelisme sesi
+bisa dipakai ulang. Question box memakai fallback chat bernomor bila tidak
+tersedia; pertanyaan material yang belum dijawab tidak dianggap disetujui.
 
----
+Checkpoint guided tetap di `docs/aod/WORKFLOW_STATE.json`; perubahan terpisah
+bisa memakai `docs/aod/changes/<id>.json` tanpa membuka ulang baseline. Source
+hash yang berubah memicu penilaian dampak: metadata/editorial tidak otomatis
+membatalkan keputusan bisnis. Helpers tidak memahami semantik dokumen secara
+otomatis; agent harus membaca diff dan mencatat bukti penilaiannya.
 
-## 🏛️ 5 Prinsip Fundamental
+### Instalasi ulang dan coding agent
 
-1. **Architecture First:** Arsitektur dan pemodelan data diputuskan sebelum satu baris kode implementasi ditulis.
-2. **Phase-Driven Execution:** Eksekusi dilakukan berurutan berdasarkan dependensi logis dengan pendekatan _MVP-first_.
-3. **Feature-Level Atomic Workflow:** Siklus disiplin: `1 Fitur ➔ 1 Prompt ➔ 1 Review ➔ 1 Validasi ➔ 1 Commit`.
-4. **Definition of Done Enforcement:** Tidak ada fitur yang selesai tanpa lulus kepatuhan struktur, otorisasi, proteksi N+1, dan automated tests.
-5. **AI as Controlled Executor:** AI bertindak sebagai akselerator implementasi, bukan pengambil keputusan arsitektur.
+Installer memperbarui file milik paket dan blok AOD pada instruksi agent.
+File custom, dokumen produk, checkpoint termasuk `docs/aod/changes/`, isi di
+luar blok AOD, dan aturan arsitektur spesifik proyek tetap dipertahankan.
+`AGENTS.md` menjadi panduan lintas agent; installer juga menyiapkan Gemini,
+Claude, Copilot, Cursor dan Windsurf. Ketersediaan widget dan sub-agent
+mengikuti kemampuan platform, bukan jaminan dari skill pack.
 
----
+### Peta guided discovery (generated)
 
-## Workflow melalui satu skill
-
-Panggil **Mulai AOD** untuk proyek baru, existing, atau AOD yang sedang berjalan.
-Orchestrator menginspeksi repository tanpa menulis, menampilkan overview, lalu
-meminta konfirmasi mulai dan mode fase. Spesialis tetap tersedia untuk tugas
-terbatas; pemanggilan langsung tidak menjalankan workflow penuh.
-
-- **Bertahap:** satu langkah, ringkasan/checkpoint, lalu menunggu **lanjut**.
-- **Satu fase dengan sub-agent:** gelombang independen berdasarkan dependensi.
-- **Satu fase berurutan:** alternatif tanpa sub-agent.
-
-Contoh: **Mulai AOD → setujui overview → pilih bertahap → BRD draft selesai →
-review BRD → lanjut → fase selesai → konfirmasi fase berikutnya dan mode**.
-BRD dan Business Flow dapat paralel; PRD menunggu keduanya.
-
-Dalam sesi baru, **Lanjut AOD** membaca `docs/aod/WORKFLOW_STATE.json` dan
-memeriksa perubahan sumber. **Status AOD** hanya membaca; **Jeda AOD** menyimpan
-pekerjaan parsial; **Ubah mode AOD** mengganti mode dengan scope yang jelas.
-Jawaban mulai/mode tidak otomatis menyetujui dokumen. Jika question box tidak
-tersedia, agent meminta pilihan bernomor dan menunggu jawaban wajib. Jika
-sub-agent tidak tersedia, agent melaporkan kondisi dan meminta fallback bila
-belum diotorisasi.
-
-Registry: `.agents/skills/aod-orchestrator/references/workflow.json`. Jalankan
-`python3 scripts/sync_workflow.py --check` untuk memeriksa peta ini.
+Peta ini untuk discovery dan phased review; perubahan fitur menggunakan
+contracts → implementation → verification → documentation lintas domain.
 
 <!-- aod:map:start -->
 | Phase | Steps / executing skills |
@@ -192,7 +189,7 @@ Repository ini dilengkapi dengan **28 native AOD skills** serta skill pelengkap 
 
 | Skill                   | Persona                       | Input Wajib                          | Output Artefak                         |
 | ----------------------- | ----------------------------- | ------------------------------------ | -------------------------------------- |
-| **`aod-feedback-loop`** | Lead Architect & Delivery Mgr | Dokumen Feedback di `docs/feedback/` | `docs/feedback/FINAL_REPORT_<name>.md` |
+| **`aod-feedback-loop`** | Lead Architect & Delivery Mgr | Feedback, change request, atau instruksi langsung | Perubahan terarah dan ringkasan; laporan file bila diperlukan |
 
 ---
 
@@ -201,17 +198,17 @@ Repository ini dilengkapi dengan **28 native AOD skills** serta skill pelengkap 
 Sistem AOD dilindungi oleh file aturan otomatis yang selalu aktif di [`.agents/rules/`](.agents/rules/):
 
 1. **`aod-core.md` (Always Active):**
-   - Mencegah AI melompati fase implementasi (_phase discipline_).
-   - Mengharuskan AI meminta klarifikasi jika dokumen prasyarat belum ada.
-   - Menegakkan hierarki prioritas dokumen saat terjadi konflik (`Tech Spec > PRD > Flow > BRD`).
+   - Menjaga dependency dan memilih jalur guided atau scoped change sesuai task.
+   - Meminta klarifikasi hanya pada keputusan material; memakai baseline dan rencana delta untuk perubahan terarah.
+   - Menggunakan otoritas masing-masing domain dan meminta keputusan untuk konflik material, tanpa ranking universal.
 2. **`aod-coding-standards.md` (Development Phase):**
    - **Framework-Agnostic:** Mendukung Laravel, NestJS, Django, Next.js, FastAPI, Go, dll.
-   - Memastikan pemisahan logika (Service/Use-Case layer vs Controller tipis).
-   - Memblokir N+1 queries dengan eager loading wajib.
-   - Validasi ketat di request layer dan otorisasi terpusat pada policy guards.
+   - Mengikuti batas layer yang disetujui pada Tech Spec proyek.
+   - Menangani masalah query sesuai ORM, data dan kebutuhan kinerja proyek.
+   - Validasi dan otorisasi mengikuti framework serta kontrak proyek.
 3. **`aod-document-versioning.md` (Document Lifecycle & Semantic Tracking):**
-   - **Header Wajib:** Setiap dokumen di `docs/` wajib diawali dengan metadata versi semantic (`vMAJOR.MINOR.PATCH`), tanggal `Last Updated`, status dokumen, dan tabel `Revision History`.
-   - **Version Bumping Otomatis:** AI wajib menaikkan versi setiap kali dokumen diperbarui (Major/Minor/Patch).
+   - **Header Wajib:** Dokumen Markdown AOD yang dikelola di `docs/` wajib diawali dengan metadata versi semantic (`vMAJOR.MINOR.PATCH`), tanggal `Last Updated`, status dokumen, dan tabel `Revision History`.
+   - **Version Bumping:** Naikkan versi sekali per perubahan koheren; state JSON memakai schema/revision metadata.
    - **Audit Trail Terjamin:** Setiap perubahan terdokumentasi rapi seiring berjalannya proyek.
 4. **Git Feature-Branching Enforcement (Phase 4 Development):**
    - **Dilarang Direct Commit ke Main:** Semua eksekusi kode fitur wajib berada di branch terpisah.
@@ -220,11 +217,11 @@ Sistem AOD dilindungi oleh file aturan otomatis yang selalu aktif di [`.agents/r
    - **Skill Terintegrasi:** Didukung oleh `git-flow-branch-creator`, `git-workflow-and-versioning`, dan `smart-git-commit`.
 5. **Context7 MCP Source-Driven Grounding (Official Docs Verification):**
    - **No Hallucinated APIs:** AI dilarang mengarang sintaks atau konfigurasi library pihak ketiga.
-   - **Verifikasi Wajib:** AI wajib memanggil **Context7 MCP** (`resolve-library-id` dan `query-docs`) untuk memastikan dokumentasi resmi yang paling kredibel dan versi terkini dari library/tools yang digunakan (misal: Tailwind CSS, Prisma, Next.js, Laravel, dsb.).
+   - **Verifikasi:** Gunakan Context7 bila tersedia, atau dokumentasi resmi yang cocok dengan versi stack proyek.
 6. **`aod-feedback-and-revisions.md` (Feedback Loop & Upstream-First Rule):**
    - **Planning and Authorization:** Audit-only requests menghasilkan rencana tanpa mengubah file. Jika user secara eksplisit meminta implementasi, kerjakan bagian yang jelas tanpa meminta persetujuan ulang; klarifikasi hanya keputusan material yang belum terselesaikan.
    - **3-Tier Scope Classification:** Memetakan butir revisi ke **Scope A (Doc Only)**, **Scope B (Feature Modification)**, atau **Scope C (New Feature / Scope Expansion)**.
-   - **Upstream Cascading:** Dokumen spesifikasi hulu (PRD, Data Dict, Spec) wajib disinkronkan dan dinaikkan versinya sebelum kode disentuh.
+   - **Upstream Cascading:** Patch kontrak esensial terdampak sebelum kode terkait; sinkronkan fakta implementasi sesudah checks. Rencana yang disetujui mengotorisasi keduanya tanpa approval berulang.
    - **Factual Reporting:** Buat laporan eksekusi setelah perubahan bila diwajibkan workflow proyek atau diminta user; jangan menyebut pekerjaan audit-only sebagai eksekusi selesai.
 7. **Requirement Traceability & Progress Tracking (`aod-progress-tracker`):**
    - **Full Requirement Traceability:** Memetakan requirement dan work item ke rencana, implementasi, DoD/ARC, serta bukti verifikasi yang tersedia.

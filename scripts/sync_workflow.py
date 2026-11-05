@@ -16,3 +16,12 @@ for name in ['README.md','AGENTS.md','GEMINI.md','.agents/skills/aod-orchestrato
  if '--check' in sys.argv:
   if new!=s: raise SystemExit('Workflow map drift: '+name)
  else: p.write_text(new)
+
+# AGENTS/GEMINI use the same installed policy block, not independently edited copies.
+block=(ROOT/'.agents/skills/aod-orchestrator/references/agent-block.md').read_text().rstrip()
+for name in ['AGENTS.md','GEMINI.md']:
+ p=ROOT/name;s=p.read_text();start='<!-- aod:start -->';end='<!-- aod:end -->'
+ a=s.index(start);b=s.index(end)+len(end);new=s[:a]+block+s[b:]
+ if '--check' in sys.argv:
+  if new!=s: raise SystemExit('Agent policy drift: '+name)
+ else:p.write_text(new)

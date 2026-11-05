@@ -83,6 +83,15 @@ Simpan dokumen ke: `docs/ui-architecture/UI_SLICING.md`
 Setelah selesai, kembalikan kontrol ke orchestrator. Adapter styling dan implementasi halaman menunggu gate Phase 4.
 
 
+## Scoped changes
+
+For an initialized product change, read
+`.agents/skills/aod-orchestrator/references/change-workflow.md`
+and follow its minimum section-level delta and single-authorization contract.
+The existing approved baseline and accepted change plan supply relevant inputs;
+do not require full bootstrap generation or duplicate document approvals.
+Preserve material unresolved decisions. This does not broaden audit-only scope.
+
 ## Orchestrator handoff
 
 When invoked by `aod-orchestrator`, read

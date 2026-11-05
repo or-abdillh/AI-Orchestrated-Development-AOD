@@ -207,3 +207,12 @@ Direct invocation authorizes only the requested scope, not the full workflow.
 Example phase numbers below are illustrative delivery phases, not AOD methodology
 phases. Derive actual labels from Phase Plan. Do not infer completion from branch
 existence or WIP filenames. State denominator for any percentage.
+
+## Scoped change status
+
+For an active scoped change, read its change checkpoint or work item and report
+only that change unless the user requests a whole-product audit. Keep guided
+baseline completion separate; do not reopen methodology phases or ask for
+approval of unchanged documents. Reconcile status against actual evidence.
+Remain read-only; neither plan authorization nor a checkpoint claim proves
+verification or stakeholder acceptance.

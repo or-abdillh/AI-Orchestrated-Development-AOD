@@ -61,6 +61,15 @@ framework config, or arbitrary token values in this document. After saving,
 identify `aod-ui-style` as the next step for the canonical token values.
 
 
+## Scoped changes
+
+For an initialized product change, read
+`.agents/skills/aod-orchestrator/references/change-workflow.md`
+and follow its minimum section-level delta and single-authorization contract.
+The existing approved baseline and accepted change plan supply relevant inputs;
+do not require full bootstrap generation or duplicate document approvals.
+Preserve material unresolved decisions. This does not broaden audit-only scope.
+
 ## Orchestrator handoff
 
 When invoked by `aod-orchestrator`, read

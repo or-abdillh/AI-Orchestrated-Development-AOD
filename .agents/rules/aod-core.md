@@ -13,6 +13,24 @@ These rules govern AOD work in every project. Use the project's current state an
 - **Focused task in an initialized project:** Inspect the relevant project documents and code, identify the active phase and unmet prerequisites, then continue from the nearest valid step. Do not regenerate completed upstream work without a reason.
 - A user may choose a narrower deliverable. Produce only the requested artifact when its required inputs are available; explain material gaps and avoid fabricating decisions.
 
+## Scoped changes take a separate execution path
+
+For fixes, feature changes and new modules in an initialized product, use the
+scoped change workflow in the orchestrator references. Do not replay phases
+0–5 or regenerate bootstrap artifacts. A combined accepted plan authorizes its
+contract patches, code, verification and documentation together. An explicit
+apply request already authorizes clear in-scope work. Ask again only for new
+material decisions or actions outside authorization. No per-document approval
+is required for faithful implementation of authorized deltas; record their
+provenance as plan-derived, never as fabricated developer sign-off.
+
+A focused authorized implementation plan and acceptance criteria can replace
+full Phase Plan/Feature Prompt generation for that change. Reuse existing Tech
+Spec, DoD, ARC and contracts. Document essential changed contracts before the
+corresponding code; record implementation facts after checks. Required docs
+remain part of completion. These scoped rules govern change requests; the
+following phase sequence governs guided project discovery.
+
 ## 2. Workflow and Dependency Rules
 
 Follow this dependency-aware sequence. Items in the same group may be prepared in parallel once their shared inputs are ready.
@@ -54,7 +72,7 @@ Use each document as authority for its domain:
 
 When documents conflict, do not resolve the conflict by a universal document ranking. Preserve each source, identify the affected decision, and ask the project owner to resolve it. Until resolved, follow the last explicitly approved decision only where it remains unambiguous and do not implement the conflicting part. Downstream documents must reflect the relevant upstream authority; they do not silently redefine it.
 
-Never invent database fields, endpoints, enum values, permissions, or state transitions. Propose additions in the owning document and wait for approval before implementing them.
+Never invent database fields, endpoints, enum values, permissions, or state transitions. Resolve material additions in the owning contract or accepted change plan before implementation. Reuse existing scope authorization; do not require a second approval for the same decision.
 
 ## 5. Implementation Guardrails
 
