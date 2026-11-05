@@ -1,9 +1,39 @@
 # Agent Reference Context: [Feature Name]
 
+<!-- arc:metadata:start -->
+```json
+{
+  "schema_version": 1,
+  "id": "REF-FEAT-module-feature",
+  "title": "Replace with actual feature/page title",
+  "type": "feature",
+  "module_id": "replace-module-id",
+  "feature_id": "replace-feature-id",
+  "status": "draft",
+  "updated_at": "YYYY-MM-DD",
+  "tags": [],
+  "sources": [],
+  "related_refs": [],
+  "code_paths": []
+}
+```
+<!-- arc:metadata:end -->
+
+Metadata di atas adalah placeholder, bukan referensi proyek yang sudah terdaftar.
+Ganti dengan identitas dan hubungan aktual sebelum menyimpan di docs/references/.
+ID pada header dan INDEX harus sama dengan metadata. Path metadata relatif ke
+root proyek; fragment dokumen disimpan terpisah. Gunakan sources untuk dokumen
+sumber, related_refs untuk koneksi ARC, dan code_paths untuk file aktual.
+Contoh source: {"path":"docs/business/PRD.md","fragment":"equipment","relation":"implements"}.
+Contoh related_refs: {"id":"REF-FEAT-equipment-create","relation":"integrates_with"}.
+Status metadata menyatakan kondisi referensi, bukan bukti test lulus atau UAT diterima.
+Koneksi metadata hanya deklarasi, bukan hasil verifikasi semantik otomatis.
+
+
 > **Reference ID:** `REF-FEAT-[module]-[slug]`
-> **Version:** `v1.0.1`
-> **Last Updated:** `2026-11-02`
-> **Status:** `Completed` *(Planned / In Progress / Completed / Deprecated)*
+> **Version:** `v1.1.0`
+> **Last Updated:** `2026-11-05`
+> **Status:** `Draft` *(Draft / Active / Deprecated — status dokumen referensi)*
 > **Module / Sub-module:** `[Module Name]` / `[Sub-module Name]`
 > **Phase Target:** Phase [N] — [Phase Name]
 > **Author / Agent:** `aod-feature-prompts` / `[agent-id]`
@@ -23,6 +53,7 @@
 
 | Version | Date | Author / Agent | Description |
 |---|---|---|---|
+| `v1.1.0` | 2026-11-05 | AOD | Structured ARC metadata, stable identity and CLI navigation contract |
 | `v1.0.1` | 2026-11-02 | `aod-feature-prompts` | Initial feature implementation and architectural documentation |
 
 ---
@@ -136,6 +167,6 @@ Panduan bagi AI agent berikutnya yang akan memodifikasi modul ini:
 > - Jika ada kebutuhan menambahkan voucher/diskon, masukkan logic pada `DiscountCalculatorService` terpisah dan inject ke `OrderCheckoutService` agar SRP (Single Responsibility Principle) tetap terjaga.
 > - Jika ada integrasi notifikasi baru, daftarkan listener baru pada event `OrderCreated` tanpa memodifikasi service utama checkout.
 
-> Template revision v1.0.1 (2026-11-02): Phase 4 ownership and evidence clarification.
+> Template revision v1.1.0 (2026-11-05): structured ARC metadata and CLI navigation; examples remain illustrative.
 > All sample routes, framework tokens, statuses and test results above are illustrative.
 > Replace with actual project evidence; examples never prove completion or approval.

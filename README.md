@@ -420,6 +420,7 @@ Tooling internal dipisahkan dari tooling aplikasi penerima:
 | Path | Kegunaan | Ikut instalasi |
 | --- | --- | --- |
 | `.agents/skills/<skill>/scripts/` | Helper runtime khusus skill | Sesuai manifest |
+| `.agents/aod/bin/arc` | CLI runtime navigasi dan visualisasi ARC | Ya |
 | `.agents/aod/scripts/` | Sinkronisasi/pemeriksaan distribusi oleh maintainer | Tidak |
 | `.agents/aod/tests/` | Pengujian workflow dan installer AOD | Tidak |
 
@@ -458,3 +459,54 @@ Pemanggilan melalui pipe dapat memakai terminal pengendali untuk input wizard;
 input tidak diambil dari stream skrip. Tanpa terminal, installer memakai mode
 non-interaktif. `--interactive` gagal dengan pesan jelas bila terminal tidak
 tersedia. Gunakan `--help` untuk melihat opsi.
+
+## Navigasi dan visualisasi ARC tanpa AI
+
+CLI ARC memakai Python 3 standard library dan tersedia setelah instalasi ulang
+paket. Jalankan dari root proyek, gunakan `--root PATH` jika diperlukan.
+Tidak ada command global atau dependency aplikasi yang ditambahkan.
+
+```bash
+./.agents/aod/bin/arc modules
+./.agents/aod/bin/arc list --module equipment
+./.agents/aod/bin/arc list --all
+./.agents/aod/bin/arc search "running hours"
+./.agents/aod/bin/arc show REF-FEAT-equipment-create
+./.agents/aod/bin/arc trace REF-FEAT-equipment-create
+./.agents/aod/bin/arc check
+./.agents/aod/bin/arc graph --module equipment --output docs/aod/equipment.mmd
+./.agents/aod/bin/arc graph --format html --output docs/aod/arc-explorer.html
+```
+
+Alternatif tanpa executable bit: `python3 .agents/aod/bin/arc list`. Untuk command
+pendek pada shell Anda, tambahkan direktori bin AOD ke PATH secara lokal atau
+gunakan alias dengan path proyek yang sesuai. Installer tidak mengubah PATH.
+`--json` tersedia untuk integrasi; `list`, `search`, `show` mendukung `--path-only`.
+`graph --include-code` menambahkan file implementasi. Default hanya referensi
+terdaftar; `--all` menyertakan dokumen yang ditemukan tetapi belum terdaftar.
+Show/trace dapat mengakses ID unik yang belum terdaftar dan menampilkan statusnya.
+
+Template ARC menyediakan metadata JSON bertanda arc:metadata. Metadata adalah
+sumber identitas/koneksi; INDEX.md menentukan membership. Relasi memakai
+implements, conforms_to, integrates_with, uses, documented_in atau references.
+Tidak ada cache/database kedua yang perlu disinkronkan. Legacy Markdown tetap
+dapat dibaca secara best-effort, modul yang tidak diketahui ditampilkan unknown,
+dan CLI tidak menulis migrasi ataupun menambahkan hubungan berdasarkan tebakan.
+
+`check` mengembalikan exit code 1 jika ada error, 0 untuk bersih/warning saja;
+error penggunaan command menghasilkan 2. Ia memeriksa file/ID/hubungan struktural,
+bukan membuktikan implementasi sesuai requirement. Anchor Markdown diperiksa
+secara best-effort dan kegagalan resolusi diberi warning. Status di ARC adalah
+klaim sumber yang dilaporkan, bukan sertifikasi hasil verifikasi oleh CLI.
+
+Mermaid dapat dibuka pada renderer yang mendukungnya. HTML mandiri dapat dibuka
+tanpa server/CDN: filter modul, cari referensi, klik node, lalu telusuri hubungan
+masuk/keluar. Graph HTML membatasi tampilan 70 node; daftar tetap dapat dicari.
+Gunakan filter/fokus untuk proyek besar. Tautan lokal dihitung dari lokasi file
+ekspor; jika membagikan HTML ke tim, sertakan file sumber dengan struktur relatif
+yang sama agar tautan dapat dibuka. HTML adalah snapshot dan perlu diekspor ulang
+saat referensi berubah. CLI menolak menimpa ekspor yang sudah ada kecuali --force.
+
+AI dipakai untuk menjelaskan konteks atau mengaudit kesesuaian kode dengan ARC,
+bukan untuk menjalankan navigasi rutin. Agent implementasi memperbarui metadata,
+referensi dan registry dalam scope perubahan, lalu menjalankan arc check.

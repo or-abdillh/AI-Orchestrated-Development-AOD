@@ -1,7 +1,7 @@
 # Master Agent Reference Registry
 
-> **Version:** `v1.0.1`
-> **Last Updated:** `2026-11-02`
+> **Version:** `v1.1.0`
+> **Last Updated:** `2026-11-05`
 > **Status:** `Active`
 > **Framework:** AOD (AI-Orchestrated Development)
 > **Project Scope:** `[Nama Proyek / SME]`
@@ -13,6 +13,7 @@
 
 | Version | Date | Author / Agent | Description |
 |---|---|---|---|
+| `v1.1.0` | 2026-11-05 | AOD | Structured ARC metadata, stable identity and CLI navigation contract |
 | `v1.0.1` | 2026-11-02 | `aod-orchestrator` / `[agent-id]` | Inisialisasi Master Agent Reference Registry |
 
 ---
@@ -48,9 +49,9 @@ Daftar seluruh halaman, view, dan komponen terpotong (*sliced UI components*) ya
 
 | Ref ID | Halaman / Komponen | Target Route / Selector | File Komponen Utama | Dokumen Referensi | Git Branch | Status |
 |---|---|---|---|---|---|---|
-| `REF-UI-001` | Halaman Login | `/login` | `src/pages/auth/LoginPage.tsx` | [`REF-UI-auth-login.md`](docs/references/ui/REF-UI-auth-login.md) | `feat/ui-slicing` | `[✔] Sliced (Mock)` |
-| `REF-UI-002` | Halaman Register | `/register` | `src/pages/auth/RegisterPage.tsx` | [`REF-UI-auth-register.md`](docs/references/ui/REF-UI-auth-register.md) | `feat/ui-slicing` | `[✔] Sliced (Mock)` |
-| `REF-UI-003` | Order Checkout Page | `/checkout` | `src/pages/checkout/CheckoutPage.tsx` | [`REF-UI-orders-checkout.md`](docs/references/ui/REF-UI-orders-checkout.md) | `feat/ui-checkout` | `[⏳] In Progress` |
+| `REF-UI-auth-login` | Halaman Login | `/login` | `src/pages/auth/LoginPage.tsx` | [`REF-UI-auth-login.md`](ui/REF-UI-auth-login.md) | `feat/ui-slicing` | `[✔] Sliced (Mock)` |
+| `REF-UI-auth-register` | Halaman Register | `/register` | `src/pages/auth/RegisterPage.tsx` | [`REF-UI-auth-register.md`](ui/REF-UI-auth-register.md) | `feat/ui-slicing` | `[✔] Sliced (Mock)` |
+| `REF-UI-orders-checkout` | Order Checkout Page | `/checkout` | `src/pages/checkout/CheckoutPage.tsx` | [`REF-UI-orders-checkout.md`](ui/REF-UI-orders-checkout.md) | `feat/ui-checkout` | `[⏳] In Progress` |
 
 ---
 
@@ -60,9 +61,9 @@ Daftar seluruh fitur teknis, service, dan business logic yang dihasilkan pada Ph
 
 | Ref ID | Modul | Fitur / Use Case | File Kode Kunci (Service/Controller) | Dokumen Referensi | Git Branch | Status |
 |---|---|---|---|---|---|---|
-| `REF-FEAT-001` | Auth | User Login & Token Issue | `app/Services/AuthService.php` | [`REF-FEAT-auth-login.md`](docs/references/features/REF-FEAT-auth-login.md) | `phase/00-setup` | `[✔] Completed` |
-| `REF-FEAT-002` | Catalog | Master Product CRUD | `app/Services/ProductService.php` | [`REF-FEAT-catalog-products.md`](docs/references/features/REF-FEAT-catalog-products.md) | `phase/01-core` | `[✔] Completed` |
-| `REF-FEAT-003` | Order | Checkout & Reservasi Stok | `app/Services/OrderCheckoutService.php` | [`REF-FEAT-orders-checkout.md`](docs/references/features/REF-FEAT-orders-checkout.md) | `feat/order-checkout` | `[⏳] In Progress` |
+| `REF-FEAT-auth-login` | Auth | User Login & Token Issue | `app/Services/AuthService.php` | [`REF-FEAT-auth-login.md`](features/REF-FEAT-auth-login.md) | `phase/00-setup` | `[✔] Completed` |
+| `REF-FEAT-catalog-products` | Catalog | Master Product CRUD | `app/Services/ProductService.php` | [`REF-FEAT-catalog-products.md`](features/REF-FEAT-catalog-products.md) | `phase/01-core` | `[✔] Completed` |
+| `REF-FEAT-orders-checkout` | Order | Checkout & Reservasi Stok | `app/Services/OrderCheckoutService.php` | [`REF-FEAT-orders-checkout.md`](features/REF-FEAT-orders-checkout.md) | `feat/order-checkout` | `[⏳] In Progress` |
 
 ---
 
@@ -79,13 +80,22 @@ Matriks penghubung antara hasil Slicing UI (Phase 3) dengan Implementasi Backend
 
 ## 5. Agent Instructions for Updating this Registry
 
-Setiap kali agent AI menyelesaikan step penulisan kode pada Phase 3 atau Phase 4:
+Setelah perubahan implementasi terkait pada Phase 4 atau scoped change:
 1. **Identifikasi Kategori:** Tentukan apakah task merupakan penambahan UI baru, revisi UI, penambahan fitur backend, atau modifikasi logika.
 2. **Tambah/Update Baris Tabel:** Tambahkan baris baru pada tabel Seksi 2, 3, atau 4 dengan format tautan relatif ke dokumen referensi di `docs/references/ui/` atau `docs/references/features/`.
 3. **Perbarui Hierarchy Tree:** Jika terdapat modul atau sub-modul baru, tambahkan cabang pada Seksi 1.
 4. **Naikkan Versi (SemVer):** Naikkan versi patch/minor pada header dokumen dan catat di tabel `Revision History`.
 5. **Commit Bersama Kode:** Pastikan perubahan file ini di-stage dan di-commit bersamaan dengan kode dan file referensi terkait.
 
-> Template revision v1.0.1 (2026-11-02): Phase 4 ownership and evidence clarification.
+> Template revision v1.1.0 (2026-11-05): structured ARC metadata and CLI navigation; examples remain illustrative.
 > All sample routes, framework tokens, statuses and test results above are illustrative.
 > Replace with actual project evidence; examples never prove completion or approval.
+
+## CLI ARC
+
+Gunakan `./.agents/aod/bin/arc list` untuk referensi terdaftar dan `list --all`
+untuk menemukan referensi yang belum terdaftar. `check` menampilkan entri hilang,
+ID duplikat dan metadata legacy. Registry tetap menjadi sumber membership;
+identitas dan koneksi berasal dari metadata dokumen ARC. CLI tidak mengubah
+registry atau referensi secara otomatis. Isi tabel ini harus memakai ID aktual
+yang sama dengan metadata, bukan nomor urut tampilan.

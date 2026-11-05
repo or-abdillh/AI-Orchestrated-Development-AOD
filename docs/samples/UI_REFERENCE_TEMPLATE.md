@@ -1,9 +1,39 @@
 # Agent Reference Context: [Page / Component Name]
 
+<!-- arc:metadata:start -->
+```json
+{
+  "schema_version": 1,
+  "id": "REF-UI-module-page",
+  "title": "Replace with actual feature/page title",
+  "type": "ui",
+  "module_id": "replace-module-id",
+  "feature_id": "replace-feature-id",
+  "status": "draft",
+  "updated_at": "YYYY-MM-DD",
+  "tags": [],
+  "sources": [],
+  "related_refs": [],
+  "code_paths": []
+}
+```
+<!-- arc:metadata:end -->
+
+Metadata di atas adalah placeholder, bukan referensi proyek yang sudah terdaftar.
+Ganti dengan identitas dan hubungan aktual sebelum menyimpan di docs/references/.
+ID pada header dan INDEX harus sama dengan metadata. Path metadata relatif ke
+root proyek; fragment dokumen disimpan terpisah. Gunakan sources untuk dokumen
+sumber, related_refs untuk koneksi ARC, dan code_paths untuk file aktual.
+Contoh source: {"path":"docs/business/PRD.md","fragment":"equipment","relation":"implements"}.
+Contoh related_refs: {"id":"REF-FEAT-equipment-create","relation":"integrates_with"}.
+Status metadata menyatakan kondisi referensi, bukan bukti test lulus atau UAT diterima.
+Koneksi metadata hanya deklarasi, bukan hasil verifikasi semantik otomatis.
+
+
 > **Reference ID:** `REF-UI-[slug]`
-> **Version:** `v1.0.1`
-> **Last Updated:** `2026-11-02`
-> **Status:** `Sliced (Mock Data)` *(Sliced / Integrated / Deprecated)*
+> **Version:** `v1.1.0`
+> **Last Updated:** `2026-11-05`
+> **Status:** `Draft` *(Draft / Active / Deprecated — status dokumen referensi)*
 > **Author / Agent:** `aod-page-slicer` / `[agent-id]`
 > **Target Route:** `/path/to/page`
 > **Primary Layout:** `[AppLayout / AuthLayout / DashboardLayout]`
@@ -21,6 +51,7 @@
 
 | Version | Date | Author / Agent | Description |
 |---|---|---|---|
+| `v1.1.0` | 2026-11-05 | AOD | Structured ARC metadata, stable identity and CLI navigation contract |
 | `v1.0.1` | 2026-11-02 | `aod-page-slicer` | Initial UI slicing and component documentation |
 
 ---
@@ -144,6 +175,6 @@ Instruksi bagi AI agent berikutnya yang akan memodifikasi atau memperluas halama
 > - Komponen `CartSummaryTable` bersifat reusable; jika digunakan di halaman Order Detail, kirimkan prop `isReadOnly={true}` untuk menyembunyikan aksi penambahan kuantiti.
 > - Hindari mengubah padding luar kontainer halaman agar tidak bertabrakan dengan `DashboardLayout`.
 
-> Template revision v1.0.1 (2026-11-02): Phase 4 ownership and evidence clarification.
+> Template revision v1.1.0 (2026-11-05): structured ARC metadata and CLI navigation; examples remain illustrative.
 > All sample routes, framework tokens, statuses and test results above are illustrative.
 > Replace with actual project evidence; examples never prove completion or approval.

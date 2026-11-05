@@ -28,6 +28,12 @@ Tailwind. DoD, actual verification, documentation and ARC remain completion
 criteria. Quick Checklist is read-only; Progress Tracker independently audits
 and exports only on request. UAT preparation is not stakeholder acceptance.
 
+Use `.agents/aod/bin/arc` for deterministic list/search/trace/check/graph ARC
+navigation without AI overhead. Preserve stable metadata IDs and explicit
+source relations when updating ARC. INDEX owns registration; references own
+identity and connections. Run arc check for impacted references; do not treat
+CLI structural checks as semantic verification or invent links/approvals.
+
 ### Workflow map (generated from registry)
 <!-- aod:map:start -->
 | Phase | Steps / executing skills |
