@@ -1,0 +1,300 @@
+#!/usr/bin/env python3
+"""ARC navigation and local graph export. Python standard library only; no AI required."""
+import argparse
+import collections
+import html
+import json
+import os
+from pathlib import Path
+import re
+import sys
+import unicodedata
+from urllib.parse import quote, unquote
+
+START='<!-- arc:metadata:start -->'
+END='<!-- arc:metadata:end -->'
+RELATIONS={'implements','conforms_to','integrates_with','uses','documented_in','references'}
+
+def safe_path(root, value):
+    if not isinstance(value,str) or not value or '\\' in value or any(ord(c)<32 for c in value):
+        raise ValueError('Expected a project-relative path')
+    p=Path(value)
+    if p.is_absolute() or '..' in p.parts or not (root/p).resolve().is_relative_to(root):
+        raise ValueError('Path escapes project: '+value)
+    return root/p
+
+def find_root(value=None):
+    if value: return Path(value).resolve()
+    for p in (Path.cwd(), *Path.cwd().parents):
+        if (p/'docs/references').is_dir() or (p/'.agents/aod-package.json').is_file(): return p
+    raise ValueError('Project root not found; pass --root PATH')
+
+def field(text, name):
+    m=re.search(r'^>\s*\*\*'+re.escape(name)+r':\*\*\s*(.*)$',text,re.M)
+    return m.group(1).split('*(')[0].strip().strip('`').strip() if m else ''
+
+def metadata(text):
+    if START not in text and END not in text: return None
+    if text.count(START)!=1 or text.count(END)!=1 or text.index(START)>text.index(END):
+        raise ValueError('Malformed ARC metadata markers')
+    block=text.split(START,1)[1].split(END,1)[0].strip()
+    m=re.fullmatch(r'```json\s*\n(.*?)\n```',block,re.S)
+    if not m: raise ValueError('Metadata must contain one fenced JSON object')
+    data=json.loads(m.group(1))
+    if not isinstance(data,dict) or data.get('schema_version')!=1: raise ValueError('Unsupported ARC metadata schema')
+    for k in ('id','title','type','module_id','feature_id','status','updated_at'):
+        if not isinstance(data.get(k),str) or not data[k].strip(): raise ValueError('Missing/non-string metadata: '+k)
+    if data['type'] not in {'feature','ui'}: raise ValueError('type must be feature or ui')
+    prefix='REF-FEAT-' if data['type']=='feature' else 'REF-UI-'
+    if not re.fullmatch(prefix+r'[A-Za-z0-9][A-Za-z0-9._-]*',data['id']): raise ValueError('Invalid stable reference ID')
+    for k in ('tags','sources','related_refs','code_paths'):
+        if not isinstance(data.get(k),list): raise ValueError('Missing/non-array metadata: '+k)
+    if any(not isinstance(x,str) or not x for x in data['tags']+data['code_paths']): raise ValueError('tags/code_paths must contain strings')
+    for item in data['sources']:
+        if not isinstance(item,dict) or not isinstance(item.get('path'),str) or item.get('relation') not in RELATIONS:
+            raise ValueError('Invalid source path/relation')
+        if '#' in item['path'] or ('fragment' in item and not isinstance(item['fragment'],str)): raise ValueError('Store anchor separately in fragment')
+    for item in data['related_refs']:
+        if not isinstance(item,dict) or not isinstance(item.get('id'),str) or item.get('relation') not in RELATIONS: raise ValueError('Invalid related reference')
+    return data
+
+def legacy(text,path):
+    kind='ui' if path.name.startswith('REF-UI-') else 'feature'
+    title=next((x[2:].strip() for x in text.splitlines() if x.startswith('# ')),path.stem)
+    title=re.sub(r'^Agent Reference Context:\s*','',title)
+    module=field(text,'Module / Sub-module').split('/')[0].strip().strip('`') or 'unknown'
+    sources=[]
+    upstream=re.search(r'\*\*Upstream Specs:\*\*(.*?)(?:\n---|\Z)',text,re.S)
+    if upstream:
+        for match in re.finditer(r'`(docs/[^`\n]+)`',upstream.group(1)):
+            raw=match.group(1);p,sep,fragment=raw.partition('#')
+            sources.append({'path':p,'fragment':fragment,'relation':'references'})
+    return dict(schema_version=0,id=field(text,'Reference ID') or path.stem,title=title,type=kind,module_id=module,
+        feature_id='unknown',status=field(text,'Status') or 'unknown',updated_at=field(text,'Last Updated') or 'unknown',
+        tags=[],sources=sources,related_refs=[],code_paths=[])
+
+def load(root):
+    directory=root/'docs/references';index=directory/'INDEX.md'
+    records=[];issues=[];referenced=set();by_name=collections.defaultdict(list);anchor_cache={}
+    def issue(level,code,path,message): issues.append(dict(level=level,code=code,path=path,message=message))
+    if not directory.is_dir(): issue('warning','missing_directory','docs/references','No ARC directory yet')
+    for path in sorted(directory.rglob('REF-*.md')) if directory.is_dir() else []:
+        rel=path.relative_to(root).as_posix()
+        try:
+            safe_path(root,rel)
+            text=path.read_text(encoding='utf-8');data=metadata(text)
+            format_='structured' if data is not None else 'legacy'
+            data=data if data is not None else legacy(text,path)
+            if format_=='structured' and field(text,'Reference ID') and field(text,'Reference ID')!=data['id']: issue('error','conflicting_header_id',rel,'Header and metadata IDs disagree')
+            if format_=='legacy': issue('warning','legacy_metadata',rel,'Best-effort legacy read; metadata has not been migrated')
+            record={**data,'path':rel,'format':format_,'registered':False,'_text':text}
+            for target in data['sources']+[{ 'path':p } for p in data['code_paths']]: safe_path(root,target['path'])
+            records.append(record);by_name[path.name].append(rel)
+        except (ValueError,OSError,UnicodeError) as exc:
+            issue('error','invalid_reference',rel,str(exc))
+    if index.exists():
+        try:
+            safe_path(root,'docs/references/INDEX.md')
+            content=index.read_text(encoding='utf-8')
+            # Explicit Markdown links, including legacy root-relative links.
+            for raw in re.findall(r'\]\(([^)]+)\)',content):
+                raw=unquote(raw.split('#',1)[0].strip('<>'))
+                if not re.search(r'REF-(?:FEAT|UI)-[^/]+\.md$',raw): continue
+                rel=raw if raw.startswith('docs/') else (Path('docs/references')/raw).as_posix()
+                try:
+                    safe_path(root,rel);referenced.add(rel)
+                    if not (root/rel).is_file(): issue('error','missing_registered_file',rel,'Registry points to missing file')
+                    if raw.startswith('docs/'): issue('warning','legacy_registry_link',rel,'Use a link relative to docs/references/INDEX.md')
+                except ValueError as exc:issue('error','unsafe_registry_link',raw,str(exc))
+            # Backticked basenames are explicit registrations only when unambiguous.
+            for name in re.findall(r'`(REF-(?:FEAT|UI)-[^`/\n]+\.md)`',content):
+                paths=by_name.get(name,[])
+                if len(paths)==1:referenced.add(paths[0])
+                elif not paths:issue('error','missing_registered_file',name,'Registry names missing reference')
+                else:issue('error','ambiguous_registry_name',name,'Use a relative path, not a duplicate basename')
+        except (OSError,UnicodeError,ValueError) as exc:issue('error','invalid_registry','docs/references/INDEX.md',str(exc))
+    else:issue('warning','missing_registry','docs/references/INDEX.md','No registry; use list --all to discover files')
+    ids=collections.Counter(x['id'] for x in records)
+    for record in records:
+        record['registered']=record['path'] in referenced
+        if not record['registered']:issue('warning','unregistered_reference',record['path'],'Found on disk, absent from registry')
+        if ids[record['id']]>1:issue('error','duplicate_id',record['path'],record['id'])
+        for item in record['sources']:
+            try:
+                p=safe_path(root,item['path'])
+                if not p.is_file():issue('error','missing_source',record['path'],item['path'])
+                elif item.get('fragment') and p.suffix.lower()=='.md':
+                    if p not in anchor_cache:anchor_cache[p]=markdown_anchors(p.read_text(encoding='utf-8'))
+                    anchors=anchor_cache[p]
+                    if unquote(item['fragment']) not in anchors:issue('warning','unresolved_anchor',record['path'],item['path']+'#'+item['fragment'])
+            except (ValueError,OSError,UnicodeError) as exc:issue('error','invalid_source',record['path'],str(exc))
+        for item in record['related_refs']:
+            if item['id'] not in ids:issue('error','missing_related_reference',record['path'],item['id'])
+        for p in record['code_paths']:
+            try:
+                if not safe_path(root,p).is_file():issue('error','missing_code',record['path'],p)
+            except ValueError as exc:issue('error','invalid_code_path',record['path'],str(exc))
+    return records,issues
+
+def markdown_anchors(text):
+    anchors=set();counts=collections.Counter()
+    for heading in re.findall(r'^#{1,6}\s+(.+?)\s*#*$',text,re.M):
+        base=re.sub(r'[^\w\- ]','',unicodedata.normalize('NFC',heading).lower()).replace(' ','-')
+        n=counts[base];counts[base]+=1;anchors.add(base+('-'+str(n) if n else ''))
+    anchors.update(re.findall(r'\bid=["\']([^"\']+)',text))
+    return anchors
+
+def terminal(value):return ''.join(c if ord(c)>=32 and ord(c)!=127 else ' ' for c in str(value))
+
+def public(record):return {k:v for k,v in record.items() if not k.startswith('_')}
+
+def select(records,args):
+    result=[x for x in records if args.all or x['registered']]
+    if args.module:result=[x for x in result if x['module_id'].casefold()==args.module.casefold()]
+    if args.type:result=[x for x in result if x['type']==args.type]
+    if args.command=='search':result=[x for x in result if args.query.casefold() in (json.dumps(public(x),ensure_ascii=False)+' '+x['_text']).casefold()]
+    return result
+
+def graph(records,all_records,include_code=False):
+    nodes={};edges=[];by_id=collections.defaultdict(list);by_path=collections.defaultdict(list)
+    for record in all_records:by_id[record['id']].append(record);by_path[record['path']].append(record)
+    def node(id_,kind,label,**kw):nodes.setdefault(id_,dict(id=id_,kind=kind,label=label,**kw));return id_
+    def edge(a,b,relation,provenance):edges.append(dict(source=a,target=b,relation=relation,provenance=provenance))
+    def ref(x):return node('ref:'+x['id']+':'+x['path'],'reference',x['title'],ref_id=x['id'],module=x['module_id'],path=x['path'],registered=x['registered'],status=x['status'])
+    for x in records:
+        rid=ref(x);mid=node('module:'+x['module_id'],'module',x['module_id'])
+        edge(mid,rid,'contains','metadata' if x['format']=='structured' else 'legacy')
+        for item in x['sources']:
+            path=item['path'];fragment=item.get('fragment','')
+            matches=by_path[path]
+            target=ref(matches[0]) if len(matches)==1 and not fragment else node('doc:'+path+('#'+fragment if fragment else ''),'document',path+('#'+fragment if fragment else ''),path=path,fragment=fragment)
+            edge(rid,target,item['relation'],'metadata' if x['format']=='structured' else 'legacy')
+        for item in x['related_refs']:
+            targets=by_id[item['id']]
+            target=ref(targets[0]) if len(targets)==1 else node('unresolved:'+item['id'],'unresolved',item['id']+' (missing/ambiguous)')
+            edge(rid,target,item['relation'],'metadata')
+        if include_code:
+            for path in x['code_paths']:edge(rid,node('code:'+path,'code',path,path=path),'implemented_in','metadata')
+    return dict(nodes=list(nodes.values()),edges=edges)
+
+def mermaid(data):
+    lines=['flowchart TD'];ids={x['id']:'n'+str(i) for i,x in enumerate(data['nodes'])}
+    def label(x):return html.escape(x,quote=True).replace('\n',' ').replace('`','&#96;')
+    for n in data['nodes']:lines.append('  '+ids[n['id']]+'["'+label(n['label'])+'"]')
+    for e in data['edges']:lines.append('  '+ids[e['source']]+' -->|"'+label(e['relation']+' / '+e['provenance'])+'"| '+ids[e['target']])
+    return '\n'.join(lines)+'\n'
+
+HTML=r'''<!doctype html><html lang="id"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ARC Explorer</title>
+<style>body{margin:0;font:15px system-ui;background:#f4f6fa;color:#17243b}header{background:#17243b;color:white;padding:24px}h1{margin:0 0 8px}main{padding:20px}input,select,button{font:inherit;padding:9px;border:1px solid #aab6c6;border-radius:6px;margin:4px}#layout{display:grid;grid-template-columns:300px 1fr;gap:16px}#list{max-height:70vh;overflow:auto}#list button{display:block;text-align:left;width:95%;background:white}section{background:white;border-radius:10px;padding:12px;min-width:0}svg{width:100%;min-height:460px}text{font:12px system-ui;fill:#17243b}#details{white-space:pre-wrap;overflow-wrap:anywhere}a{color:#155fa0}small{color:#526078}@media(max-width:800px){#layout{grid-template-columns:1fr}#list{max-height:220px}}</style>
+<header><h1>ARC Explorer</h1><div>Declared context connections · local snapshot</div></header><main>
+<p>Hubungan tercatat bukan bukti implementasi atau verifikasi. Metadata legacy ditandai; tidak ada relasi hasil tebakan AI.</p>
+<input id="q" aria-label="Cari referensi" placeholder="Cari ID, fitur, modul, dokumen"><select id="module" aria-label="Modul"><option value="">Semua modul</option></select><button id="reset">Reset fokus</button><span id="count"></span>
+<div id="layout"><section id="list"></section><section><div id="graph"></div><div id="details"></div></section></div><p id="notice"></p><details><summary>Diagnostik sumber</summary><pre id="issues"></pre></details></main>
+<script id="data" type="application/json">__DATA__</script><script>
+'use strict';const data=JSON.parse(document.getElementById('data').textContent);let focus=null;
+const $=id=>document.getElementById(id),ns='http://www.w3.org/2000/svg';$('issues').textContent=data.issues.map(i=>i.level+' '+i.code+' '+i.path+': '+i.message).join('\n');
+for(const name of [...new Set(data.references.map(x=>x.module_id))].sort()){const o=document.createElement('option');o.value=name;o.textContent=name;$('module').append(o)}
+function svgEl(tag,attrs={}){const e=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);return e}
+function draw(){const q=$('q').value.toLowerCase(),mod=$('module').value;let refs=data.references.filter(r=>(!mod||r.module_id===mod)&&JSON.stringify(r).toLowerCase().includes(q));$('list').replaceChildren();$('count').textContent=refs.length+' referensi';
+for(const r of refs){const b=document.createElement('button');b.textContent=r.id+' — '+r.title+' ['+(r.registered?'registered':'unregistered')+']';b.onclick=()=>{focus='ref:'+r.id+':'+r.path;draw()};$('list').append(b)}
+const base=new Set(refs.map(r=>'ref:'+r.id+':'+r.path));let allowed=new Set(focus?[focus]:base);
+for(const e of data.graph.edges)if((focus&&(e.source===focus||e.target===focus))||(!focus&&(base.has(e.source)||base.has(e.target)))){allowed.add(e.source);allowed.add(e.target)}
+let nodes=data.graph.nodes.filter(n=>allowed.has(n.id));const total=nodes.length;nodes=nodes.slice(0,70);const shown=new Set(nodes.map(n=>n.id)),edges=data.graph.edges.filter(e=>shown.has(e.source)&&shown.has(e.target));
+$('notice').textContent='Issues: '+data.issues.length+'. '+(total>70?'Graph dibatasi 70 node; gunakan filter atau pilih referensi.':'Pilih referensi untuk fokus koneksi.');
+const cols={module:0,reference:1,document:2,code:2,unresolved:2},rows=[0,0,0],positions=new Map();
+for(const n of nodes){let c=cols[n.kind];positions.set(n.id,{x:20+c*350,y:20+rows[c]++*82})}
+const svg=svgEl('svg',{viewBox:'0 0 1060 '+Math.max(460,Math.max(...rows)*82+30),role:'img','aria-label':'Graph koneksi ARC'});
+const defs=svgEl('defs'),marker=svgEl('marker',{id:'arrow',viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:6,markerHeight:6,orient:'auto-start-reverse'});marker.append(svgEl('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#7c8fa5'}));defs.append(marker);svg.append(defs);
+for(const e of edges){const a=positions.get(e.source),b=positions.get(e.target);const line=svgEl('line',{x1:a.x+(a.x<b.x?310:155),y1:a.y+28,x2:b.x+(a.x<b.x?0:155),y2:b.y+28,stroke:e.provenance==='legacy'?'#bd8a37':'#a4b3c5','stroke-width':1.5,'marker-end':'url(#arrow)'});const t=svgEl('title');t.textContent=e.relation+' ('+e.provenance+')';line.append(t);svg.append(line)}
+for(const n of nodes){const p=positions.get(n.id),g=svgEl('g',{tabindex:0,role:'button','aria-label':n.label});g.append(svgEl('rect',{x:p.x,y:p.y,width:310,height:56,rx:8,fill:n.kind==='reference'?'#deecff':n.kind==='module'?'#e0f3e9':'#f1f3f7',stroke:n.id===focus?'#155fa0':'#aab6c6'}));const title=svgEl('title');title.textContent=n.label;g.append(title);const txt=svgEl('text',{x:p.x+10,y:p.y+23});txt.textContent=n.label.length>39?n.label.slice(0,36)+'…':n.label;g.append(txt);const type=svgEl('text',{x:p.x+10,y:p.y+43});type.textContent=n.ref_id||n.kind;g.append(type);const action=()=>show(n);g.onclick=action;g.onkeydown=e=>{if(e.key==='Enter')action()};svg.append(g)}$('graph').replaceChildren(svg);
+if(focus){const n=data.graph.nodes.find(x=>x.id===focus);if(n)show(n,false)}else $('details').textContent='Gunakan filter modul atau klik node. Hover garis untuk tipe hubungan.';
+}
+function show(n,redraw=true){$('details').replaceChildren();const h=document.createElement('h3');h.textContent=n.label;$('details').append(h);if(n.path&&data.links[n.id]){const a=document.createElement('a');a.textContent='Buka dokumen / file';a.href=data.links[n.id];$('details').append(a)}const relations=data.graph.edges.filter(e=>e.source===n.id||e.target===n.id);const p=document.createElement('p');p.textContent=relations.map(e=>{const other=data.graph.nodes.find(x=>x.id===(e.source===n.id?e.target:e.source));return(e.source===n.id?'→ ':'← ')+e.relation+' · '+other.label+' ['+e.provenance+']'}).join('\n');$('details').append(p);if(n.kind==='reference'&&redraw){focus=n.id;draw()}}
+$('q').oninput=()=>{focus=null;draw()};$('module').onchange=()=>{focus=null;draw()};$('reset').onclick=()=>{focus=null;draw()};draw();
+</script></html>'''
+
+def html_graph(data,records,issues,root,output):
+    links={}
+    for n in data['nodes']:
+        if n.get('path'):
+            try:
+                path=safe_path(root,n['path']);rel=os.path.relpath(path,output.parent)
+                links[n['id']]=quote(Path(rel).as_posix(),safe='/')+('#'+quote(n['fragment'],safe='') if n.get('fragment') else '')
+            except ValueError:pass
+    payload=json.dumps(dict(graph=data,references=[public(x) for x in records],issues=issues,links=links),ensure_ascii=False)
+    payload=payload.replace('&','\\u0026').replace('<','\\u003c').replace('>','\\u003e')
+    return HTML.replace('__DATA__',payload)
+
+def main(argv=None):
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--root',help='Project root (or auto-detect from current directory)')
+    sub=parser.add_subparsers(dest='command',required=True)
+    for cmd in ('list','modules','search','show','trace','graph','check'):
+        p=sub.add_parser(cmd)
+        p.add_argument('--root',dest='subroot',help='Project root')
+        p.add_argument('--json',action='store_true',help='Machine-readable result')
+        if cmd in {'list','modules','search','graph'}:
+            p.add_argument('--all',action='store_true',help='Include discovered but unregistered references')
+            p.add_argument('--module');p.add_argument('--type',choices=['ui','feature'])
+        if cmd=='search':p.add_argument('query')
+        if cmd in {'show','trace'}:p.add_argument('id')
+        if cmd in {'list','search','show'}:p.add_argument('--path-only',action='store_true')
+        if cmd=='graph':
+            p.add_argument('--format',choices=['mermaid','html'],default='mermaid')
+            p.add_argument('--include-code',action='store_true');p.add_argument('--output',type=Path)
+            p.add_argument('--force',action='store_true',help='Explicitly replace existing export')
+    args=parser.parse_args(argv)
+    try:
+        root=find_root(args.subroot or args.root);records,issues=load(root)
+        if args.command=='check':
+            if args.json:print(json.dumps(issues,ensure_ascii=False,indent=2))
+            else:
+                for i in issues:print(i['level'].upper()+' '+i['code']+' '+i['path']+': '+i['message'])
+                print(str(sum(i['level']=='error' for i in issues))+' errors, '+str(sum(i['level']=='warning' for i in issues))+' warnings')
+            return 1 if any(i['level']=='error' for i in issues) else 0
+        if args.command in {'show','trace'}:
+            matches=[x for x in records if x['id']==args.id]
+            if len(matches)!=1:raise ValueError('Reference ID missing or ambiguous: '+args.id)
+            record=matches[0]
+            if args.command=='show':
+                if args.path_only:print(record['path'])
+                elif args.json:print(json.dumps(public(record),ensure_ascii=False,indent=2))
+                else:print(json.dumps(public(record),ensure_ascii=False,indent=2))
+                return 0
+            data=graph(records,records,True);key='ref:'+record['id']+':'+record['path']
+            edges=[e for e in data['edges'] if e['source']==key or e['target']==key];used={key}|{e['source'] for e in edges}|{e['target'] for e in edges}
+            result=dict(reference=public(record),nodes=[n for n in data['nodes'] if n['id'] in used],edges=edges)
+            if args.json:print(json.dumps(result,ensure_ascii=False,indent=2))
+            else:
+                names={n['id']:n.get('ref_id',n['label']) for n in result['nodes']}
+                print(terminal(record['id']+' — '+record['title']))
+                for e in edges:print(terminal(names[e['source']]+' --'+e['relation']+' ['+e['provenance']+']--> '+names[e['target']]))
+            return 0
+        chosen=select(records,args)
+        if args.command=='modules':
+            counts=collections.Counter(x['module_id'] for x in chosen)
+            print(json.dumps(dict(sorted(counts.items())),ensure_ascii=False,indent=2) if args.json else '\n'.join(terminal(k)+'\t'+str(v) for k,v in sorted(counts.items())))
+        elif args.command=='graph':
+            if any(i['code']=='duplicate_id' for i in issues):raise ValueError('Resolve duplicate IDs before graph export')
+            data=graph(chosen,records,args.include_code)
+            if args.json:
+                if args.output:raise ValueError('--json writes stdout; use shell redirection for JSON')
+                print(json.dumps(data,ensure_ascii=False,indent=2));return 0
+            if args.format=='html' and not args.output:raise ValueError('HTML export requires --output PATH')
+            result=html_graph(data,chosen,issues,root,args.output.resolve()) if args.format=='html' else mermaid(data)
+            if args.output:
+                dest=args.output.resolve()
+                if dest.exists() and not args.force:raise ValueError('Output exists; use another path or --force')
+                if dest.suffix.lower() not in {'.html','.mmd','.md'}:raise ValueError('Use .html, .mmd or .md for graph export')
+                dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(result,encoding='utf-8');print(str(dest))
+            else:print(result,end='')
+        elif args.path_only:print('\n'.join(x['path'] for x in chosen))
+        elif args.json:print(json.dumps([public(x) for x in chosen],ensure_ascii=False,indent=2))
+        else:
+            print('ID\tMODULE\tTITLE\tTYPE\tREGISTRATION\tPATH')
+            for x in chosen:print('\t'.join(terminal(v) for v in (x['id'],x['module_id'],x['title'],x['type'],'registered' if x['registered'] else 'unregistered',x['path'])))
+        return 0
+    except (ValueError,OSError,UnicodeError) as exc:
+        print('arc: '+str(exc),file=sys.stderr);return 2
+
+if __name__=='__main__':sys.exit(main())

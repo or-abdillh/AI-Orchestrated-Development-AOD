@@ -99,7 +99,7 @@ class InstallerTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as tmp:
    t=Path(tmp)
    subprocess.run(['bash',str(ROOT/'install.sh'),'--yes',tmp],check=True,capture_output=True)
-   for rel in ['scripts','tests','test','.agents/aod']:
+   for rel in ['scripts','tests','test','.agents/aod/scripts','.agents/aod/tests']:
     self.assertFalse((t/rel).exists(),rel+' must not be injected')
    runtime=t/'.agents/skills/aod-orchestrator/scripts/workflow.py'
    self.assertTrue(runtime.is_file())
@@ -115,13 +115,13 @@ class InstallerTests(unittest.TestCase):
     p=t/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(data)
    for _ in range(2):subprocess.run(['bash',str(ROOT/'install.sh'),'--yes',tmp],check=True,capture_output=True)
    for name,data in originals.items():self.assertEqual((t/name).read_bytes(),data,name)
-   for folder in ['scripts','tests','test','.agents/aod']:
+   for folder in ['scripts','tests','test','.agents/aod/scripts']:
     actual={str(p.relative_to(t)) for p in (t/folder).rglob('*') if p.is_file()}
     expected={name for name in originals if name.startswith(folder+'/')}
     self.assertEqual(actual,expected)
  def test_manifest_excludes_maintainer_tooling(self):
   files=json.loads((ROOT/'.agents/aod-package.json').read_text())['files']
-  self.assertFalse(any(p.startswith(('scripts/','tests/','test/','.agents/aod/')) for p in files))
+  self.assertFalse(any(p.startswith(('scripts/','tests/','test/','.agents/aod/')) and p!='.agents/aod/bin/arc' for p in files))
  def test_markers_preserve_and_reject(self):
   block='<!-- aod:start -->new<!-- aod:end -->'
   self.assertEqual(i.inject('before<!-- aod:start -->old<!-- aod:end -->after',block),'before'+block+'after')

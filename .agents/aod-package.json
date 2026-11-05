@@ -2,6 +2,7 @@
   "version": 1,
   "files": [
     ".agents/aod-package.json",
+    ".agents/aod/bin/arc",
     ".agents/rules/aod-architecture-engineering.md",
     ".agents/rules/aod-coding-standards.md",
     ".agents/rules/aod-core.md",

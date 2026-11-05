@@ -62,6 +62,8 @@ def install(source,target):
   else:
    atomic(dst,data)
    counts['updated' if exists else 'created']+=1
+  if dst==target/'.agents/aod/bin/arc':
+   dst.chmod(dst.stat().st_mode | 0o111)
   if number==total or number%50==0:
    print(f'  Progres: {number}/{total} file diperiksa',flush=True)
  print(f"  Hasil: {counts['created']} baru, {counts['updated']} diperbarui, {counts['unchanged']} sudah sesuai.")
